@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Mocha Test Suite</title>
+    <link rel="stylesheet" href="/vendor/bower/mocha/mocha.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="/app/styles/index.css"  type="text/css" charset="utf-8" />
+    <script src="/vendor/js/plugins/modernizr.js"></script>
+</head>
+<body>
+
+    <!-- Required for browser reporter -->
+    <div id="mocha"></div>
+
+    <!-- Application Container -->
+    <div id="app-container-test" style="visibility:hidden">
+        <canvas id="canvas-section"></canvas>
+        <div role="main" id="main"></div>
+    </div>
+    
+    <!-- mocha -->
+    <script src="/vendor/bower/mocha/mocha.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        // This will be overridden by mocha-helper if you run with grunt
+        mocha.setup('bdd');
+    </script>
+
+    <!-- Include your assertion lib of choice -->
+    <script src="/vendor/bower/chai/chai.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        // Setup chai
+        var expect = chai.expect;
+        var should = chai.should();
+    </script>
+
+    <!-- Include sinon spies, mocks, and stubs -->
+    <script src="/vendor/bower/sinon/lib/sinon.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/spy.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/call.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/stub.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/mock.js" type="text/javascript" charset="utf-8"></script>    
+
+    <!-- Our test runner -->
+    <script type="text/javascript" charset="utf-8">
+        // Setup our global test harness
+        var __test = (function() {
+
+            // Called on app exit (to not found) if called from test harness.
+            // This is because the test harness is an invalid route.
+            function testRunner(path, app) {
+                // If we haven't been run
+                if (!__test.app) {
+                    // get all the defined modules
+                    //require.s.contexts._.defined;
+                    __test.app = app;                    
+                    // Ensure you point to where your tests are, base directory is app/, which
+                    // is why ../test is necessary                    
+                    require({ paths: { tests: "../test/mocha/tests" } }, [
+                        // load all the tests
+                        "tests/environment",
+                        "tests/modernizr",
+                        "tests/app"//,
+                        //"tests/home",
+                        // next test suite here
+                    ], function() {
+                        // tests loaded, run em!
+                        mocha.run(function() {
+                            // Don't navigate in the app for mocha anchors
+                            $("#mocha a").attr("data-bypass", true);
+                        });
+                    });
+                } else {
+                    window.location.replace("/" + path + ".notfound");
+                }
+            }
+            return testRunner;
+        })();
+    </script>
+
+    <!-- load the application -->    
+    <script data-main="../../app/config" src="/vendor/bower/requirejs/require.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "mocha",
+  "version": "1.11.0",
+  "repo": "visionmedia/mocha",
+  "description": "simple, flexible, fun test framework",
+  "keywords": [
+    "mocha",
+    "test",
+    "bdd",
+    "tdd",
+    "tap"
+  ],
+  "main": "mocha.js",
+  "scripts": [
+    "mocha.js"
+  ],
+  "styles": [
+    "mocha.css"
+  ],
+  "homepage": "https://github.com/visionmedia/mocha",
+  "_release": "1.11.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.11.0",
+    "commit": "a1791c5621f2c83149ad89d44a4394cd8c53512b"
+  },
+  "_source": "git://github.com/visionmedia/mocha.git",
+  "_target": "~1.11.0"
+}

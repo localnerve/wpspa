@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]><html class="ie7" xmlns:og="http://opengraphprotocol.org/schema/" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie8" xmlns:og="http://opengraphprotocol.org/schema/" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9" xmlns:og="http://opengraphprotocol.org/schema/" lang="en"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html xmlns:og="http://opengraphprotocol.org/schema/" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="fragment" content="!">
+
+  <title>WPSPA Application</title>
+  <meta name="description" content="This is a static description string">
+  <meta name="keywords" content="This is a static keyword string">
+
+  <!-- og for facebook -->
+  <meta property="og:url" content="http://wpspa.localnerve.com/" />
+  <meta property="og:image" content="http://wpspa.localnerve.com/images/logo.jpg" />
+  <meta property="og:locale" content="en_US"/>
+  <meta property="og:site_name" content="Wordpress Single Page Application"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Wordpress Single Page Application"/>
+  <meta property="og:description" content="Wordpress Single Page Application"/>
+
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="canonical" href="http://wpspa.localnerve.com/" />
+  
+  <!--(if target dummy)><!-->
+  <link rel="stylesheet" href="/app/styles/index.css">
+  <!--<!(endif)-->
+
+  <!--(if target release)>
+  <link rel="stylesheet" href="index.css">
+  <!(endif)-->
+
+  <!--(if target debug)>
+  <link rel="stylesheet" href="index.css">
+  <!(endif)-->
+
+  <script src="/vendor/js/modernizr/modernizr.js"></script>
+
+</head>
+
+<body>
+
+  <!-- application container -->
+  <div role="main" id="main">
+    <div class="main-grid-row">
+      <div class="main-grid-column centered">
+        <noscript>      
+          <h1>Optimized Wordpress Site for Multiple Devices</h1>
+          <p>This site requires javascript be enabled.</p>
+        </noscript>
+        <div class="page-spinner"></div>
+      </div>
+  </div>
+
+  <!--(if target dummy)><!-->
+  <script data-main="/app/config" src="/vendor/bower/requirejs/require.js"></script>
+  <!--<!(endif)-->
+
+  <!--(if target release)>
+  <script src="require.js"></script>
+  <!(endif)-->
+
+  <!--(if target debug)>
+  <script src="require.js"></script>
+  <!(endif)-->
+</body>
+</html>
