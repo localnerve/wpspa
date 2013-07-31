@@ -15,11 +15,13 @@ require.config({
     polyfiller: "../vendor/bower/webshim/demos/js-webshim/minified/polyfiller",
     "backbone.marionette": "../vendor/bower/backbone.marionette/lib/core/amd/backbone.marionette",
     requirejs: "../vendor/bower/requirejs/require",
-    "requirejs-text": "../vendor/bower/requirejs-text/text",
-    underscore: "../vendor/bower/underscore/underscore"
+    "requirejs-text": "../vendor/bower/requirejs-text/text" //,
+    //underscore: "../vendor/bower/underscore/underscore"
   },
   config: {
-
+    "modules/jst": {
+      prefix: "/app/templates"
+    }
   },
   map: {
     "*": {
@@ -27,12 +29,28 @@ require.config({
     }
   },
   shim: {
+    jquery: {
+      exports: 'jQuery'
+    },
+    lodash: {
+      exports: '_'
+    },
     backbone: {
       deps: [
         "lodash",
         "jquery"
       ],
       exports: "Backbone"
+    },
+    "backbone.wreqr": {
+      deps: [
+        "backbone"
+      ]
+    },
+    "backbone.babysitter": {
+      deps: [
+        "backbone"
+      ]
     }
   }
 });

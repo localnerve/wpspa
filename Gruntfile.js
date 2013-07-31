@@ -1,6 +1,5 @@
-var fs = require("fs");
 var mountFolder = function(connect, dir) {
-  console.log("dir: "+require('path').resolve(dir));
+  //console.log("dir: "+require('path').resolve(dir));
   return connect.static(require('path').resolve(dir));
 };
 
@@ -39,10 +38,10 @@ module.exports = function(grunt) {
         rjsConfig: "<%= project.app %>/config.js",
         options: {
           exclude: [
-          // these are not compiled
-          "chai", "foundation", "mocha", "sinon", "webshim",
-          // these are custom (deviate from package main)
-          "lodash", "backbone.marionette"
+            // these are not compiled
+            "chai", "foundation", "mocha", "sinon", "webshim",
+            // these are custom (deviate from package main)
+            "lodash", "backbone.marionette"
           ]
         }
       }
@@ -125,7 +124,7 @@ module.exports = function(grunt) {
       },
       test: {
         testdir: "<%= project.test %>",
-        options: {          
+        options: {
           port: "<%= project.port.test %>",
           middleware: function(connect) {
             return [
@@ -539,13 +538,20 @@ module.exports = function(grunt) {
   // the development task, run watch and the development webserver in parallel
   grunt.registerTask("dev", "development task", function() {
     function runTask(task) {
-      var child = grunt.util.spawn({ grunt: true, args: [task]}, function(){});
+      var child = grunt.util.spawn({
+        grunt: true,
+        args: [task]
+      }, function() {});
       child.stdout.pipe(process.stdout);
       child.stderr.pipe(process.stderr);
     }
     grunt.util.async.parallel([
-      function() { runTask("watch"); },
-      function() { runTask("connect:dev"); }
+      function() {
+        runTask("watch");
+      },
+      function() {
+        runTask("connect:dev");
+      }
     ], this.async());
   });
 
