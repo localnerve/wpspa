@@ -1,15 +1,19 @@
 define([
   "backbone.marionette"
-  ], function(Marionette) {
+], function(Marionette) {
 
-    var navView = Marionette.ItemView.extend({
-      template: "navigation",
+  var NavigationView = Marionette.ItemView.extend({
+    template: "navigation",
 
-      initialize: function(options) {
-        options = options || {};
-        this.vent = options.vent;
-      }
-    });
-
-    return navView;
+    initialize: function(options) {
+      options = options || {};
+      this.vent = options.vent;
+    }
   });
+
+  return {
+    create: function(options) {
+      return new NavigationView(options);
+    }
+  };
+});

@@ -1,7 +1,7 @@
 define([
-    "backbone.marionette"
-  ], function(Marionette) {
-  
+  "backbone.marionette"
+], function(Marionette) {
+
   var HeaderView = Marionette.ItemView.extend({
     template: "header",
 

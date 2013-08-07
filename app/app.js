@@ -5,9 +5,9 @@ define([
   "modules/loaders/jst",
   "modules/helpers/anchor",
   "modules/layouts/appLayout",
-  "modules/routers/router",
+  "modules/routers/appRouter",
   "module"
-], function(_, Backbone, Marionette, loader, anchor, appLayout, router, module) {
+], function(_, Backbone, Marionette, loader, anchor, appLayout, appRouter, module) {
 
   var $w = window;
 
@@ -29,14 +29,13 @@ define([
   // handle app exit events
   app.listenTo(app.vent, "app:exit", function(options) {
     options = options || {};
-
     // Run the test harness. Otherwise, run the given exit routine
     _.defer($w.__test || options.exit, options.path, this);
   });
 
   // application initialization
   app.addInitializer(function(options) {
-    app.router = router.create(options);
+    app.router = appRouter.create(options);
     app.main.show(appLayout.create(options));
   });
 

@@ -10,35 +10,48 @@ define([
       development: true
     };
 
-    // ajax retrieval failure handler
-    function failure(jqXHR, msg) {
-      throw "Template '" + template + "' could not be retrieved: " + jqXHR.status + (msg ? ", " + msg : "");
+    // assign template prefix
+    var prefix = module.config().prefix;
+    prefix = prefix.charAt(prefix.length - 1) !== '/' ? prefix + "/" : prefix;
+    prefix = prefix.charAt(0) === '/' ? prefix.substring(1) : prefix;
+
+    // assign template suffix
+    var suffix = module.config().suffix;
+    suffix = suffix.charAt(0) !== '.' ? "." + suffix : suffix;
+
+    // template retrieval failure handler
+
+    function failure(template, jqXHR, msg) {
+      var err = "Template '" + template + "' could not be retrieved. ";
+      if (jqXHR) {
+        err += jqXHR.status + (msg ? ", " + msg : "");
+      }
+      throw new Error(err);
     }
 
     // return the method that will process templates for render
     return function(template, data) {
-      template = module.config().prefix + "/" + template + ".html";
+      template = prefix + template + suffix;
       // if not cached
       if (!JST[template]) {
         // If not development
         if (!JST.development) {
           // this was a real build, so you should've built your templates - shameful.
-          throw "Template '" + template + "' not found!";
-        }
-        else {
+          throw failure(template);
+        } else {
           // we have to block for development on marionette... unless you are willing to support marionette.async...
           $.ajax(template, {
             async: false
           })
             .done(function(data, textStatus, jqXHR) {
               if (textStatus === "success")
-                // compile and cache
+              // compile and cache
                 JST[template] = _.template(data);
               else
-                failure(jqXHR);
+                failure(template, jqXHR);
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-              failure(jqXHR, errorThrown.message);
+              failure(template, jqXHR, errorThrown.message);
             });
         }
       }

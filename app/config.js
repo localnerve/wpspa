@@ -20,9 +20,10 @@ require.config({
   },
   config: {
     "modules/loaders/jst": {
-      prefix: "/app/templates"
+      prefix: "app/templates",
+      suffix: ".html"
     },
-    "app": {
+    app: {
       root: "/"
     }
   },

@@ -1,19 +1,19 @@
 define([
   "backbone.marionette"
-  ], function(Marionette) {
+], function(Marionette) {
 
-    var FooterView = Marionette.ItemView.extend({
-      template: "footer",
+  var FooterView = Marionette.ItemView.extend({
+    template: "footer",
 
-      initialize: function(options) {
-        options = options || {};
-        this.vent = options.vent;
-      }
-    });
-
-    return {
-      create: function(options) {
-        return new FooterView(options);
-      }
-    };
+    initialize: function(options) {
+      options = options || {};
+      this.vent = options.vent;
+    }
   });
+
+  return {
+    create: function(options) {
+      return new FooterView(options);
+    }
+  };
+});
