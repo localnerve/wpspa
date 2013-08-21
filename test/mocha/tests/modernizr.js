@@ -6,18 +6,15 @@ describe("Modernizr build", function() {
     expect($m.boxsizing).to.exist;
   });
 
-  it("should have canvas test", function() {
-    expect($m.canvas).to.exist;
-  });
-
-  it("should have our forms tests", function() {
-    expect($m.input).to.exist;
-    expect($m.inputtypes).to.exist;
-    expect($m.formvalidation).to.exist;
-  });
-
   it("should not have a loader", function() {
-    expect($m.yepnope).to.not.exist;
+    expect($m.load).to.not.exist;
   });
 
+  it("should have touch test", function() {
+    expect($m.touch).to.exist;
+  });
+
+  it("should have mq test", function() {
+    expect($m.mq).to.exist;
+  });
 });

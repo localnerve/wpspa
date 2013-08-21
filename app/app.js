@@ -4,16 +4,15 @@ define([
   "backbone.marionette",
   "modules/loaders/jst",
   "modules/helpers/anchor",
-  "modules/layouts/appLayout",
-  "modules/routers/appRouter",
+  "modules/helpers/contract",
   "module"
-], function(_, Backbone, Marionette, loader, anchor, appLayout, appRouter, module) {
+], function(_, Backbone, Marionette, loader, anchor, contract, module) {
 
   var $w = window;
 
   // override the render method to work with a loader
   Marionette.Renderer.render = function(template, data) {
-    return loader(template, data);
+    return loader(template, data, module.config().root);
   };
 
   // create the app
@@ -28,28 +27,40 @@ define([
 
   // handle app exit events
   app.listenTo(app.vent, "app:exit", function(options) {
-    options = options || {};
-    // Run the test harness. Otherwise, run the given exit routine
-    _.defer($w.__test || options.exit, options.path, this);
+    contract(options, "path");
+    
+    // Run the test harness. Otherwise, exit the app.
+    _.defer($w.__test || function(path) {
+      // kill cookie here, too? TODO...
+      $w.location.replace("/" + path + ".notfound");
+    }, options.path, this);
+  
   });
 
-  // application initialization
-  app.addInitializer(function(options) {
-    app.router = appRouter.create(options);
-    app.main.show(appLayout.create(options));
-  });
-
+  // after app initialization
   app.on("initialize:after", function(options) {
 
-    // Trigger the initial route and enable HTML5 History API support, set the
-    // root folder to app.root.    
-    Backbone.history.start({
-      pushState: true,
-      root: app.root
+    // Trigger the initial, application render chain
+    app.main.show(app.request("appLayout:instance"));
+
+    // wait for navigation to arrive
+    app.listenTo(app.vent, "app:navigation:success", function(options) {
+      // Trigger the initial route and enable HTML5 History API support, set the
+      // root folder to app.root.    
+      Backbone.history.start({
+        pushState: true,
+        root: app.root
+      });
+
+      // initialize anchors
+      anchor.init(app);
     });
 
-    // initialize anchors
-    anchor.init();
+    // wait for navigation to fail
+    app.listenTo(app.vent, "app:navigation:fail", function(options) {
+      // TODO: implement application, categorized error handling
+    });
+
   });
 
   return app;

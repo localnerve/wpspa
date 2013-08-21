@@ -1,7 +1,7 @@
 require([
-    "app"
-  ],
-  function(app) {
+    "app",
+    "modules/routers/appRouter"
+  ], function(app) {
 
     app.start({
       vent: app.vent,

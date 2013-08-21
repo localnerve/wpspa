@@ -5,7 +5,7 @@
     <title>Mocha Test Suite</title>
     <link rel="stylesheet" href="/vendor/bower/mocha/mocha.css" type="text/css" charset="utf-8" />
     <link rel="stylesheet" href="/app/styles/index.css"  type="text/css" charset="utf-8" />
-    <script src="/vendor/js/plugins/modernizr.js"></script>
+    <script src="/vendor/js/modernizr/modernizr.js"></script>
 </head>
 <body>
 
@@ -13,8 +13,7 @@
     <div id="mocha"></div>
 
     <!-- Application Container -->
-    <div id="app-container-test" style="visibility:hidden">
-        <canvas id="canvas-section"></canvas>
+    <div id="app-container-test" style="visibility:hidden">        
         <div role="main" id="main"></div>
     </div>
     
@@ -59,7 +58,8 @@
                         // load all the tests
                         "tests/environment",
                         "tests/modernizr",
-                        "tests/app"//,
+                        "tests/app",
+                        "tests/appRouter"//,
                         //"tests/home",
                         // next test suite here
                     ], function() {
@@ -69,7 +69,7 @@
                             $("#mocha a").attr("data-bypass", true);
                         });
                     });
-                } else {
+                } else {                    
                     window.location.replace("/" + path + ".notfound");
                 }
             }

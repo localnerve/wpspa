@@ -1,9 +1,13 @@
+// middleware for connect. Serve static content.
+// TODO: move this to server/node/lib
 var mountFolder = function(connect, dir) {
-  //console.log("dir: "+require('path').resolve(dir));
-  return connect.static(require('path').resolve(dir));
+  return connect.static(require("path").resolve(dir));
 };
 
-// main build
+// middleware to route /api requests to the backend.
+var proxy = require("./server/node/lib/proxy");
+
+// Grunt callback
 module.exports = function(grunt) {
 
   // load all grunt tasks
@@ -15,7 +19,10 @@ module.exports = function(grunt) {
       debug: "dist/debug",
       release: "dist/release"
     },
-    api: "api",
+    api: {
+      host: "jsonapi.local",
+      port: 80
+    },
     app: "app",
     images: "images",
     fonts: "fonts",
@@ -122,12 +129,21 @@ module.exports = function(grunt) {
         // change this to '0.0.0.0' to access the server from outside
         hostname: "localhost"
       },
+      rules: {
+        "^/$": "index.html",
+        "^/sample-page": "index.html",
+        "^/page-two": "index.html"
+      },
       test: {
         testdir: "<%= project.test %>",
         options: {
           port: "<%= project.port.test %>",
           middleware: function(connect) {
             return [
+              proxy.api(
+                grunt.config.process("<%= project.api.host %>"),
+                grunt.config.process("<%= project.api.port %>")
+              ),
               mountFolder(connect, ".")
             ];
           }
@@ -139,6 +155,10 @@ module.exports = function(grunt) {
           keepalive: true,
           middleware: function(connect) {
             return [
+              proxy.api(
+                grunt.config.process("<%= project.api.host %>"),
+                grunt.config.process("<%= project.api.port %>")
+              ),
               mountFolder(connect, ".")
             ];
           }
@@ -150,6 +170,10 @@ module.exports = function(grunt) {
           port: "<%= project.port.debug %>",
           middleware: function(connect) {
             return [
+              proxy.api(
+                grunt.config.process("<%= project.api.host %>"),
+                grunt.config.process("<%= project.api.port %>")
+              ),
               mountFolder(connect, grunt.config.process("<%= project.dist.debug %>"))
             ];
           }
@@ -160,6 +184,10 @@ module.exports = function(grunt) {
           port: "<%= project.port.debug %>",
           middleware: function(connect) {
             return [
+              proxy.api(
+                grunt.config.process("<%= project.api.host %>"),
+                grunt.config.process("<%= project.api.port %>")
+              ),
               mountFolder(connect, grunt.config.process("<%= project.dist.debug %>"))
             ];
           }
@@ -170,151 +198,14 @@ module.exports = function(grunt) {
           port: "<%= project.port.release %>",
           middleware: function(connect) {
             return [
+              proxy.api(
+                grunt.config.process("<%= project.api.host %>"),
+                grunt.config.process("<%= project.api.port %>")
+              ),
               mountFolder(connect, grunt.config.process("<%= project.dist.release %>"))
             ];
           }
         }
-      }
-    },
-
-    // CSS Minification and concatenation is provided by grunt-contrib-cssmin.
-    // This output is named index.css, because we only want to
-    // load one stylesheet in index.html.
-    cssmin: {
-      options: {
-        report: "gzip"
-      },
-      release: {
-        files: [{
-          src: ["<%= project.app %>/styles/index.css"],
-          dest: "<%= project.dist.release %>/index.css"
-        }]
-      }
-    },
-
-    // Task provided by grunt-contrib-jshint.
-    // The jshint option for scripturl is set to lax, because the anchor
-    // override inside main.js needs to test for them so as to not accidentally
-    // route.
-    jshint: {
-      options: {
-        scripturl: true,
-
-        // Allows the use of expressions in assignments. 
-        // "Expected an assignment or function call and instead saw an expression."
-        "-W093": false
-      },
-      files: [
-        "Gruntfile.js", "<%= project.app %>/**/*.js"
-      ],
-      test: {
-        options: {
-          "-W030": false
-        },
-        src: ["<%= project.test %>/**/*.js"]
-      }
-    },
-
-    // Task provided by grunt-contrib-jst.
-    // The jst task compiles all application templates into JavaScript
-    // functions with the underscore.js template function from 1.2.4.
-    //
-    // The concat task depends on this file to exist, so if you decide to
-    // remove this, ensure concat is updated accordingly.
-    jst: {
-      compile: {
-        files: [{
-          src: ["<%= project.app %>/templates/**/*.html"],
-          dest: "<%= project.dist.debug %>/templates.js"
-        }]
-      }
-    },
-
-    // Task provided by grunt-contrib-requirejs.
-    // This task uses James Burke's excellent r.js AMD build tool.  In the
-    // future other builders may be contributed as drop-in alternatives.
-    requirejs: {
-      compile: {
-        options: {
-          // We do this in the uglify step so we can debug
-          optimize: "none",
-
-          // Ensure modules are inserted
-          skipModuleInsertion: false,
-
-          // Include the main configuration file.
-          mainConfigFile: "<%= project.app %>/config.js",
-
-          // Output file.
-          out: "<%= project.dist.debug %>/require.js",
-
-          // Root application module.
-          name: "config",
-
-          // Do not wrap everything in an IIFE.
-          wrap: false,
-
-          done: function(done, output) {
-
-            var duplicates = require('rjs-build-analysis').duplicates(output);
-
-            if (duplicates.length > 0) {
-              grunt.log.subhead('Duplicates found in requirejs build:');
-              grunt.log.warn(duplicates);
-              done(new Error('r.js built duplicate modules, please check the excludes option.'));
-            }
-
-            done();
-          }
-        }
-      }
-    },
-
-    // Minification and js compilation is provided by grunt-contrib-uglify.
-    // Takes the built require.js file and minifies it for filesize benefits.
-    // This produces the release version of the application from the debug version,
-    // output by the concat task.
-    uglify: {
-      options: {
-        /*report: "gzip"*/
-        report: "min"
-      },
-      release: {
-        files: [{
-          src: ["<%= project.dist.debug %>/require.js"],
-          dest: "<%= project.dist.release %>/require.js"
-        }]
-      }
-    },
-
-    // Testing task provided by grunt-mocha.
-    // Runs the tests
-    mocha: {
-      all: {
-        options: {
-          run: false,
-          log: true,
-          bail: false,
-          urls: [
-            "http://localhost:<%= connect.test.options.port %>/<%= connect.test.testdir %>/index.html"
-          ]
-        }
-      }
-    },
-
-    // targethtml task provided by grunt-targethtml.
-    // If you want to generate targeted `index.html` builds into the `dist/`
-    // folders, use the following configuration block and set 
-    // conditionals inside `index.html`.
-    targethtml: {
-      debug: {
-        src: "index.html",
-        dest: "<%= project.dist.debug %>/index.html"
-      },
-
-      release: {
-        src: "index.html",
-        dest: "<%= project.dist.release %>/index.html"
       }
     },
 
@@ -364,53 +255,115 @@ module.exports = function(grunt) {
       }
     },
 
-    // revision task provided by grunt-rev
-    // makes hash revisions for select files
-    rev: {
+    // CSS Minification and concatenation is provided by grunt-contrib-cssmin.
+    // This output is named index.css, because we only want to
+    // load one stylesheet in index.html.
+    cssmin: {
       options: {
-        encoding: "utf8",
-        algorithm: "md5",
-        length: 8
+        report: "gzip"
+      },
+      release: {
+        files: [{
+          src: ["<%= project.app %>/styles/index.css"],
+          dest: "<%= project.dist.release %>/index.css"
+        }]
+      }
+    },
+
+    // html_snapshots provided by grunt-html-snapshots.
+    // This task will create the html snapshots for indexing.
+    html_snapshots: {
+      options: {
+        //selector: "#dynamic-content",
+        input: "robots",
+        source: "robots.txt",
+        timeout: 5000
       },
       debug: {
-        files: {
-          src: [
-            "<%= project.dist.debug %>/require.js",
-            "<%= project.dist.debug %>/index.css",
-            "<%= project.dist.debug %>/<%= project.vendor %>/js/modernizr/modernizr.js"
-          ]
+        options: {
+          port: "<%= project.port.debug %>",
+          outputDir: "<%= project.dist.debug %>/snapshots"
         }
       },
       release: {
-        files: {
-          src: [
-            "<%= project.dist.release %>/require.js",
-            "<%= project.dist.release %>/index.css",
-            "<%= project.dist.release %>/<%= project.vendor %>/js/modernizr/modernizr.js"
-          ]
+        options: {
+          port: "<%= project.port.release %>",
+          outputDir: "<%= project.dist.release %>/snapshots"
         }
       }
     },
 
-    // useminOptions custom task
-    // usemin provided by grunt-usemin
-    useminOptions: {
-      debug: {
-        usemin: {
-          html: ["<%= project.dist.debug %>/index.html"],
-          options: {
-            dirs: ["<%= project.dist.debug %>"],
-            basedir: "<%= project.dist.debug %>"
-          }
-        }
+    // js Formatting task provided by grunt-jsbeautifier
+    jsbeautifier: {
+      files: ["<%= jshint.files %>", "<%= jshint.test.src %>"],
+      options: {
+        indent_size: 2,
+        indent_char: " ",
+        indent_level: 0,
+        indent_with_tabs: false,
+        preserve_newlines: true,
+        max_preserve_newlines: 2,
+        jslint_happy: false,
+        brace_style: "collapse",
+        keep_array_indentation: false,
+        keep_function_indentation: false,
+        space_before_conditional: true,
+        break_chained_methods: false,
+        eval_code: false,
+        wrap_line_length: 0,
+        unescape_strings: false
+      }
+    },
+
+    // Task provided by grunt-contrib-jshint.
+    // The jshint option for scripturl is set to lax, because the anchor
+    // override inside main.js needs to test for them so as to not accidentally
+    // route.
+    jshint: {
+      options: {
+        scripturl: true,
+
+        // Allows the use of expressions in assignments. 
+        // "Expected an assignment or function call and instead saw an expression."
+        "-W093": false
       },
-      release: {
-        usemin: {
-          html: ["<%= project.dist.release %>/index.html"],
-          options: {
-            dirs: ["<%= project.dist.release %>"],
-            basedir: "<%= project.dist.release %>"
-          }
+      files: [
+        "Gruntfile.js", "<%= project.app %>/**/*.js"
+      ],
+      test: {
+        options: {
+          "-W030": false
+        },
+        src: ["<%= project.test %>/**/*.js"]
+      }
+    },
+
+    // Task provided by grunt-contrib-jst.
+    // The jst task compiles all application templates into JavaScript
+    // functions with the underscore.js template function from 1.2.4.
+    //
+    // The concat task depends on this file to exist, so if you decide to
+    // remove this, ensure concat is updated accordingly.
+    jst: {
+      compile: {
+        files: [{
+          src: ["<%= project.app %>/templates/**/*.html"],
+          dest: "<%= project.dist.debug %>/templates.js"
+        }]
+      }
+    },
+
+    // Testing task provided by grunt-mocha.
+    // Runs the tests
+    mocha: {
+      all: {
+        options: {
+          run: false,
+          log: true,
+          bail: false,
+          urls: [
+            "http://localhost:<%= connect.test.options.port %>/<%= connect.test.testdir %>/index.html"
+          ]
         }
       }
     },
@@ -444,25 +397,126 @@ module.exports = function(grunt) {
       }
     },
 
-    // html_snapshots provided by grunt-html-snapshots.
-    // This task will create the html snapshots for indexing.
-    html_snapshots: {
+    // Task provided by grunt-contrib-requirejs.
+    // This task uses James Burke's excellent r.js AMD build tool.  In the
+    // future other builders may be contributed as drop-in alternatives.
+    requirejs: {
+      compile: {
+        options: {
+          // We do this in the uglify step so we can debug
+          optimize: "none",
+
+          // Ensure modules are inserted
+          skipModuleInsertion: false,
+
+          // Include the main configuration file.
+          mainConfigFile: "<%= project.app %>/config.js",
+
+          // Output file.
+          out: "<%= project.dist.debug %>/require.js",
+
+          // Root application module.
+          name: "config",
+
+          // Do not wrap everything in an IIFE.
+          wrap: false,
+
+          done: function(done, output) {
+
+            var duplicates = require('rjs-build-analysis').duplicates(output);
+
+            if (duplicates.length > 0) {
+              grunt.log.subhead('Duplicates found in requirejs build:');
+              grunt.log.warn(duplicates);
+              done(new Error('r.js built duplicate modules, please check the excludes option.'));
+            }
+
+            done();
+          }
+        }
+      }
+    },
+
+    // revision task provided by grunt-rev
+    // makes hash revisions for select files
+    rev: {
       options: {
-        //selector: "#dynamic-content",
-        input: "robots",
-        source: "robots.txt",
-        timeout: 5000
+        encoding: "utf8",
+        algorithm: "md5",
+        length: 8
       },
       debug: {
-        options: {
-          port: "<%= project.port.debug %>",
-          outputDir: "<%= project.dist.debug %>/snapshots"
+        files: {
+          src: [
+            "<%= project.dist.debug %>/require.js",
+            "<%= project.dist.debug %>/index.css",
+            "<%= project.dist.debug %>/<%= project.vendor %>/js/modernizr/modernizr.js"
+          ]
         }
       },
       release: {
-        options: {
-          port: "<%= project.port.release %>",
-          outputDir: "<%= project.dist.release %>/snapshots"
+        files: {
+          src: [
+            "<%= project.dist.release %>/require.js",
+            "<%= project.dist.release %>/index.css",
+            "<%= project.dist.release %>/<%= project.vendor %>/js/modernizr/modernizr.js"
+          ]
+        }
+      }
+    },
+
+    // targethtml task provided by grunt-targethtml.
+    // If you want to generate targeted `index.html` builds into the `dist/`
+    // folders, use the following configuration block and set 
+    // conditionals inside `index.html`.
+    targethtml: {
+      debug: {
+        src: "index.html",
+        dest: "<%= project.dist.debug %>/index.html"
+      },
+
+      release: {
+        src: "index.html",
+        dest: "<%= project.dist.release %>/index.html"
+      }
+    },
+
+    // Minification and js compilation is provided by grunt-contrib-uglify.
+    // Takes the built require.js file and minifies it for filesize benefits.
+    // This produces the release version of the application from the debug version,
+    // output by the concat task.
+    uglify: {
+      options: {
+        /*report: "gzip"*/
+        report: "min"
+      },
+      release: {
+        files: [{
+          src: ["<%= project.dist.debug %>/require.js"],
+          dest: "<%= project.dist.release %>/require.js"
+        }]
+      }
+    },
+
+    // useminOptions custom task
+    // usemin provided by grunt-usemin
+    useminOptions: {
+      debug: {
+        usemin: {
+          html: ["<%= project.dist.debug %>/index.html"],
+          options: {
+            dirs: ["<%= project.dist.debug %>"],
+            basedir: "<%= project.dist.debug %>"
+          }
+        }
+      },
+      release: {
+        usemin: {
+          html: ["<%= project.dist.release %>/index.html"],
+          options: {
+            dirs: ["<%= project.dist.release %>"],
+            basedir: "<%= project.dist.release %>"
+          }
         }
       }
     },
@@ -478,27 +532,6 @@ module.exports = function(grunt) {
       css: {
         files: ["<%= project.app %>/**/*.scss"],
         tasks: ["compass:dev"]
-      }
-    },
-
-    jsbeautifier: {
-      files: ["<%= jshint.files %>", "<%= jshint.test.src %>"],
-      options: {
-        indent_size: 2,
-        indent_char: " ",
-        indent_level: 0,
-        indent_with_tabs: false,
-        preserve_newlines: true,
-        max_preserve_newlines: 2,
-        jslint_happy: false,
-        brace_style: "collapse",
-        keep_array_indentation: false,
-        keep_function_indentation: false,
-        space_before_conditional: true,
-        break_chained_methods: false,
-        eval_code: false,
-        wrap_line_length: 0,
-        unescape_strings: false
       }
     }
   });

@@ -20,7 +20,6 @@ define([
     suffix = suffix.charAt(0) !== '.' ? "." + suffix : suffix;
 
     // template retrieval failure handler
-
     function failure(template, jqXHR, msg) {
       var err = "Template '" + template + "' could not be retrieved. ";
       if (jqXHR) {
@@ -30,16 +29,19 @@ define([
     }
 
     // return the method that will process templates for render
-    return function(template, data) {
+    return function(template, data, root) {
       template = prefix + template + suffix;
       // if not cached
       if (!JST[template]) {
         // If not development
         if (!JST.development) {
           // this was a real build, so you should've built your templates - shameful.
-          throw failure(template);
+          failure(template);
         } else {
-          // we have to block for development on marionette... unless you are willing to support marionette.async...
+          // development-only code    
+          if (_.isString(root) && template.substring(0, root.length-1) != root)
+            template = root + template;
+          // we have to block for marionette... unless you are willing to support marionette.async...
           $.ajax(template, {
             async: false
           })

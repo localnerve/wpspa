@@ -1,12 +1,17 @@
 define([
   "backbone.marionette",
-  "modules/views/header",
-  "modules/views/footer",
-  "modules/views/page",
-  "modules/regions/contentRegion"
-], function(Marionette, header, footer, page, content) {
+  "app",
+  "modules/helpers/contract",
+  "modules/regions/contentRegion",
+  "modules/layouts/headerLayout"//,
+  //"modules/views/footer"
+], function(Marionette, app, contract, content) {
 
-  var AppLayout = Backbone.Marionette.Layout.extend({
+  // create the app module
+  var thisModule = app.module("appLayout");
+
+  // definition of the appLayout
+  var AppLayout = Marionette.Layout.extend({
 
     template: "app-layout",
     className: "main-grid-row",
@@ -18,23 +23,32 @@ define([
     },
 
     initialize: function(options) {
-      options = options || {};
-      this.vent = options.vent;
-      this.listenTo(this.vent, "appLayout:render", this.onAppLayoutRender);
+      contract(options, "vent", "reqres");
+
+      // honor requests for this instance
+      options.reqres.setHandler("appLayout:instance", function() {
+        return thisModule.instance;
+      });
     },
 
-    onAppLayoutRender: function(options) {
-      this.header.show(header.create(options));
-      this.footer.show(footer.create(options));
-      this.content.show(page.create(options));
+    onRender: function(options) {
+      this.header.show(app.request("headerLayout:instance"));
+      // TODO:
+      //this.footer.show(footer.create(options));
+      //this.content.show(page.create(options));
     }
 
   });
 
-  return {
-    create: function(options) {
-      return new AppLayout(options);
-    }
-  };
+  // app module initialization
+  thisModule.addInitializer(function(options) {
+    this.instance = new AppLayout(options);
+  });
+
+  thisModule.addFinalizer(function() {
+    delete this.instance;
+  });
+
+  return thisModule;
 
 });

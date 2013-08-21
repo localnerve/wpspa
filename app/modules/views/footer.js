@@ -2,12 +2,11 @@ define([
   "backbone.marionette"
 ], function(Marionette) {
 
+  // TODO: implement
   var FooterView = Marionette.ItemView.extend({
     template: "footer",
 
     initialize: function(options) {
-      options = options || {};
-      this.vent = options.vent;
     }
   });
 
