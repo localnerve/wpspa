@@ -129,11 +129,6 @@ module.exports = function(grunt) {
         // change this to '0.0.0.0' to access the server from outside
         hostname: "localhost"
       },
-      rules: {
-        "^/$": "index.html",
-        "^/sample-page": "index.html",
-        "^/page-two": "index.html"
-      },
       test: {
         testdir: "<%= project.test %>",
         options: {

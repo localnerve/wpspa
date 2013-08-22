@@ -42,7 +42,7 @@ define([
       // it will always delegate to the proper handler for the object type.
       // NEXT TODO: finish content [page|post|category] hierarchy with prefetch.
       this[options.name] = function() {
-        this.options.vent.trigger(options.options.object_type+":render", options.options);
+        this.options.vent.trigger("content:"+options.options.object_type+":start", options.options);
       };
     }
   });

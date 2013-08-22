@@ -26,14 +26,14 @@ define([
   });
 
   // handle app exit events
-  app.listenTo(app.vent, "app:exit", function(options) {
+  app.vent.on("app:exit", function(options) {
     contract(options, "path");
     
     // Run the test harness. Otherwise, exit the app.
     _.defer($w.__test || function(path) {
       // kill cookie here, too? TODO...
       $w.location.replace("/" + path + ".notfound");
-    }, options.path, this);
+    }, options.path, app);
   
   });
 
@@ -44,7 +44,7 @@ define([
     app.main.show(app.request("appLayout:instance"));
 
     // wait for navigation to arrive
-    app.listenTo(app.vent, "app:navigation:success", function(options) {
+    app.vent.once("app:navigation:success", function(options) {
       // Trigger the initial route and enable HTML5 History API support, set the
       // root folder to app.root.    
       Backbone.history.start({
@@ -57,7 +57,7 @@ define([
     });
 
     // wait for navigation to fail
-    app.listenTo(app.vent, "app:navigation:fail", function(options) {
+    app.vent.once("app:navigation:fail", function(options) {
       // TODO: implement application, categorized error handling
     });
 
