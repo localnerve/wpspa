@@ -36,6 +36,7 @@ describe("appRouter", function() {
     // we can't assume what the name is, but we know it should happen now.
     app.vent.once("all", function(eventName) {
       expect(eventName).to.satisfy(function(name) {
+        // eventName startsWith "content:"
         return (name.toString().indexOf("content:") === 0);
       });
       done();
@@ -80,15 +81,15 @@ describe("appRouter", function() {
         route: route,
         name: name
       });
-
-      route_stub.should.have.been.calledOnce;
-      createHandler_stub.should.have.been.calledOnce;
+      delete appController[name];
 
       expect(appRouter.appRoutes[name]).to.exist;
       expect(appRouter.appRoutes[name]).to.be.a("string");
-      
-      delete appController[name];
       delete appRouter.appRoutes[name];
+
+      assert(route_stub.calledOnce, "Backbone.Router.route should have been called once");
+      assert(createHandler_stub.calledOnce, "createHandler should have been called once");
+
     });
   });
 

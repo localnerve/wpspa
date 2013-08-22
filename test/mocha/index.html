@@ -29,6 +29,7 @@
     <script type="text/javascript" charset="utf-8">
         // Setup chai
         var expect = chai.expect;
+        var assert = chai.assert;
         var should = chai.should();
     </script>
 
@@ -47,34 +48,58 @@
             // Called on app exit (to not found) if called from test harness.
             // This is because the test harness is an invalid route.
             function testRunner(path, app) {
+
                 // If we haven't been run
                 if (!__test.app) {
-                    // get all the defined modules
-                    //require.s.contexts._.defined;
-                    __test.app = app;                    
+
+                    // set the test exit handler
+                    __test.exit = function(path) {
+                        throw new Error("Unhandled application exit for '"+path+"'");
+                    };
+
+                    // set a reference to the app
+                    __test.app = app;
+
+                    // create a helpers namespace
+                    __test.helpers = {};
+                    
                     // Ensure you point to where your tests are, base directory is app/, which
-                    // is why ../test is necessary                    
-                    require({ paths: { tests: "../test/mocha/tests" } }, [
+                    // is why ../test is necessary
+                    require({ 
+                      paths: { 
+                        tests: "../test/mocha/tests"
+                      }
+                    }, [
+                        // load all helpers
+                        "modules/helpers/contract",
+
                         // load all the tests
                         "tests/environment",
                         "tests/modernizr",
+                        "tests/contract",
                         "tests/app",
-                        "tests/appRouter"//,
-                        //"tests/home",
+                        "tests/appRouter",
+                        "tests/appController",
+                        "tests/navigationView"
                         // next test suite here
-                    ], function() {
-                        // tests loaded, run em!
+                    ], function(contract) {
+                        // make helpers available                        
+                        __test.helpers.contract = contract;
+
+                        // tests and helpers loaded, run it!
                         mocha.run(function() {
                             // Don't navigate in the app for mocha anchors
                             $("#mocha a").attr("data-bypass", true);
                         });
                     });
-                } else {                    
-                    window.location.replace("/" + path + ".notfound");
-                }
+                } else {
+                    __test.exit(path);
+                    //window.location.replace("/" + path + ".notfound");
+                }                
             }
+
             return testRunner;
-        })();
+        }());
     </script>
 
     <!-- load the application -->    

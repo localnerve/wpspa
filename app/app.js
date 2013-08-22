@@ -34,7 +34,6 @@ define([
       // kill cookie here, too? TODO...
       $w.location.replace("/" + path + ".notfound");
     }, options.path, app);
-  
   });
 
   // after app initialization

@@ -57,21 +57,24 @@ define([
   });
 
   // app module initialization
-  // 
   thisModule.addInitializer(function(options) {
-    thisModule.options = options;
-    options.collection = navigationEntity.create(options);
-    this.instance = new NavigationView(options);
+    
+    // dont expose the navigation entity to the rest of application
+    var navigationOptions = _.clone(options);
+    navigationOptions.collection = navigationEntity.create(options);
+
+    // create the navigation view instance
+    this.instance = new NavigationView(navigationOptions);
 
     // start the navigation download
-    options.collection.fetch({
+    navigationOptions.collection.fetch({
       success: function(collection, response, options) {
         // navigation successfully loaded, tell the app
-        thisModule.options.vent.trigger("app:navigation:success");
+        app.vent.trigger("app:navigation:success");
       },
       error: function(collection, response, options) {
         // navigation failed to load, tell the app
-        thisModule.options.vent.trigger("app:navigation:error", collection, response, options);
+        app.vent.trigger("app:navigation:error", collection, response, options);
       }
     });
   });

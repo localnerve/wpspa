@@ -23,7 +23,12 @@ define([
       });
 
       // listen for add route events for appRouter
-      this.listenTo(options.vent, "appRouter:addRoute", this.addRoute);
+      // NOTE: instead of calling this.addRoute, using a function allows test stubs.
+      //       This appears to be because handlers are _.bind-ed at definition, disallowing stubs later (during test).
+      //       Might be able to get around this by stubbing the prototype - need more investigation.
+      this.listenTo(options.vent, "appRouter:addRoute", function(options) {
+        thisModule.instance.addRoute(options);
+      });
     },
 
     // addRoute handler

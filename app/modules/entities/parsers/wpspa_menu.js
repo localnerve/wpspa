@@ -5,14 +5,13 @@ define([
   
   // parse a single wpspa nav_menu_item post to a model
   function parsePost(post) {
-    contract(post, "custom_fields", "id");
-    contract(post.custom_fields,
-      "_menu_item_wpspa_menu_text",
-      "_menu_item_wpspa_route",
-      "_menu_item_wpspa_post_type",
-      "_menu_item_wpspa_object_id",
-      "_menu_item_menu_item_parent"
-      );
+    contract(post, "id",
+      "custom_fields._menu_item_wpspa_menu_text",
+      "custom_fields._menu_item_wpspa_route",
+      "custom_fields._menu_item_wpspa_post_type",
+      "custom_fields._menu_item_wpspa_object_id",
+      "custom_fields._menu_item_menu_item_parent"
+    );
     var model = {
       name: post.custom_fields._menu_item_wpspa_menu_text[0],
       route: (function() {
@@ -33,8 +32,7 @@ define([
 
   // parse a response containing wpspa nav_menu_item posts
   function parse(data) {
-    contract(data, "posts");
-    contract(data.posts, "length");
+    contract(data, "posts", "posts.length");
 
     // make the models and give them back to the collection
     var models = [];

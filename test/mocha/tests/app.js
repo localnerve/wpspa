@@ -2,12 +2,12 @@ describe("Application", function() {
 
   var app = window.__test.app;
 
-  it("main region should exist and be an object", function() {
+  it("should have a main region as an object", function() {
     expect(app.main).to.exist;
     expect(app.main).to.be.an("object");
   });
 
-  it("root property should be defined and be a string", function() {
+  it("should have a root as a string", function() {
     expect(app.root).to.exist;
     expect(app.root).to.be.a("string");
   });

@@ -312,7 +312,7 @@ module.exports = function(grunt) {
 
     // Task provided by grunt-contrib-jshint.
     // The jshint option for scripturl is set to lax, because the anchor
-    // override inside main.js needs to test for them so as to not accidentally
+    // override inside anchor.js needs to test for them so as to not accidentally
     // route.
     jshint: {
       options: {
@@ -327,7 +327,8 @@ module.exports = function(grunt) {
       ],
       test: {
         options: {
-          "-W030": false
+          "-W030": false,
+          "-W024": false
         },
         src: ["<%= project.test %>/**/*.js"]
       }

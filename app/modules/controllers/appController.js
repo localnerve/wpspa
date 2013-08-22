@@ -35,8 +35,7 @@ define([
 
     // dynamically add a route handler
     createHandler: function(options) {
-      contract(options, "name", "options");
-      contract(options.options, "object_type");
+      contract(options, "name", "options", "options.object_type");
 
       // expand this controller to include the new route handler.
       // it will always delegate to the proper handler for the object type.
