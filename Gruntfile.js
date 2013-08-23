@@ -24,6 +24,7 @@ module.exports = function(grunt) {
       port: 80
     },
     app: "app",
+    report: "report",
     images: "images",
     fonts: "fonts",
     test: "test/mocha",
@@ -364,6 +365,20 @@ module.exports = function(grunt) {
       }
     },
 
+    // plato task provided by grunt-plato
+    // This runs introspection reports.
+    plato: {
+      client: {
+        options: {
+          exclude: /config\.js/
+        },
+        files: [{
+          dest: "<%= project.report %>",
+          src: "<%= project.app %>/**/*.js"
+        }]
+      }
+    },
+
     // regex replace task provided by grunt-regex-replace
     // Ensures that usemin replacements are preceeded by a /
     "regex-replace": {
@@ -545,6 +560,7 @@ module.exports = function(grunt) {
     grunt.log.writeln("\tgrunt watch - Run the watch process");
     grunt.log.writeln("\tgrunt format - Run the js formatter");
     grunt.log.writeln("\tgrunt dev - Run the development watch and webserver");
+    grunt.log.writeln("\tgrunt plato - Run the static analysis report");
     grunt.log.writeln("\tgrunt debug - Build the debug version of the app");
     grunt.log.writeln("\tgrunt release - Build the release version of the app");
   });
