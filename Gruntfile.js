@@ -7,6 +7,12 @@ var mountFolder = function(connect, dir) {
 // middleware to route /api requests to the backend.
 var proxy = require("./server/node/lib/proxy");
 
+// middleware for rewrites
+var rewrite = require("connect-modrewrite");
+
+// helper for rewrites
+var rewriteHelper = require("./app/modules/helpers/rewrites");
+
 // Grunt callback
 module.exports = function(grunt) {
 
@@ -155,6 +161,14 @@ module.exports = function(grunt) {
                 grunt.config.process("<%= project.api.host %>"),
                 grunt.config.process("<%= project.api.port %>")
               ),
+              rewrite([
+                "^"+rewriteHelper.notfound('(.+)\\')+"$ /404.html [NC] [L]",
+                '^/$ /index.html [L]',
+                "^/"+rewriteHelper.page('(.*)')+"$ /index.html [L]"
+                //'^(.+)\\.notfound$ /404.html [NC] [L]',
+                //'^/$ /index.html [L]',
+                //'^/page/(.*)$ /index.html [L]'
+              ]),
               mountFolder(connect, ".")
             ];
           }

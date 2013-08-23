@@ -5,8 +5,9 @@ define([
   "modules/loaders/jst",
   "modules/helpers/anchor",
   "modules/helpers/contract",
+  "modules/helpers/rewrites",
   "module"
-], function(_, Backbone, Marionette, loader, anchor, contract, module) {
+], function(_, Backbone, Marionette, loader, anchor, contract, rewrites, module) {
 
   var $w = window;
 
@@ -32,7 +33,7 @@ define([
     // Run the test harness. Otherwise, exit the app.
     _.defer($w.__test || function(path) {
       // kill cookie here, too? TODO...
-      $w.location.replace("/" + path + ".notfound");
+      $w.location.replace(rewrites.notfound("/"+path));
     }, options.path, app);
   });
 
