@@ -1,8 +1,7 @@
 // parser for wpspa wordpress plugin nav_menu_item Wordpress type posts
 define([
-  "modules/helpers/contract",
-  "modules/helpers/rewrites"
-  ], function(contract, rewrites) {
+  "modules/helpers/contract"
+  ], function(contract) {
   
   // parse a single wpspa nav_menu_item post to a model
   function parsePost(post) {
@@ -20,9 +19,6 @@ define([
         
         if (route.charAt(0) === '/')
           route = route.substring(1);
-
-        if (route !== "")
-          route = rewrites.page(route);
 
         return route;
       }()),

@@ -351,19 +351,6 @@ FileETag None
 </IfModule>
 
 # ----------------------------------------------------------------------
-# Enable api support
-# ----------------------------------------------------------------------
-#ProxyPass /api http://api.hostname.dom
-#ProxyPassReverse /api http://api.hostname.dom
-# poor man's CORS workaround api
-#<ifModule mod_rewrite.c>
-#  RewriteCond %{REQUEST_FILENAME} !-f
-#  RewriteCond %{REQUEST_FILENAME} !-d
-#  RewriteCond %{REQUEST_URI} !api/index
-#  RewriteRule ^/api /api/index.php [QSA,L]
-#</ifModule>
-
-# ----------------------------------------------------------------------
 # Enable search engine snapshot support
 # ----------------------------------------------------------------------
 <ifModule mod_rewrite.c>

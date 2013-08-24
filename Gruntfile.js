@@ -10,6 +10,9 @@ var proxy = require("./server/node/lib/proxy");
 // middleware for rewrites
 var rewrite = require("connect-modrewrite");
 
+// middleware for notfound
+var notfound = require("./server/node/lib/notfound");
+
 // helper for rewrites
 var rewriteHelper = require("./app/modules/helpers/rewrites");
 
@@ -157,19 +160,22 @@ module.exports = function(grunt) {
           keepalive: true,
           middleware: function(connect) {
             return [
+              // handle api
               proxy.api(
                 grunt.config.process("<%= project.api.host %>"),
                 grunt.config.process("<%= project.api.port %>")
               ),
+              // rewrite filter
               rewrite([
-                "^"+rewriteHelper.notfound('(.+)\\')+"$ /404.html [NC] [L]",
-                '^/$ /index.html [L]',
-                "^/"+rewriteHelper.page('(.*)')+"$ /index.html [L]"
-                //'^(.+)\\.notfound$ /404.html [NC] [L]',
-                //'^/$ /index.html [L]',
-                //'^/page/(.*)$ /index.html [L]'
+                // if application marked notfound, exit here
+                "^"+rewriteHelper.notfound('(.+)', {regex: true})+"$ /404.html [NC] [L]",
+                // if a static resource is not being requested, its an in-app route
+                '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
               ]),
-              mountFolder(connect, ".")
+              // static files
+              mountFolder(connect, "."),
+              // if we're here, its a 404
+              notfound.four04
             ];
           }
         }

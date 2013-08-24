@@ -16,17 +16,16 @@
     }
 }(function() {
 
-  function prependPage(input) {
-    return "page/"+input;
-  }
+  function processNotFound(input, options) {
+    options = options || {};
 
-  function appendNotFound(input) {
-    return input + ".notfound";
+    var dot = !!(options.regex) ? "\\." : ".";
+    
+    return input + dot + "notfound";
   }
 
   return {
-    page: prependPage,
-    notfound: appendNotFound
+    notfound: processNotFound
   };
 
 }));
