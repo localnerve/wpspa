@@ -43,8 +43,12 @@ define([
 
   // app module initialization
   thisModule.addInitializer(function(options) {
-    options.controller = app.request("appController:instance");
-    this.instance = new Router(options);
+    // dont expose the controller to the rest of application
+    var routerOptions = _.clone(options);
+    // add the controller to the router options
+    routerOptions.controller = app.request("appController:instance");
+    // create the appRouter
+    this.instance = new Router(routerOptions);
   });
 
   thisModule.addFinalizer(function() {
