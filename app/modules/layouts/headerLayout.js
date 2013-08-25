@@ -13,6 +13,7 @@ define([
   var HeaderLayout = Marionette.Layout.extend({
 
     template: "header-layout",
+    tagName: "header",
     className: "grid-row",
 
     regions: {
@@ -31,6 +32,7 @@ define([
     // renders all child views of this layout
     onRender: function(options) {
       this.navigation.show(app.request("headerLayout:navigation:instance"));
+      // TODO:
       //this.banner.show(banner.create(options));
     }
 

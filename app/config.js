@@ -26,6 +26,9 @@ require.config({
     "modules/entities/navigation": {
       endpoint: "/api/get_posts/?post_type=nav_menu_item&order=ASC&orderby=menu_order&custom_fields=_menu_item_menu_item_parent,_menu_item_wpspa_route,_menu_item_wpspa_menu_text,_menu_item_wpspa_post_type,_menu_item_wpspa_object_id"
     },
+    "modules/entities/post": {
+      endpoint: "/api/get_post"
+    },
     app: {
       root: "/"
     }
@@ -57,6 +60,17 @@ require.config({
     "backbone.babysitter": {
       deps: [
         "backbone"
+      ]
+    },
+    "foundation/foundation": {
+      deps: [
+        "jquery"
+      ],
+      exports: "Foundation"
+    },
+    "foundation/foundation.topbar": {
+      deps: [
+        "foundation/foundation"
       ]
     }
   }

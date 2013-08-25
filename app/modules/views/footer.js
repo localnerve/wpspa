@@ -1,18 +1,31 @@
 define([
-  "backbone.marionette"
-], function(Marionette) {
+  "backbone.marionette",
+  "app",
+  "modules/helpers/contract"
+], function(Marionette, app, contract) {
 
-  // TODO: implement
-  var FooterView = Marionette.ItemView.extend({
+  var thisModule = app.module("appLayout.footerLayout");
+
+  // define the FooterLayout.
+  // just a plain item view for now...
+  var FooterLayout = Marionette.ItemView.extend({
     template: "footer",
+    className: "grid-row",
+    tagName: "footer",
 
     initialize: function(options) {
+      contract(options, "reqres");
+      options.reqres.setHandler("footerLayout:instance", function() {
+        return thisModule.instance;
+      });
     }
   });
 
-  return {
-    create: function(options) {
-      return new FooterView(options);
-    }
-  };
+  thisModule.addInitializer(function(options) {
+    thisModule.instance = new FooterLayout(options);
+  });
+
+  thisModule.addFinalizer(function() {
+    delete thisModule.instance;
+  });
 });

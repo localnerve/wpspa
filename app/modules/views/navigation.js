@@ -11,7 +11,8 @@ define([
   // The view definition of each navigation item
   var NavItemView = Marionette.ItemView.extend({
     template: "navigation-item",
-    // TODO: handle the el issue when implementing navigation hierarchy
+    tagName: "li",
+
     serializeData: function() {
       return {
         name: this.model.get("name"),
@@ -27,7 +28,7 @@ define([
     itemView: NavItemView,
     tagName: "nav",
     className: "top-bar",
-    itemViewContainer: ".top-bar-section ul",
+    itemViewContainer: ".wpspa-nav",
 
     initialize: function(options) {
       contract(options, "reqres", "vent");

@@ -563,6 +563,9 @@ module.exports = function(grunt) {
       css: {
         files: ["<%= project.app %>/**/*.scss"],
         tasks: ["compass:dev"]
+      },
+      html: {
+        files: ["<%= project.app %>/**/*.html"]
       }
     }
   });

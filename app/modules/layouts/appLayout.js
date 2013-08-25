@@ -3,8 +3,8 @@ define([
   "app",
   "modules/helpers/contract",
   "modules/regions/contentRegion",
-  "modules/layouts/headerLayout"//,
-  //"modules/views/footer"
+  "modules/layouts/headerLayout",
+  "modules/views/footer"
 ], function(Marionette, app, contract, content) {
 
   // create the app module
@@ -33,9 +33,10 @@ define([
 
     onRender: function(options) {
       this.header.show(app.request("headerLayout:instance"));
-      // TODO:
-      //this.footer.show(footer.create(options));
-      //this.content.show(page.create(options));
+      this.footer.show(app.request("footerLayout:instance"));
+
+      // content is shown dynamically
+      // see appController.createHandler for view initiation
     }
 
   });
