@@ -554,6 +554,9 @@ module.exports = function(grunt) {
       }
     },
 
+    // Watch task provided by grunt-contrib-watch
+    // We are watching changes to all js, css, and markup.
+    // When a change is detected, we run any associated tasks and signal livereload.
     watch: {
       options: {
         livereload: true
