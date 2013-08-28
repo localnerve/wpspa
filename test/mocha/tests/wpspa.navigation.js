@@ -1,7 +1,7 @@
-describe("Navigation View", function() {
+describe("wpspa.navigation", function() {
 
   var app = __test.app;
-  var navigationView = app.request("headerLayout:navigation:instance");
+  var navigationView = app.wpspa.navigation;
 
   var stubs = [];
 
@@ -13,7 +13,7 @@ describe("Navigation View", function() {
     stubs.length = 0;
   });
 
-  it("should get able to get an instance with 'headerLayout:navigation:instance'", function() {
+  it("should get able to get a navigation instance", function() {
     expect(navigationView).to.exist;
     expect(navigationView).to.be.an("object");
   });
@@ -33,7 +33,7 @@ describe("Navigation View", function() {
         addRoute_stub;
 
     // stub the appRouter.addRoute so that we don't have to clean up.
-    var appRouter = app.request("appRouter:instance");
+    var appRouter = app.wpspa.router;
     stubs.push(addRoute_stub = sinon.stub(appRouter, "addRoute"));
 
     var models = [];
@@ -48,14 +48,14 @@ describe("Navigation View", function() {
 
     var beforeLength = navigationView.collection.length;
 
-    app.vent.once("appRouter:addRoute", function(options) {
+    app.vent.once("wpspa:router:addRoute", function(options) {
       // inspect the event arguments
       expect(options.name).to.equal(name);
       expect(options.route).to.equal(route);
       expect(options.options.object_type).to.equal(object_type);
       expect(options.options.object_id).to.equal(object_id);
       
-      assert(addRoute_stub.calledOnce, "appRouter.addRoute should have been called once");
+      assert(addRoute_stub.calledOnce, "addRoute should have been called once");
 
       // cleanup the collection
       var models = navigationView.collection.where({ nav_item: nav_item });

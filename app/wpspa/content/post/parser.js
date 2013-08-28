@@ -1,6 +1,6 @@
 // parser for a single Wordpress json api post
 define([
-  "modules/helpers/contract"
+  "helpers/contract"
   ], function(contract) {
   
   // parse a response containing a post

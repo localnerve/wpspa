@@ -71,17 +71,17 @@
                       }
                     }, [
                         // load all helpers
-                        "modules/helpers/contract",
+                        "helpers/contract",
 
                         // load all the tests
                         "tests/environment",
                         "tests/modernizr",
                         "tests/contract",
                         "tests/app",
-                        "tests/appRouter",
-                        "tests/appController",
-                        "tests/navigationView",
-                        "tests/content"
+                        "tests/wpspa.router",
+                        "tests/wpspa.controller",
+                        "tests/wpspa.navigation",
+                        "tests/wpspa.content"
                         // next test suite here
                     ], function(contract) {
                         // make helpers available                        
@@ -91,6 +91,8 @@
                         mocha.run(function() {
                             // Don't navigate in the app for mocha anchors
                             $("#mocha a").attr("data-bypass", true);
+                            // Remove the replay links, not supporting
+                            $("#mocha a.replay").css("display", "none");
                         });
                     });
                 } else {

@@ -1,12 +1,8 @@
 require([
     "app",
-    "modules/routers/appRouter"
+    "wpspa/router"
   ], function(app) {
 
-    app.start({
-      vent: app.vent,
-      reqres: app.reqres,
-      commands: app.commands
-    });
+    app.start();
 
   });

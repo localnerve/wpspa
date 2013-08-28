@@ -1,8 +1,8 @@
 define([
   "backbone.marionette",
   "app",
-  "modules/helpers/vendor-interface",
-  "modules/views/post"
+  "helpers/vendor-interface",
+  "wpspa/content/post/main"
 ], function(Marionette, app, vendor, post) {
 
   // definition of the content region

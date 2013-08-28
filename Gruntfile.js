@@ -1,5 +1,4 @@
 // middleware for connect. Serve static content.
-// TODO: move this to server/node/lib
 var mountFolder = function(connect, dir) {
   return connect.static(require("path").resolve(dir));
 };
@@ -14,7 +13,7 @@ var rewrite = require("connect-modrewrite");
 var notfound = require("./server/node/lib/notfound");
 
 // helper for rewrites
-var rewriteHelper = require("./app/modules/helpers/rewrites");
+var rewriteHelper = require("./app/helpers/rewrites");
 
 // Grunt callback
 module.exports = function(grunt) {
@@ -81,7 +80,10 @@ module.exports = function(grunt) {
         javascriptsDir: "<%= project.vendor %>/gem/foundation",
         imagesDir: "<%= project.images %>",
         fontsDir: "<%= project.fonts %>",
-        importPath: "<%= project.vendor %>/bower/foundation/scss"
+        importPath: [
+          "<%= project.vendor %>/bower/foundation/scss",
+          "<%= project.app %>"
+        ]
       },
       test: {
         options: {
@@ -364,7 +366,7 @@ module.exports = function(grunt) {
     jst: {
       compile: {
         files: [{
-          src: ["<%= project.app %>/templates/**/*.html"],
+          src: ["<%= project.app %>/**/*.html"],
           dest: "<%= project.dist.debug %>/templates.js"
         }]
       }

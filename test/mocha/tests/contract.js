@@ -1,21 +1,23 @@
 describe("contract", function() {
 
+  var contract;
+  beforeEach(function() {
+    contract = __test.helpers.contract;
+  });
+
   it("should fail if no options supplied", function() {
-    var contract = __test.helpers.contract;
     expect(function() {
       contract();
     }).to.throw(Error);
   });
 
   it("should fail if no contract supplied", function() {
-    var contract = __test.helpers.contract;
     expect(function() {
       contract({ test: 1 });
     }).to.throw(Error);
   });
 
   it ("should pass simple expected input", function() {
-    var contract = __test.helpers.contract;
     var props = ["name", "address", "time", "waste"];
 
     expect(function() {
@@ -24,7 +26,6 @@ describe("contract", function() {
   });
 
   it("should pass nested expected input", function() {
-    var contract = __test.helpers.contract;
     var props = ["name", "address", "time", "waste"];
     var options = _.object(props, [1,2,3,4]);
     
@@ -37,7 +38,6 @@ describe("contract", function() {
   });
 
   it("should pass simple expected input with unexpected properties in options", function() {
-    var contract = __test.helpers.contract;
     var props = ["name", "address", "time", "waste"];
 
     expect(function() {
@@ -46,7 +46,6 @@ describe("contract", function() {
   });
 
   it ("should fail simple unexpected input", function() {
-    var contract = __test.helpers.contract;
     var props = ["name", "address", "time", "waste"];
 
     expect(function() {
@@ -55,7 +54,6 @@ describe("contract", function() {
   });
 
   it("should fail nested unexpected input", function() {
-    var contract = __test.helpers.contract;
     var props = ["name", "address", "time", "waste"];
     var options = _.object(props, [1,2,3,4]);
     
@@ -66,7 +64,6 @@ describe("contract", function() {
   });
 
   it("should allow named or array contract arguments", function() {
-    var contract = __test.helpers.contract;
     var props = ["name", "address", "time", "waste"];
     var options = _.object(props, [1,2,3,4]);
 

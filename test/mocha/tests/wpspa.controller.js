@@ -1,8 +1,8 @@
-describe("appController", function() {
+describe("wpspa.controller", function() {
 
   var app = window.__test.app;
-  var appController = app.request("appController:instance");
-  var appRouter = app.request("appRouter:instance");
+  var appController = app.wpspa.controller;
+  var appRouter = app.wpspa.router;
   var stubs = [];
 
   afterEach(function() {
@@ -37,44 +37,45 @@ describe("appController", function() {
 
   describe("createHandler", function() {
 
-    it("should get called in response to the appController:createHandler event", function() {
+    it("should get called in response to the createHandler event", function() {
       var name = "dummy1",
           object_type = "obbie",
           createHandler_stub = sinon.stub(appController, "createHandler");
 
       stubs.push(createHandler_stub);
 
-      app.vent.trigger("appController:createHandler", {
+      app.vent.trigger("wpspa:controller:createHandler", {
         name: name,
         options: { object_type: object_type }
       });
 
-      assert(createHandler_stub.calledOnce, "appController.createHandler should have been called once");
+      assert(createHandler_stub.calledOnce, "createHandler should have been called once");
     });
 
     it("should fail if it doesn't get name, options, and options.object_type", function() {
+      var eventName = "wpspa:controller:createHandler";
       expect(function() {
-        app.vent.trigger("appController:createHandler", {
+        app.vent.trigger(eventName, {
         });
       }).to.throw(Error);
       expect(function() {
-        app.vent.trigger("appController:createHandler", {
+        app.vent.trigger(eventName, {
           name: "name"
         });
       }).to.throw(Error);
       expect(function() {
-        app.vent.trigger("appController:createHandler", {
+        app.vent.trigger(eventName, {
           options: {}
         });
       }).to.throw(Error);
       expect(function() {
-        app.vent.trigger("appController:createHandler", {
+        app.vent.trigger(eventName, {
           name: "name",
           options: {}
         });
       }).to.throw(Error);
       expect(function() {
-        app.vent.trigger("appController:createHandler", {
+        app.vent.trigger(eventName, {
           options: { object_type: "blah" }
         });
       }).to.throw(Error);
@@ -84,7 +85,7 @@ describe("appController", function() {
       var name = "dummy1",
           object_type = "obbie";
 
-      app.vent.trigger("appController:createHandler", {
+      app.vent.trigger("wpspa:controller:createHandler", {
         name: name,
         options: { object_type: object_type }
       });

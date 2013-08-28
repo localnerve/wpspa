@@ -1,7 +1,7 @@
 define([
   "backbone",
-  "modules/helpers/contract",
-  "modules/entities/parsers/jsonapi_post",
+  "helpers/contract",
+  "wpspa/content/post/parser",
   "module"
   ], function(Backbone, contract, parser, module) {
 

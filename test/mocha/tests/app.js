@@ -12,8 +12,8 @@ describe("Application", function() {
     expect(app.root).to.be.a("string");
   });
 
-  it("should be able to get the appLayout instance", function() {
-    var appLayout = app.request("appLayout:instance");
+  it("should be able to get the main layout instance", function() {
+    var appLayout = app.wpspa.layout;
     expect(appLayout).to.exist;
     expect(appLayout).to.be.an("object");
   });

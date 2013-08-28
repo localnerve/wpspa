@@ -1,6 +1,6 @@
 define([
   "backbone",
-  "modules/entities/parsers/wpspa_menu",
+  "wpspa/header/navigation/parser",
   "module"
   ], function(Backbone, parser, module) {
 
@@ -15,8 +15,8 @@ define([
     });
 
     return {
-      create: function(options) {
-        return new NavigationCollection(options);
+      create: function(/*options*/) {
+        return new NavigationCollection();
       }
     };
 

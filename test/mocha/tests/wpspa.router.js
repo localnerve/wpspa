@@ -1,8 +1,8 @@
-describe("appRouter", function() {
+describe("wpspa.router", function() {
 
   var app = window.__test.app;
-  var appRouter = app.request("appRouter:instance");
-  var appController = app.request("appController:instance");
+  var appRouter = app.wpspa.router;
+  var appController = app.wpspa.controller;
   var stubs = [];
 
   afterEach(function() {
@@ -18,12 +18,12 @@ describe("appRouter", function() {
     expect(appRouter).to.be.an("object");
   });
 
-  it("should be able to get the appController instance", function() {
+  it("should be able to get the controller instance", function() {
     expect(appController).to.exist;
     expect(appController).to.be.an("object");
   });
 
-  it("should have an appController properly defined", function() {
+  it("should have an controller properly defined", function() {
     var controller = Backbone.Marionette.getOption(appRouter, "controller");
     expect(controller).to.exist;
     expect(controller).to.be.an("object");
@@ -53,17 +53,18 @@ describe("appRouter", function() {
 
   describe("addRoute", function() {
     it("should fail if it doesn't get route and name", function() {
+      var eventName = "wpspa:router:addRoute";
       expect(function() {
-        app.vent.trigger("appRouter:addRoute", {
+        app.vent.trigger(eventName, {
         });
       }).to.throw(Error);
       expect(function() {
-        app.vent.trigger("appRouter:addRoute", {
+        app.vent.trigger(eventName, {
           route: "route"
         });
       }).to.throw(Error);
       expect(function() {
-        app.vent.trigger("appRouter:addRoute", {
+        app.vent.trigger(eventName, {
           name: "name"
         });
       }).to.throw(Error);
@@ -77,7 +78,7 @@ describe("appRouter", function() {
       stubs.push(route_stub = sinon.stub(Backbone.Router.prototype, "route"));
 
       appController[name] = function() {};
-      app.vent.trigger("appRouter:addRoute", {
+      app.vent.trigger("wpspa:router:addRoute", {
         route: route,
         name: name
       });
