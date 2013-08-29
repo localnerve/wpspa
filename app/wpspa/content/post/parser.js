@@ -5,7 +5,7 @@ define([
   
   // parse a response containing a post
   function parse(data) {
-    contract(data, "post", "post.content");
+    contract(data, "post", "post.content", "post.excerpt");
 
     return {
       title: data.post.title,
