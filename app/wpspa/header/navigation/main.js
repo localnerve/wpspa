@@ -70,7 +70,15 @@ define([
 
       // start the navigation download
       wpspa.navigation.collection.fetch({
-        success: function(collection, response, options) {
+        success: function(collection) {
+          // send out a pretch content event
+          app.vent.trigger("content:prefetch", collection.map(function(model) {
+            return {
+              object_type: model.get("object_type"),
+              object_id: model.get("object_id")
+            };
+          }));
+
           // navigation successfully loaded, tell the app
           app.vent.trigger("app:navigation:success");
         },
@@ -87,7 +95,8 @@ define([
   });
 
   thisModule.addFinalizer(function() {
-    delete wpspa.navigation;
+    app.wpspa.navigation.stopListening();
+    delete app.wpspa.navigation;
   });
 
   return thisModule;

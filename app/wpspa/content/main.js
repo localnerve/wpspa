@@ -2,8 +2,9 @@ define([
   "backbone.marionette",
   "app",
   "helpers/vendor-interface",
+//  "wpspa/content/prefetch",
   "wpspa/content/post/main"
-], function(Marionette, app, vendor, post) {
+], function(Marionette, app, vendor/*, prefetch*/, post) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -15,8 +16,9 @@ define([
 
       // handle post start
       app.vent.on("content:post:start", function(options) {
+
         var postView = post.create(options);
-        self.listenTo(postView.model, "sync", function() {
+        self.listenTo(postView.model, "request", function() {
           // TODO: content transition view
           // self.show(transitionView)
           var test = 0;

@@ -22,6 +22,7 @@ define([
         
         return route;
       }()),
+      id: post.id,
       nav_item: post.id,
       object_type: post.custom_fields._menu_item_wpspa_post_type[0],
       object_id: post.custom_fields._menu_item_wpspa_object_id[0],
