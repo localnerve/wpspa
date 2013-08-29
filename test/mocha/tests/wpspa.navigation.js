@@ -1,9 +1,12 @@
 describe("wpspa.navigation", function() {
 
   var app = __test.app;
-  var navigationView = app.wpspa.navigation;
-
   var stubs = [];
+  var navigationView;
+
+  beforeEach(function() {
+    navigationView = app.wpspa.navigation;
+  });
 
   afterEach(function() {
     // clean up stubs

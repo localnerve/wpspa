@@ -1,9 +1,14 @@
 describe("wpspa.controller", function() {
 
   var app = window.__test.app;
-  var appController = app.wpspa.controller;
-  var appRouter = app.wpspa.router;
   var stubs = [];
+  var appController;
+  var appRouter;
+
+  beforeEach(function() {
+    appController = app.wpspa.controller;
+    appRouter = app.wpspa.router;
+  });
 
   afterEach(function() {
     // clean up stubs
