@@ -1,5 +1,9 @@
-# Wordpress Spa
-> (WIP) An example single page application that demonstrates using wordpress as an api
+# Wordpress SPA
+> An example single page application that demonstrates using wordpress as an api (Work in progress)
+
+Latest static analysis [report](http://htmlpreview.github.io/?https://github.com/localnerve/wpspa/blob/master/report/index.html "Plato Report") of this project.
+
+The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Also, to learn new stuff and keep growing.
 
 ## Development Notes
 
@@ -8,11 +12,11 @@
 + Demonstrate Marionette w/AMD
 + Demonstrates WP structures that play well with an SPA architecture
 + Demonstrate optimal build procedure for development and SEO
-++ Requires WPSPA plugin
+  * WPSPA Wordpress plugin extends menu admin interface for route mapping
 + Model a scalable, extensible application structure
-+ Separate backend from frontend cloud service implementation
-++ Total javascript front end implementation (one language)
-+ (*stretch*) Attempt to get 1 second response for mobile user (1st response)
++ Separate, portable backend and frontend 
+  * Total javascript front end implementation (one language)
++ (*stretch*) Attempt to get 1 second response for mobile user (ATF 1st response)
 
 ### External Dependencies
 #### Css and responsive fwk
@@ -28,14 +32,8 @@
 + Bower (manages runtime requirejs, webshim)
 
 ### Unmanaged Vendor packages
-+ (Bupkiss)
++ modernizr, still waiting on grunt-modernizr/Moderizr 3
 
 ### Dynamically loaded modules
 #### Dynamic and Conditionally loaded modules
-+ (Bupkiss)
-
-
-#### TODO: version control dynamically loaded modules (when I get them)
-How to version control these with names that are referenced by the require loader?
-(I'm trying to avoid manual intervention in app/config.js)
-Perhaps use grunt-regex-replace
++ (none)
