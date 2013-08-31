@@ -2,7 +2,7 @@
  * url rewrites helper
  *
  * A common set of methods to do the rewrites of the application.
- * Invoked in AMD and CommonJS, so UMD notation is used.
+ * Loaded in AMD and CommonJS, so UMD notation is used.
  */
 (function (factory) {
     if (typeof define === "function" && define.amd) {

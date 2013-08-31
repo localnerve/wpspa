@@ -1,5 +1,4 @@
 /*
- * appController
  * The wpspa controller.
  * Handles notfound events and dynamic wpspa added routes.
  */
@@ -17,10 +16,10 @@ define([
     var AppController = Marionette.Controller.extend({
 
       initialize: function(/*options*/) {
-
+        var self = this;
         // Create the handler to dynamically add a route handler
         this.listenTo(app.vent, "wpspa:controller:createHandler", function(options) {
-          wpspa.controller.createHandler(options);
+          self.createHandler(options);
         });
       },
 
@@ -34,13 +33,13 @@ define([
 
       // Handler to dynamically add a route handler, pay attention.
       createHandler: function(options) {
-        contract(options, "name", "options", "options.object_type");
+        contract(options, "name", "options");
 
         // Here, we expand this controller to include the new route handler.
         // It will always delegate to the proper handler for the object type.
         // For now, it will always be a content event: See contentRegion.
         this[options.name] = function() {
-          app.vent.trigger("content:"+options.options.object_type+":start", options.options);
+          app.vent.trigger("content:start", options.options);
         };
       }
     });

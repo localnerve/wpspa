@@ -1,21 +1,17 @@
 describe("wpspa.router", function() {
 
   var app = window.__test.app;
-  var stubs = [];
-  var appRouter;
-  var appController;
+  var appRouter, appController;
+  var sandbox;
 
   beforeEach(function() {
     appRouter = app.wpspa.router;
     appController = app.wpspa.controller;
+    sandbox = sinon.sandbox.create();
   });
 
   afterEach(function() {
-    // clean up stubs
-    for (var i = 0; i < stubs.length; i++) {
-      stubs[i].restore();
-    }
-    stubs.length = 0;
+    sandbox.restore();
   });
 
   it("should exist and be an object", function() {
@@ -79,8 +75,8 @@ describe("wpspa.router", function() {
       var route = "dummy1", name = "dummy1",
           createHandler_stub, route_stub;
 
-      stubs.push(createHandler_stub = sinon.stub(appController, "createHandler"));
-      stubs.push(route_stub = sinon.stub(Backbone.Router.prototype, "route"));
+      createHandler_stub = sandbox.stub(appController, "createHandler");
+      route_stub = sandbox.stub(Backbone.Router.prototype, "route");
 
       appController[name] = function() {};
       app.vent.trigger("wpspa:router:addRoute", {
@@ -95,7 +91,6 @@ describe("wpspa.router", function() {
 
       assert(route_stub.calledOnce, "Backbone.Router.route should have been called once");
       assert(createHandler_stub.calledOnce, "createHandler should have been called once");
-
     });
   });
 

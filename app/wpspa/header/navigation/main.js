@@ -65,7 +65,7 @@ define([
       
       // create the navigation view instance
       wpspa.navigation = new NavigationView(_.extend({
-        collection: entities.create({ collection: true })
+        collection: entities.createCollection()
       }, options));
 
       // start the navigation download

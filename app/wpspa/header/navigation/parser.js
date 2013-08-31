@@ -1,7 +1,8 @@
 // parser for wpspa wordpress plugin nav_menu_item Wordpress type posts
 define([
+  "lodash",
   "helpers/contract"
-  ], function(contract) {
+  ], function(_, contract) {
   
   // parse a single wpspa nav_menu_item post to a model
   function parsePost(post) {
@@ -33,14 +34,12 @@ define([
 
   // parse a response containing wpspa nav_menu_item posts
   function parse(data) {
-    contract(data, "posts", "posts.length");
+    contract(data, "posts");
 
     // make the models and give them back to the collection
-    var models = [];
-    for (var i=0; i < data.posts.length; i++ )
-      models[i] = parsePost(data.posts[i]);
-    
-    return models;
+    return _.map(data.posts, function(post) {
+      return parsePost(post);
+    });
   }
 
   return parse;

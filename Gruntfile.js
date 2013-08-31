@@ -1,7 +1,10 @@
-// middleware for connect. Serve static content.
+// middleware for static content.
 var mountFolder = function(connect, dir) {
   return connect.static(require("path").resolve(dir));
 };
+
+// middleware to mock /api for test
+var mockApi = require("./test/fixtures/mockApi");
 
 // middleware to route /api requests to the backend.
 var proxy = require("./server/node/lib/proxy");
@@ -22,7 +25,7 @@ module.exports = function(grunt) {
   require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
 
   // project configuration
-  projectConfig = {
+  var projectConfig = {
     dist: {
       debug: "dist/debug",
       release: "dist/release"
@@ -45,6 +48,7 @@ module.exports = function(grunt) {
     }
   };
 
+  // Grunt config
   grunt.initConfig({
 
     project: projectConfig,
@@ -147,11 +151,23 @@ module.exports = function(grunt) {
           port: "<%= project.port.test %>",
           middleware: function(connect) {
             return [
-              proxy.api(
-                grunt.config.process("<%= project.api.host %>"),
-                grunt.config.process("<%= project.api.port %>")
-              ),
-              mountFolder(connect, ".")
+              mockApi,
+              mountFolder(connect, "."),
+              notfound.four04
+            ];
+          }
+        }
+      },
+      testTest: {
+        testdir: "<%= project.test %>",
+        options: {
+          port: "<%= project.port.test %>",
+          keepalive: true,
+          middleware: function(connect) {
+            return [
+              mockApi,
+              mountFolder(connect, "."),
+              notfound.four04
             ];
           }
         }
@@ -188,11 +204,22 @@ module.exports = function(grunt) {
           port: "<%= project.port.debug %>",
           middleware: function(connect) {
             return [
+              // handle api
               proxy.api(
                 grunt.config.process("<%= project.api.host %>"),
                 grunt.config.process("<%= project.api.port %>")
               ),
-              mountFolder(connect, grunt.config.process("<%= project.dist.debug %>"))
+              // rewrite filter
+              rewrite([
+                // if application marked notfound, exit here
+                "^"+rewriteHelper.notfound('(.+)', {regex: true})+"$ /404.html [NC] [L]",
+                // if a static resource is not being requested, its an in-app route
+                '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
+              ]),
+              // static files
+              mountFolder(connect, grunt.config.process("<%= project.dist.debug %>")),
+              // if we're here, its a 404
+              notfound.four04
             ];
           }
         }

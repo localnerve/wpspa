@@ -33,12 +33,20 @@
         var should = chai.should();
     </script>
 
-    <!-- Include sinon spies, mocks, and stubs -->
+    <!-- Include sinon spies, stubs, mocks, and sandbox -->
     <script src="/vendor/bower/sinon/lib/sinon.js" type="text/javascript" charset="utf-8"></script>
     <script src="/vendor/bower/sinon/lib/sinon/spy.js" type="text/javascript" charset="utf-8"></script>
     <script src="/vendor/bower/sinon/lib/sinon/call.js" type="text/javascript" charset="utf-8"></script>
     <script src="/vendor/bower/sinon/lib/sinon/stub.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/vendor/bower/sinon/lib/sinon/mock.js" type="text/javascript" charset="utf-8"></script>    
+    <script src="/vendor/bower/sinon/lib/sinon/mock.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/collection.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/util/fake_timers.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/util/event.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/util/fake_xml_http_request.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/util/fake_server.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/util/fake_timers.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/util/fake_server_with_clock.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/vendor/bower/sinon/lib/sinon/sandbox.js" type="text/javascript" charset="utf-8"></script>
 
     <!-- Our test runner -->
     <script type="text/javascript" charset="utf-8">
@@ -60,8 +68,9 @@
                     // set a reference to the app
                     __test.app = app;
 
-                    // create a helpers namespace
+                    // create a namespaces
                     __test.helpers = {};
+                    __test.modules = {};
                     
                     // Ensure you point to where your tests are, base directory is app/, which
                     // is why ../test is necessary
@@ -70,8 +79,9 @@
                         tests: "../test/mocha/tests"
                       }
                     }, [
-                        // load all helpers
+                        // load all helpers and standalone modules
                         "helpers/contract",
+                        "wpspa/layout/content/prefetch/main",
 
                         // load all the tests
                         "tests/environment",
@@ -81,11 +91,13 @@
                         "tests/wpspa.router",
                         "tests/wpspa.controller",
                         "tests/wpspa.navigation",
-                        "tests/wpspa.content"
+                        "tests/wpspa.layout.content"
                         // next test suite here
-                    ], function(contract) {
+                    ], function(contract, prefetch) {
                         // make helpers available                        
                         __test.helpers.contract = contract;
+                        // make app modules available
+                        __test.modules.prefetch = prefetch;
 
                         // tests and helpers loaded, run it!
                         mocha.run(function() {

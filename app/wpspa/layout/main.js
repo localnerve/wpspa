@@ -1,7 +1,7 @@
 define([
   "backbone.marionette",
   "app",
-  "wpspa/content/main",
+  "wpspa/layout/content/main",
   "wpspa/header/main",
   "wpspa/footer/main"
 ], function(Marionette, app, content) {

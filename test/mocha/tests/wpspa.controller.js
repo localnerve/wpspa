@@ -1,21 +1,17 @@
 describe("wpspa.controller", function() {
 
   var app = window.__test.app;
-  var stubs = [];
-  var appController;
-  var appRouter;
+  var appController, appRouter;
+  var sandbox;
 
   beforeEach(function() {
     appController = app.wpspa.controller;
     appRouter = app.wpspa.router;
+    sandbox = sinon.sandbox.create();
   });
 
   afterEach(function() {
-    // clean up stubs
-    for (var i = 0; i < stubs.length; i++) {
-      stubs[i].restore();
-    }
-    stubs.length = 0;
+    sandbox.restore();
   });
 
   it("should be able to get the appController instance", function() {
@@ -25,16 +21,17 @@ describe("wpspa.controller", function() {
 
   // we already tested this, but this verifies the mechanism
   describe("notfound", function() {
+
     it("should get invoked by a bad route", function(done) {
       var route = "dummy1";
 
       expect(appRouter.appRoutes[route]).to.not.exist;
 
       // routing event handlers are previously bound to context, so we stub the target exit handler
-      stubs.push(sinon.stub(__test, "exit", function(path) {
+      sandbox.stub(__test, "exit", function(path) {
         expect(path).to.be.equal(route);
         done();
-      }));
+      });
 
       Backbone.history.loadUrl(route);
     });
@@ -45,9 +42,7 @@ describe("wpspa.controller", function() {
     it("should get called in response to the createHandler event", function() {
       var name = "dummy1",
           object_type = "obbie",
-          createHandler_stub = sinon.stub(appController, "createHandler");
-
-      stubs.push(createHandler_stub);
+          createHandler_stub = sandbox.stub(appController, "createHandler");
 
       app.vent.trigger("wpspa:controller:createHandler", {
         name: name,
@@ -57,7 +52,7 @@ describe("wpspa.controller", function() {
       assert(createHandler_stub.calledOnce, "createHandler should have been called once");
     });
 
-    it("should fail if it doesn't get name, options, and options.object_type", function() {
+    it("should fail if it createHandler event does get the correct options", function() {
       var eventName = "wpspa:controller:createHandler";
       expect(function() {
         app.vent.trigger(eventName, {
@@ -70,12 +65,6 @@ describe("wpspa.controller", function() {
       }).to.throw(Error);
       expect(function() {
         app.vent.trigger(eventName, {
-          options: {}
-        });
-      }).to.throw(Error);
-      expect(function() {
-        app.vent.trigger(eventName, {
-          name: "name",
           options: {}
         });
       }).to.throw(Error);

@@ -1,10 +1,10 @@
 define([
   "backbone.marionette",
-  "wpspa/content/post/entities"
+  "wpspa/layout/content/post/entities"
   ], function (Marionette, entities) {
 
     var PostView = Marionette.ItemView.extend({
-      template: "wpspa/content/post/template",
+      template: "wpspa/layout/content/post/template",
       serializeData: function() {
         return {
           title: this.model.get("title"),
@@ -15,9 +15,11 @@ define([
 
     return {
       create: function(options) {
-        return new PostView({
-          model: entities.create(options)
+        options = options || {};
+        var postView = new PostView({
+          model: options.model || entities.create(options)
         });
+        return postView;
       }
     };
   });

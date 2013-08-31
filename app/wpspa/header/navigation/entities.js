@@ -15,7 +15,7 @@ define([
     });
 
     return {
-      create: function(/*options*/) {
+      createCollection: function(/*options*/) {
         return new NavigationCollection();
       }
     };

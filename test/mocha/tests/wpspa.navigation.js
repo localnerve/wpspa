@@ -1,19 +1,16 @@
 describe("wpspa.navigation", function() {
 
   var app = __test.app;
-  var stubs = [];
   var navigationView;
+  var sandbox;
 
   beforeEach(function() {
     navigationView = app.wpspa.navigation;
+    sandbox = sinon.sandbox.create();
   });
 
   afterEach(function() {
-    // clean up stubs
-    for (var i = 0; i < stubs.length; i++) {
-      stubs[i].restore();
-    }
-    stubs.length = 0;
+    sandbox.restore();
   });
 
   it("should get able to get a navigation instance", function() {
@@ -37,7 +34,7 @@ describe("wpspa.navigation", function() {
 
     // stub the appRouter.addRoute so that we don't have to clean up.
     var appRouter = app.wpspa.router;
-    stubs.push(addRoute_stub = sinon.stub(appRouter, "addRoute"));
+    addRoute_stub = sandbox.stub(appRouter, "addRoute");
 
     var models = [];
     models.push({
