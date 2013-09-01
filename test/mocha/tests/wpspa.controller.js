@@ -52,7 +52,7 @@ describe("wpspa.controller", function() {
       assert(createHandler_stub.calledOnce, "createHandler should have been called once");
     });
 
-    it("should fail if it createHandler event does get the correct options", function() {
+    it("should fail if createHandler event does not get the correct options", function() {
       var eventName = "wpspa:controller:createHandler";
       expect(function() {
         app.vent.trigger(eventName, {

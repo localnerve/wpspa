@@ -13,7 +13,7 @@ describe("wpspa.navigation", function() {
     sandbox.restore();
   });
 
-  it("should get able to get a navigation instance", function() {
+  it("should be able to get a navigation instance", function() {
     expect(navigationView).to.exist;
     expect(navigationView).to.be.an("object");
   });
