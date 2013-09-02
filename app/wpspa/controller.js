@@ -15,7 +15,7 @@ define([
     // The definition of the appController
     var AppController = Marionette.Controller.extend({
 
-      initialize: function(/*options*/) {
+      initialize: function( /*options*/ ) {
         var self = this;
         // Create the handler to dynamically add a route handler
         this.listenTo(app.vent, "wpspa:controller:createHandler", function(options) {

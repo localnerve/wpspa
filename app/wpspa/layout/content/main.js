@@ -10,7 +10,7 @@ define([
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
     el: "#content",
-    
+
     initialize: function() {
       // Create a prefetch promise on the app.vent
       this.promise = prefetch.promise(app.vent);
@@ -27,27 +27,32 @@ define([
     // See the prefetch create to match up the handlers by signature to the events on the deferred promise
     contentStart: function(options) {
       contract(options, "object_id");
-      
+
       var self = this;
       this.promise.then(
         // success
+
         function(collection) {
           self.show(
             // for now, this is always going to be a "post" view.
             // next possibly create a factory for views based on options.object_type.
             post.create({
-              model: collection.get({ id: options.object_id })
+              model: collection.get({
+                id: options.object_id
+              })
             })
           );
         },
         // fail
+
         function(response, options) {
           // TODO: Add error implementation
           // self.show(errorView)
           var test = 0;
         },
         // progress
-        function () {
+
+        function() {
           // TODO: Add content transition implementation
           // self.show(transitionView)
           var test = 0;
@@ -56,7 +61,7 @@ define([
     },
 
     // called after the region contents render
-    onShow: function(/* view */) {
+    onShow: function( /* view */ ) {
       vendor.initialize();
     }
 

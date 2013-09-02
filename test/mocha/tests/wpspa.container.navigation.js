@@ -1,11 +1,11 @@
-describe("wpspa.navigation", function() {
+describe("Navigation", function() {
 
   var app = __test.app;
   var navigationView;
   var sandbox;
 
   beforeEach(function() {
-    navigationView = app.wpspa.navigation;
+    navigationView = app.wpspa.container.navigation;
     sandbox = sinon.sandbox.create();
   });
 
@@ -26,11 +26,11 @@ describe("wpspa.navigation", function() {
 
   it("should fire addRoute event when item is added to the collection", function(done) {
     var name = "dummy1",
-        route = "someroute",
-        object_type = "post",
-        object_id = "1",
-        nav_item = "999999999",
-        addRoute_stub;
+      route = "someroute",
+      object_type = "post",
+      object_id = "1",
+      nav_item = "999999999",
+      addRoute_stub;
 
     // stub the appRouter.addRoute so that we don't have to clean up.
     var appRouter = app.wpspa.router;
@@ -54,11 +54,13 @@ describe("wpspa.navigation", function() {
       expect(options.route).to.equal(route);
       expect(options.options.object_type).to.equal(object_type);
       expect(options.options.object_id).to.equal(object_id);
-      
+
       assert(addRoute_stub.calledOnce, "addRoute should have been called once");
 
       // cleanup the collection
-      var models = navigationView.collection.where({ nav_item: nav_item });
+      var models = navigationView.collection.where({
+        nav_item: nav_item
+      });
       expect(models.length).to.equal(1);
       navigationView.collection.remove(models);
       expect(beforeLength).to.equal(navigationView.collection.length);

@@ -1,3 +1,7 @@
+/*
+ * The wpspa router
+ * Routes wpspa level state changes
+ */
 define([
   "lodash",
   "backbone.marionette",
@@ -9,13 +13,13 @@ define([
   // Create a partial definition for WPSPA module
   var thisModule = app.module("wpspa", function(wpspa, app) {
 
-    // The definition for the central WPSPA.router
+    // The definition for the dynamic WPSPA.router
     var AppRouter = Marionette.AppRouter.extend({
       appRoutes: {
         "*default": "notfound"
       },
 
-      initialize: function(/*options*/) {
+      initialize: function( /*options*/ ) {
 
         // Add route events handler, adds a dynamic route
         // NOTE: instead of calling this.addRoute, using a function allows test stubs.
@@ -43,7 +47,7 @@ define([
         controller: app.wpspa.controller
       }, options));
     });
-  
+
   });
 
   thisModule.addFinalizer(function() {

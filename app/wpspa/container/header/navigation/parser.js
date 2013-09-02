@@ -2,8 +2,8 @@
 define([
   "lodash",
   "helpers/contract"
-  ], function(_, contract) {
-  
+], function(_, contract) {
+
   // parse a single wpspa nav_menu_item post to a model
   function parsePost(post) {
     contract(post, "id",
@@ -17,10 +17,10 @@ define([
       name: post.custom_fields._menu_item_wpspa_menu_text[0],
       route: (function() {
         var route = post.custom_fields._menu_item_wpspa_route[0];
-        
+
         if (route.charAt(0) === '/')
           route = route.substring(1);
-        
+
         return route;
       }()),
       id: post.id,
@@ -33,6 +33,7 @@ define([
   }
 
   // parse a response containing wpspa nav_menu_item posts
+
   function parse(data) {
     contract(data, "posts");
 

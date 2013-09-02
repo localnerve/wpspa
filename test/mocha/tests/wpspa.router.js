@@ -56,24 +56,27 @@ describe("wpspa.router", function() {
     it("should fail if it doesn't get route and name", function() {
       var eventName = "wpspa:router:addRoute";
       expect(function() {
-        app.vent.trigger(eventName, {
-        });
-      }).to.throw(Error);
+        app.vent.trigger(eventName, {});
+      }).to.
+      throw (Error);
       expect(function() {
         app.vent.trigger(eventName, {
           route: "route"
         });
-      }).to.throw(Error);
+      }).to.
+      throw (Error);
       expect(function() {
         app.vent.trigger(eventName, {
           name: "name"
         });
-      }).to.throw(Error);
+      }).to.
+      throw (Error);
     });
 
     it("should correctly add a route", function() {
-      var route = "dummy1", name = "dummy1",
-          createHandler_stub, route_stub;
+      var route = "dummy1",
+        name = "dummy1",
+        createHandler_stub, route_stub;
 
       createHandler_stub = sandbox.stub(appController, "createHandler");
       route_stub = sandbox.stub(Backbone.Router.prototype, "route");

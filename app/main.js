@@ -1,8 +1,8 @@
 require([
-    "app",
-    "wpspa/router"
-  ], function(app) {
+  "app",
+  "wpspa/router"
+], function(app) {
 
-    app.start();
+  app.start();
 
-  });
+});

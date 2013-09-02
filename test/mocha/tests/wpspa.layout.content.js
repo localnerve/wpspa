@@ -1,5 +1,5 @@
 describe("Content", function() {
-  
+
   var app = window.__test.app;
   var sandbox, contentRegion;
 
@@ -34,6 +34,7 @@ describe("Content", function() {
     });
 
     // factory to create an event aggregator
+
     function eventAggregator() {
       return _.extend({}, Backbone.Events);
     }
@@ -83,10 +84,12 @@ describe("Content", function() {
       var sync_stub = sandbox.stub(Backbone, "sync", function(method, model, options) {
         model.url = "badurl";
         backboneSync(method, model, options);
-      });      
+      });
 
       // start the prefetch
-      ea.trigger("content:prefetch", { items: [1,2,3] });
+      ea.trigger("content:prefetch", {
+        items: [1, 2, 3]
+      });
 
       assert(sync_stub.calledOnce, "Backbone.sync should have been called once");
     });
@@ -107,7 +110,9 @@ describe("Content", function() {
         progress_fn
       );
 
-      ea.trigger("content:prefetch", { items: [1,2,3] });
+      ea.trigger("content:prefetch", {
+        items: [1, 2, 3]
+      });
     });
 
     it("should throw on no item input", function() {
@@ -118,7 +123,8 @@ describe("Content", function() {
 
       expect(function() {
         ea.trigger("content:prefetch" /* nothing */ );
-      }).to.throw(Error);
+      }).to.
+      throw (Error);
     });
   });
 

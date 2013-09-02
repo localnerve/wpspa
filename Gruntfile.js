@@ -186,7 +186,9 @@ module.exports = function(grunt) {
               // rewrite filter
               rewrite([
                 // if application marked notfound, exit here
-                "^"+rewriteHelper.notfound('(.+)', {regex: true})+"$ /404.html [NC] [L]",
+                "^" + rewriteHelper.notfound('(.+)', {
+                  regex: true
+                }) + "$ /404.html [NC] [L]",
                 // if a static resource is not being requested, its an in-app route
                 '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
               ]),
@@ -212,7 +214,9 @@ module.exports = function(grunt) {
               // rewrite filter
               rewrite([
                 // if application marked notfound, exit here
-                "^"+rewriteHelper.notfound('(.+)', {regex: true})+"$ /404.html [NC] [L]",
+                "^" + rewriteHelper.notfound('(.+)', {
+                  regex: true
+                }) + "$ /404.html [NC] [L]",
                 // if a static resource is not being requested, its an in-app route
                 '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
               ]),

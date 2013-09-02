@@ -93,8 +93,8 @@
     <textarea id="file-source" class="span12">// parser for a single Wordpress json api post
 define([
   &quot;helpers/contract&quot;
-  ], function(contract) {
-  
+], function(contract) {
+
   // parse a response containing a post
   function parse(data) {
     contract(data, &quot;post&quot;, &quot;post.content&quot;, &quot;post.excerpt&quot;);

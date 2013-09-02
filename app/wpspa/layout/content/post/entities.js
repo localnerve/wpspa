@@ -3,34 +3,34 @@ define([
   "helpers/contract",
   "wpspa/layout/content/post/parser",
   "module"
-  ], function(Backbone, contract, parser, module) {
+], function(Backbone, contract, parser, module) {
 
-    // definition of a post model
-    var PostModel = Backbone.Model.extend({
-      // get endpoint from config
-      urlRoot: module.config().endpoint,
-      
-      // make a jsonapi url
-      url: function() {
-        var urlRoot = this.urlRoot.charAt(this.urlRoot.length-1) === '/' ?
-          this.urlRoot : this.urlRoot + "/";
+  // definition of a post model
+  var PostModel = Backbone.Model.extend({
+    // get endpoint from config
+    urlRoot: module.config().endpoint,
 
-        return urlRoot + "?id="+this.id;
-      },
+    // make a jsonapi url
+    url: function() {
+      var urlRoot = this.urlRoot.charAt(this.urlRoot.length - 1) === '/' ?
+        this.urlRoot : this.urlRoot + "/";
 
-      // delegate response parsing to the given parser
-      parse: function(data) {
-        return parser(data);
-      }
-    });
+      return urlRoot + "?id=" + this.id;
+    },
 
-    return {
-      create: function(options) {
-        contract(options, "object_id");
-        return new PostModel({
-          id: options.object_id
-        });
-      }
-    };
-
+    // delegate response parsing to the given parser
+    parse: function(data) {
+      return parser(data);
+    }
   });
+
+  return {
+    create: function(options) {
+      contract(options, "object_id");
+      return new PostModel({
+        id: options.object_id
+      });
+    }
+  };
+
+});

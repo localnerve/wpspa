@@ -2,17 +2,17 @@ define([
   "jquery",
   "foundation/foundation",
   "foundation/foundation.topbar"
-  ], function($) {
+], function($) {
 
-    var vendorInit = false;
+  var vendorInit = false;
 
-    return {
-      initialize: function() {
-        if (!vendorInit) {
-          vendorInit = true;
-          $(document).foundation();
-        }
+  return {
+    initialize: function() {
+      if (!vendorInit) {
+        vendorInit = true;
+        $(document).foundation();
       }
-    };
+    }
+  };
 
-  });
+});

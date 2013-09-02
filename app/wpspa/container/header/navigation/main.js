@@ -2,45 +2,26 @@ define([
   "lodash",
   "backbone.marionette",
   "app",
-  "wpspa/header/navigation/entities"
-], function(_, Marionette, app, entities) {
+  "wpspa/container/header/navigation/item",
+  "wpspa/container/header/navigation/entities"
+], function(_, Marionette, app, itemView, entities) {
 
-  // create this app module in the proper namespace
-  var thisModule = app.module("wpspa", function(wpspa, app) {
-
-    // The view definition of each navigation item
-    var NavItemView = Marionette.ItemView.extend({
-      template: "wpspa/header/navigation/item",
-      tagName: "li",
-
-      serializeData: function() {
-        return {
-          name: this.model.get("name"),
-          route: (function(route) {
-            if (_.isString(route)) {
-              if (route.length === 0)
-                route = "/";
-            }
-            return route;
-          }(this.model.get("route"))),
-          navItem: this.model.get("nav_item")
-        };
-      }
-    });
+  // Create a partial definition for wpspa.container module
+  var thisModule = app.module("wpspa.container", function(container, app) {
 
     // The view definition of navigation
     var NavigationView = Marionette.CompositeView.extend({
-      template: "wpspa/header/navigation/view",
-      itemView: NavItemView,
+      template: "wpspa/container/header/navigation/view",
+      itemView: itemView,
       tagName: "nav",
       className: "top-bar",
       itemViewContainer: ".wpspa-nav",
 
-      initialize: function(/*options*/) {
+      initialize: function( /*options*/ ) {
         // connect the add event handler to the collection
         this.listenTo(this.collection, "add", this.onAdd);
       },
-  /*
+      /*
       appendHtml: function(collectionView, itemView, index) {
         // TODO: implement navigation hierarchy
       },
@@ -60,16 +41,16 @@ define([
       }
     });
 
-    // app module initialization
+    // add another app module initializer
     app.addInitializer(function(options) {
-      
+
       // create the navigation view instance
-      wpspa.navigation = new NavigationView(_.extend({
+      container.navigation = new NavigationView(_.extend({
         collection: entities.createCollection()
       }, options));
 
       // start the navigation download
-      wpspa.navigation.collection.fetch({
+      container.navigation.collection.fetch({
         success: function(collection) {
           // send out a pretch content event
           app.vent.trigger("content:prefetch", collection.map(function(model) {
@@ -95,8 +76,8 @@ define([
   });
 
   thisModule.addFinalizer(function() {
-    app.wpspa.navigation.stopListening();
-    delete app.wpspa.navigation;
+    app.wpspa.container.navigation.stopListening();
+    delete app.wpspa.container.navigation;
   });
 
   return thisModule;

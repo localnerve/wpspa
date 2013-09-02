@@ -35,10 +35,10 @@ define([
   // Handle app exit events
   app.vent.on("app:exit", function(options) {
     contract(options, "path");
-    
+
     // Run the test harness. Otherwise, exit the app.
     _.defer($w.__test || function(path) {
-      $w.location.replace(rewrites.notfound("/"+path));
+      $w.location.replace(rewrites.notfound("/" + path));
     }, options.path, app);
   });
 

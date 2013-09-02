@@ -6,11 +6,11 @@
 define([
   "jquery",
   "wpspa/layout/content/prefetch/entities"
- ], function($, entities) {
+], function($, entities) {
 
   // Construct a prefetch for the given event aggregator
   function prefetch(eventAggregator) {
-    
+
     // Create the deferred object
     var dfd = $.Deferred();
 
@@ -53,7 +53,6 @@ define([
     this.promise = dfd.promise();
   }
 
-
   return {
     // Create and return a new prefetch object
     _create: function(eventAggregator) {
@@ -65,4 +64,4 @@ define([
     }
   };
 
- });
+});

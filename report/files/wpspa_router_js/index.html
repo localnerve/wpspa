@@ -90,7 +90,11 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="span12">define([
+    <textarea id="file-source" class="span12">/*
+ * The wpspa router
+ * Routes wpspa level state changes
+ */
+define([
   &quot;lodash&quot;,
   &quot;backbone.marionette&quot;,
   &quot;helpers/contract&quot;,
@@ -101,13 +105,13 @@
   // Create a partial definition for WPSPA module
   var thisModule = app.module(&quot;wpspa&quot;, function(wpspa, app) {
 
-    // The definition for the central WPSPA.router
+    // The definition for the dynamic WPSPA.router
     var AppRouter = Marionette.AppRouter.extend({
       appRoutes: {
         &quot;*default&quot;: &quot;notfound&quot;
       },
 
-      initialize: function(/*options*/) {
+      initialize: function( /*options*/ ) {
 
         // Add route events handler, adds a dynamic route
         // NOTE: instead of calling this.addRoute, using a function allows test stubs.
@@ -135,7 +139,7 @@
         controller: app.wpspa.controller
       }, options));
     });
-  
+
   });
 
   thisModule.addFinalizer(function() {

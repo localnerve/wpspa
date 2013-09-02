@@ -95,6 +95,7 @@
   /**
    * Makes sure that the given arguments are found and defined in options
    */
+
   function enforceContract(options) {
 
     // get the arguments after options as an array (or preserve if they are already an array)
@@ -106,22 +107,21 @@
       throw new Error(&quot;No contract specified&quot;);
 
     // loop through the supplied contract
-    for (var i=0; i &lt; contract.length; i++) {
+    for (var i = 0; i &lt; contract.length; i++) {
       // each contract spec can have &quot;.&quot; props
       var props = contract[i].split(&quot;.&quot;);
       // start each contract spec at the top
       var topObj = options;
       // go through the properties
-      for (var j=0; j &lt; props.length; j++) {
-        if (typeof topObj[ props[j] ] === &quot;undefined&quot;) {
-          throw new Error (
-            &quot;Property &#039;&quot;+contract[i]+&quot;&#039; was not supplied in options&quot;+
-              (enforceContract.caller ? &quot; to &quot;+enforceContract.caller+&quot;.&quot; : &quot;.&quot;)
+      for (var j = 0; j &lt; props.length; j++) {
+        if (typeof topObj[props[j]] === &quot;undefined&quot;) {
+          throw new Error(
+            &quot;Property &#039;&quot; + contract[i] + &quot;&#039; was not supplied in options&quot; +
+            (enforceContract.caller ? &quot; to &quot; + enforceContract.caller + &quot;.&quot; : &quot;.&quot;)
           );
-        }
-        else {
+        } else {
           // replace the topObj with next level down
-          topObj = topObj[ props[j] ];
+          topObj = topObj[props[j]];
         }
       }
     }

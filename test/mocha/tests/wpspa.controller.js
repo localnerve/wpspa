@@ -41,12 +41,14 @@ describe("wpspa.controller", function() {
 
     it("should get called in response to the createHandler event", function() {
       var name = "dummy1",
-          object_type = "obbie",
-          createHandler_stub = sandbox.stub(appController, "createHandler");
+        object_type = "obbie",
+        createHandler_stub = sandbox.stub(appController, "createHandler");
 
       app.vent.trigger("wpspa:controller:createHandler", {
         name: name,
-        options: { object_type: object_type }
+        options: {
+          object_type: object_type
+        }
       });
 
       assert(createHandler_stub.calledOnce, "createHandler should have been called once");
@@ -55,33 +57,40 @@ describe("wpspa.controller", function() {
     it("should fail if createHandler event does not get the correct options", function() {
       var eventName = "wpspa:controller:createHandler";
       expect(function() {
-        app.vent.trigger(eventName, {
-        });
-      }).to.throw(Error);
+        app.vent.trigger(eventName, {});
+      }).to.
+      throw (Error);
       expect(function() {
         app.vent.trigger(eventName, {
           name: "name"
         });
-      }).to.throw(Error);
+      }).to.
+      throw (Error);
       expect(function() {
         app.vent.trigger(eventName, {
           options: {}
         });
-      }).to.throw(Error);
+      }).to.
+      throw (Error);
       expect(function() {
         app.vent.trigger(eventName, {
-          options: { object_type: "blah" }
+          options: {
+            object_type: "blah"
+          }
         });
-      }).to.throw(Error);
+      }).to.
+      throw (Error);
     });
 
     it("should create an event handler for the given name", function() {
       var name = "dummy1",
-          object_type = "obbie";
+        object_type = "obbie";
 
       app.vent.trigger("wpspa:controller:createHandler", {
         name: name,
-        options: { object_type: object_type }
+        options: {
+          object_type: object_type
+        }
       });
 
       expect(appController[name]).to.exist;

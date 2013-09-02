@@ -1,8 +1,8 @@
 // parser for a single Wordpress json api post
 define([
   "helpers/contract"
-  ], function(contract) {
-  
+], function(contract) {
+
   // parse a response containing a post
   function parse(data) {
     contract(data, "post", "post.content", "post.excerpt");

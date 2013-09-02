@@ -8,7 +8,7 @@ define([
     initialize: function(options) {
       this.options = options;
     },
-    
+
     url: function() {
       var test = this.options.fetchItems;
       // should be creating the url from options.fetchItems, 

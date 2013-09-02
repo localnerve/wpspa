@@ -2,8 +2,8 @@ define([
   "backbone.marionette",
   "app",
   "wpspa/layout/content/main",
-  "wpspa/header/main",
-  "wpspa/footer/main"
+  "wpspa/container/header/main",
+  "wpspa/container/footer/main"
 ], function(Marionette, app, content) {
 
   // Create a partial definition for WPSPA module
@@ -21,9 +21,9 @@ define([
         content: content
       },
 
-      onRender: function(/*options*/) {
-        this.header.show(wpspa.header);
-        this.footer.show(wpspa.footer);
+      onRender: function( /*options*/ ) {
+        this.header.show(wpspa.container.header);
+        this.footer.show(wpspa.container.footer);
 
         // content is shown dynamically
         // see appController.createHandler for view initiation call.

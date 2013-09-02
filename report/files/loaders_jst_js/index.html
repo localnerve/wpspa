@@ -49,7 +49,7 @@
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">62</p>
+      <p class="stat">63</p>
     </div>
   </div>
   <div class="row historical">
@@ -112,6 +112,7 @@
     suffix = suffix.charAt(0) !== &#039;.&#039; ? &quot;.&quot; + suffix : suffix;
 
     // template retrieval failure handler
+
     function failure(template, jqXHR, msg) {
       var err = &quot;Template &#039;&quot; + template + &quot;&#039; could not be retrieved. &quot;;
       if (jqXHR) {
@@ -131,7 +132,7 @@
           failure(template);
         } else {
           // development-only code    
-          if (_.isString(root) &amp;&amp; template.substring(0, root.length-1) != root)
+          if (_.isString(root) &amp;&amp; template.substring(0, root.length - 1) != root)
             template = root + template;
           // we have to block for marionette... unless you are willing to support marionette.async...
           $.ajax(template, {

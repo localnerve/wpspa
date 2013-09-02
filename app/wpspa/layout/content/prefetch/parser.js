@@ -2,8 +2,8 @@
 define([
   "lodash",
   "helpers/contract"
-  ], function(_, contract) {
-  
+], function(_, contract) {
+
   // parse a single post to a model
   function parsePost(post) {
     contract(post, "id", "title", "content", "excerpt");
@@ -17,6 +17,7 @@ define([
   }
 
   // parse a response containing json api posts
+
   function parse(data) {
     contract(data, "posts");
 

@@ -96,23 +96,23 @@
  * A common set of methods to do the rewrites of the application.
  * Loaded in AMD and CommonJS, so UMD notation is used.
  */
-(function (factory) {
-    if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
-      // AMD. Register as an anonymous module.
-      define(factory);
-    } else if (typeof module !== &quot;undefined&quot;) {
-      // Node/CommonJS
-      module.exports = factory();
-    } else {
-      throw new Error(&quot;Browser globals not supported&quot;);
-    }
+(function(factory) {
+  if (typeof define === &quot;function&quot; &amp;&amp; define.amd) {
+    // AMD. Register as an anonymous module.
+    define(factory);
+  } else if (typeof module !== &quot;undefined&quot;) {
+    // Node/CommonJS
+    module.exports = factory();
+  } else {
+    throw new Error(&quot;Browser globals not supported&quot;);
+  }
 }(function() {
 
   function processNotFound(input, options) {
     options = options || {};
 
-    var dot = !!(options.regex) ? &quot;\\.&quot; : &quot;.&quot;;
-    
+    var dot = !! (options.regex) ? &quot;\\.&quot; : &quot;.&quot;;
+
     return input + dot + &quot;notfound&quot;;
   }
 

@@ -20,6 +20,7 @@ define([
     suffix = suffix.charAt(0) !== '.' ? "." + suffix : suffix;
 
     // template retrieval failure handler
+
     function failure(template, jqXHR, msg) {
       var err = "Template '" + template + "' could not be retrieved. ";
       if (jqXHR) {
@@ -39,7 +40,7 @@ define([
           failure(template);
         } else {
           // development-only code    
-          if (_.isString(root) && template.substring(0, root.length-1) != root)
+          if (_.isString(root) && template.substring(0, root.length - 1) != root)
             template = root + template;
           // we have to block for marionette... unless you are willing to support marionette.async...
           $.ajax(template, {

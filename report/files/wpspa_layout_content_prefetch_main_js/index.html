@@ -49,7 +49,7 @@
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">63</p>
+      <p class="stat">62</p>
     </div>
   </div>
   <div class="row historical">
@@ -98,11 +98,11 @@
 define([
   &quot;jquery&quot;,
   &quot;wpspa/layout/content/prefetch/entities&quot;
- ], function($, entities) {
+], function($, entities) {
 
   // Construct a prefetch for the given event aggregator
   function prefetch(eventAggregator) {
-    
+
     // Create the deferred object
     var dfd = $.Deferred();
 
@@ -145,7 +145,6 @@ define([
     this.promise = dfd.promise();
   }
 
-
   return {
     // Create and return a new prefetch object
     _create: function(eventAggregator) {
@@ -157,7 +156,7 @@ define([
     }
   };
 
- });</textarea>
+});</textarea>
   </div>
 </div>
 
