@@ -68,7 +68,7 @@
                     // set a reference to the app
                     __test.app = app;
 
-                    // create a namespaces
+                    // create some namespaces
                     __test.helpers = {};
                     __test.modules = {};
                     
@@ -79,25 +79,26 @@
                         tests: "../test/mocha/tests"
                       }
                     }, [
-                        // load all helpers and standalone modules
+                        // load all helpers and standalone modules for testing
                         "helpers/contract",
-                        "wpspa/layout/content/prefetch/main",
+                        "helpers/prefetch/main",
 
                         // load all the tests
                         "tests/environment",
                         "tests/modernizr",
                         "tests/contract",
                         "tests/app",
-                        "tests/wpspa.router",
-                        "tests/wpspa.controller",
-                        "tests/wpspa.container.navigation",
-                        "tests/wpspa.layout.content"
+                        "tests/router",
+                        "tests/controller",
+                        "tests/header.navigation",
+                        "tests/content",
+                        "tests/prefetch"
                         // next test suite here
                     ], function(contract, prefetch) {
                         // make helpers available                        
                         __test.helpers.contract = contract;
                         // make app modules available
-                        __test.modules.prefetch = prefetch;
+                        __test.helpers.prefetch = prefetch;
 
                         // tests and helpers loaded, run it!
                         mocha.run(function() {

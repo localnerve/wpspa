@@ -69,7 +69,7 @@
 //
 // application styles
 @import "globals";
-@import "wpspa/container/header/styles";
-@import "wpspa/container/header/navigation/styles";
-@import "wpspa/container/footer/styles";
-@import "wpspa/layout/content/post/styles";
+@import "components/layout/header/styles";
+@import "components/layout/header/navigation/styles";
+@import "components/layout/footer/styles";
+@import "components/content/post/styles";

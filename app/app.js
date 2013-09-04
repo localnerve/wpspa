@@ -46,7 +46,7 @@ define([
   app.on("initialize:after", function(options) {
 
     // Trigger the initial, application render chain
-    app.main.show(app.wpspa.layout);
+    app.main.show(app.container.layout);
 
     // Wait for navigation to arrive
     app.vent.once("app:navigation:success", function() {

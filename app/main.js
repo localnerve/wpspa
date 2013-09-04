@@ -1,6 +1,6 @@
 require([
   "app",
-  "wpspa/router"
+  "components/router"
 ], function(app) {
 
   app.start();

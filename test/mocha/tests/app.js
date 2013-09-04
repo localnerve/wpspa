@@ -13,7 +13,7 @@ describe("Application", function() {
   });
 
   it("should be able to get the main layout instance", function() {
-    var appLayout = app.wpspa.layout;
+    var appLayout = app.container.layout;
     expect(appLayout).to.exist;
     expect(appLayout).to.be.an("object");
   });

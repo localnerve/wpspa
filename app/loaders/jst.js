@@ -2,8 +2,7 @@ define([
     "jquery",
     "lodash",
     "module"
-  ],
-  function($, _, module) {
+  ], function($, _, module) {
 
     // cache the templates, if this is development, mark it
     var JST = window.JST = window.JST || {

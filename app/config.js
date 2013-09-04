@@ -23,10 +23,10 @@ require.config({
       prefix: "app",
       suffix: ".html"
     },
-    "wpspa/container/header/navigation/entities": {
+    "components/layout/header/navigation/entities": {
       endpoint: "/api/get_posts/?post_type=nav_menu_item&order=ASC&orderby=menu_order&custom_fields=_menu_item_menu_item_parent,_menu_item_wpspa_route,_menu_item_wpspa_menu_text,_menu_item_wpspa_post_type,_menu_item_wpspa_object_id"
     },
-    "wpspa/layout/content/post/entities": {
+    "components/content/post/entities": {
       endpoint: "/api/get_post"
     },
     app: {
