@@ -1,25 +1,37 @@
+/*
+ * jst
+ * Process JST templates for an application
+ * Configured with module configuration in rjs config
+ * Allows for development and pre-built modes
+ * Development uses synchronous ajax to retrieve templates
+ * Development uses lodash to compile templates
+ * Built code expects the templates to be precompiled and cached
+ */
 define([
     "jquery",
     "lodash",
     "module"
   ], function($, _, module) {
 
-    // cache the templates, if this is development, mark it
+    // Cache the templates, if this is development, mark it
     var JST = window.JST = window.JST || {
       development: true
     };
+    
+    // Process a template prefix
+    function processTemplatePrefix(prefix) {
+      prefix = prefix.charAt(prefix.length - 1) !== '/' ? prefix + "/" : prefix;
+      prefix = prefix.charAt(0) === '/' ? prefix.substring(1) : prefix;
+      return prefix;
+    }
 
-    // assign template prefix
-    var prefix = module.config().prefix;
-    prefix = prefix.charAt(prefix.length - 1) !== '/' ? prefix + "/" : prefix;
-    prefix = prefix.charAt(0) === '/' ? prefix.substring(1) : prefix;
+    // Process a template suffix
+    function processTemplateSuffix(suffix) {
+      suffix = suffix.charAt(0) !== '.' ? "." + suffix : suffix;
+      return suffix;
+    }
 
-    // assign template suffix
-    var suffix = module.config().suffix;
-    suffix = suffix.charAt(0) !== '.' ? "." + suffix : suffix;
-
-    // template retrieval failure handler
-
+    // Template retrieval failure handler
     function failure(template, jqXHR, msg) {
       var err = "Template '" + template + "' could not be retrieved. ";
       if (jqXHR) {
@@ -27,9 +39,14 @@ define([
       }
       throw new Error(err);
     }
+    
+    // Run the factory startup code against the configuration
+    var prefix = processTemplatePrefix(module.config().prefix);
+    var suffix = processTemplateSuffix(module.config().suffix);
 
-    // return the method that will process templates for render
-    return function(template, data, root) {
+    // Process a template for rendering.
+    // Expect JST to be precompiled and cached except in development.
+    function processTemplate(template, data, root) {
       template = prefix + template + suffix;
       // if not cached
       if (!JST[template]) {
@@ -38,10 +55,11 @@ define([
           // this was a real build, so you should've built your templates - shameful.
           failure(template);
         } else {
-          // development-only code    
-          if (_.isString(root) && template.substring(0, root.length - 1) != root)
+          // development-only code
+          if (_.isString(root) && template.substring(0, root.length - 1) != root) {
             template = root + template;
-          // we have to block for marionette... unless you are willing to support marionette.async...
+          }
+          // For development, its ok to block, you won't notice it.
           $.ajax(template, {
             async: false
           })
@@ -58,5 +76,8 @@ define([
         }
       }
       return JST[template](data);
-    };
+    }
+
+    // Return the method that will process templates for render
+    return processTemplate;
   });
