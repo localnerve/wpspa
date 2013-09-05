@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">78.46</p>
+      <p class="stat">78.44</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">46</p>
+      <p class="stat">45</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">8.64</p>
+      <p class="stat">9.67</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.17</p>
+      <p class="stat">0.18</p>
     </div>
   </div>
 </div>
@@ -98,7 +98,7 @@
   &quot;components/layout/header/banner/main&quot;
 ], function(Marionette, app, contract) {
 
-  // Create a partial definition for wpspa.container module
+  // Create a partial definition for container.header module
   var thisModule = app.module(&quot;container.header&quot;, function(header) {
 
     // The definition of the headerLayout
@@ -106,7 +106,7 @@
 
       template: &quot;components/layout/header/template&quot;,
       tagName: &quot;header&quot;,
-      className: &quot;grid-row&quot;,
+      //className: &quot;grid-row&quot;,
 
       regions: {
         navigation: &quot;#navigation&quot;,
@@ -115,10 +115,9 @@
 
       // render handler
       // renders all child views of this layout
-      onRender: function( /*options*/ ) {
+      onRender: function() {
         this.navigation.show(header.navigation);
-        // TODO:
-        //this.banner.show(header.banner);
+        this.banner.show(header.banner);
       }
 
     });

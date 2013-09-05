@@ -1,0 +1,8 @@
+// sprites.scss
+// This is where all the sprites are built
+
+// produce the main sprite
+$main-sprite-dimensions: true;
+$main-spacing: 10px;
+@import "main/*.png"; 
+@include all-main-sprites;

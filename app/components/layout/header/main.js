@@ -6,7 +6,7 @@ define([
   "components/layout/header/banner/main"
 ], function(Marionette, app, contract) {
 
-  // Create a partial definition for wpspa.container module
+  // Create a partial definition for container.header module
   var thisModule = app.module("container.header", function(header) {
 
     // The definition of the headerLayout
@@ -14,7 +14,7 @@ define([
 
       template: "components/layout/header/template",
       tagName: "header",
-      className: "grid-row",
+      //className: "grid-row",
 
       regions: {
         navigation: "#navigation",
@@ -23,10 +23,9 @@ define([
 
       // render handler
       // renders all child views of this layout
-      onRender: function( /*options*/ ) {
+      onRender: function() {
         this.navigation.show(header.navigation);
-        // TODO:
-        //this.banner.show(header.banner);
+        this.banner.show(header.banner);
       }
 
     });

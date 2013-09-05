@@ -1,3 +1,13 @@
 
 // define the default row behavior
 $default-row-behavior: false;
+
+// define grid column defaults
+$columns: 12;
+$last-column: false;
+$center: false;
+$offset: false;
+$push: false;
+$pull: false;
+$collapse: false;
+$float: left;

@@ -41,7 +41,7 @@ define([
       }
     });
 
-    // add another app module initializer
+    // add another header module initializer
     header.addInitializer(function(options) {
 
       // create the navigation view instance

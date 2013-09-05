@@ -10,7 +10,7 @@ define([
     // just a plain item view for now...
     var FooterLayout = Marionette.ItemView.extend({
       template: "components/layout/footer/template",
-      className: "grid-row",
+      className: "site-footer",
       tagName: "footer"
     });
 

@@ -12,13 +12,19 @@
   "global-mixins";
 
 //
+// process sprites
+@import "sprites";
+
+//
 // project vendor overrides
 @import "vendor-overrides";
 
 //
 // vendor imports
 @import "normalize";
+// kitchen sink
 @import "foundation";
+
 // Import specific parts of Foundation by commenting the import "foundation"
 // and uncommenting what you want below. You must uncomment the following if customizing
 
@@ -70,6 +76,7 @@
 // application styles
 @import "globals";
 @import "components/layout/header/styles";
+@import "components/layout/header/banner/styles";
 @import "components/layout/header/navigation/styles";
 @import "components/layout/footer/styles";
 @import "components/content/post/styles";
