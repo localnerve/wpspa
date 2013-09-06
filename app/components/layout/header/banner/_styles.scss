@@ -6,3 +6,30 @@
   background-size: 1600px auto;
   width: auto;
 }
+
+.home-link {
+  color: #141412;
+  display: block;
+  margin: 0 auto;
+  max-width: 1080px;
+  min-height: 230px;
+  padding: 0 20px;
+  text-decoration: none;
+  width: 100%;
+}
+
+.site-title {
+  font-size: 60px;
+  font-weight: bold;
+  line-height: 1;
+  margin: 0;
+  padding: 58px 0 10px;
+}
+.site-title:hover {
+  text-decoration: underline;
+}
+
+.site-description {
+  font: 300 italic 24px "Source Sans Pro", Helvetica, sans-serif;
+  margin: 0;
+}

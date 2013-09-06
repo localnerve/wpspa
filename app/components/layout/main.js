@@ -1,3 +1,7 @@
+/*
+ * The main container layout
+ * Defines the container layout and composition
+ */
 define([
   "backbone.marionette",
   "app",
@@ -7,13 +11,13 @@ define([
 ], function(Marionette, app, content) {
 
   // Create a partial definition for WPSPA module
-  var thisModule = app.module("container", function(container, app) {
+  var thisModule = app.module("container", function(container) {
 
-    // The definition of the appLayout
+    // The definition of the container layout
     var AppLayout = Marionette.Layout.extend({
 
       template: "components/layout/template",
-      className: "main-grid-row",
+      className: "grid-row",
 
       regions: {
         header: "#header",
@@ -21,17 +25,14 @@ define([
         content: content
       },
 
-      onRender: function( /*options*/ ) {
+      onRender: function() {
         this.header.show(container.header.layout);
         this.footer.show(container.footer.layout);
-
-        // content is shown dynamically
-        // see appController.createHandler for view initiation call.
+        // content is shown dynamically and shows itself on routing events
       }
 
     });
 
-    // Add the initializer for this module partial
     container.addInitializer(function(options) {
       this.layout = new AppLayout(options);
     });

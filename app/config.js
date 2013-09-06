@@ -26,6 +26,9 @@ require.config({
     "components/layout/header/navigation/entities": {
       endpoint: "/api/get_posts/?post_type=nav_menu_item&order=ASC&orderby=menu_order&custom_fields=_menu_item_menu_item_parent,_menu_item_wpspa_route,_menu_item_wpspa_menu_text,_menu_item_wpspa_post_type,_menu_item_wpspa_object_id"
     },
+    "components/layout/header/navigation/item": {
+      hideHome: true
+    },
     "components/content/post/entities": {
       endpoint: "/api/get_post"
     },

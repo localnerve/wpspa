@@ -31,10 +31,10 @@ describe("Router", function() {
     expect(controller).to.equal(appController);
   });
 
-  it("should have a home route defined and it should trigger an event", function(done) {
+  it("should have a home route defined and it should trigger expected events", function(done) {
     // listen to all events.
     // the home route should trigger an event.
-    // we can't assume what the name is, but we know it should happen now.
+    // we can't assume what the name is (yet), but we know it should happen now.
     app.vent.once("all", function(eventName) {
       expect(eventName).to.satisfy(function(name) {
         // eventName startsWith "content:"

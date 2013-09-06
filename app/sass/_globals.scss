@@ -1,7 +1,7 @@
-.main-grid-row, .grid-row {
+.grid-row {
   @include grid-row($default-row-behavior);
 }
 
-.main-grid-col, .grid-col {
+.grid-col {
   @include grid-column($columns, $last-column, $center, $offset, $push, $pull, $collapse, $float);
 }

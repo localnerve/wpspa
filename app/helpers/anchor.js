@@ -3,7 +3,15 @@ define([
   "backbone"
 ], function($, Backbone) {
 
-  // initialize anchors
+  // Convert a route to an href
+  function routeToHref(route) {
+    if (route.length === 0) {
+      route = "/";
+    }
+    return route;
+  }
+
+  // Initialize anchors for the application
   function init(app) {
 
     // All navigation that is relative should be passed through the navigate
@@ -40,7 +48,8 @@ define([
   }
 
   return {
-    init: init
+    init: init,
+    routeToHref: routeToHref
   };
 
 });

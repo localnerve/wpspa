@@ -13,7 +13,15 @@ define([
     // The definition of the banner view
     var BannerView = Marionette.ItemView.extend({
       template: "components/layout/header/banner/template",
-      className: "main-circle"
+      className: "main-circle",
+
+      serializeData: function() {
+        // TODO: get these from a model
+        return {
+          siteTitle: "jsonapi",
+          siteDescription: "Just another WordPress site"
+        };
+      }
     });
 
     // add another header module initializer

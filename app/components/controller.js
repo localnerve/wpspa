@@ -39,7 +39,7 @@ define([
       // It will always delegate to the proper handler for the object type.
       // For now, it will always be a content event: See contentRegion.
       this[options.name] = function() {
-        app.vent.trigger("content:start", options.options);
+        app.vent.trigger("content:start", options);
       };
     }
   });

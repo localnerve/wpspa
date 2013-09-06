@@ -1,27 +1,28 @@
+/*
+ * container.header layout
+ * Defines the header layout and composition
+ */
 define([
   "backbone.marionette",
   "app",
-  "helpers/contract",
   "components/layout/header/navigation/main",
   "components/layout/header/banner/main"
-], function(Marionette, app, contract) {
+], function(Marionette, app) {
 
   // Create a partial definition for container.header module
   var thisModule = app.module("container.header", function(header) {
 
-    // The definition of the headerLayout
+    // The definition of container.header.layout
     var HeaderLayout = Marionette.Layout.extend({
 
       template: "components/layout/header/template",
-      tagName: "header",
-      //className: "grid-row",
+      className: "header-layout",
 
       regions: {
         navigation: "#navigation",
         banner: "#banner"
       },
 
-      // render handler
       // renders all child views of this layout
       onRender: function() {
         this.navigation.show(header.navigation);

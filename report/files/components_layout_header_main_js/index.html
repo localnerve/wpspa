@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">78.44</p>
+      <p class="stat">78.46</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">45</p>
+      <p class="stat">42</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,7 +63,7 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">9.67</p>
+      <p class="stat">9.94</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
@@ -90,30 +90,31 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="span12">define([
+    <textarea id="file-source" class="span12">/*
+ * container.header layout
+ * Defines the header layout and composition
+ */
+define([
   &quot;backbone.marionette&quot;,
   &quot;app&quot;,
-  &quot;helpers/contract&quot;,
   &quot;components/layout/header/navigation/main&quot;,
   &quot;components/layout/header/banner/main&quot;
-], function(Marionette, app, contract) {
+], function(Marionette, app) {
 
   // Create a partial definition for container.header module
   var thisModule = app.module(&quot;container.header&quot;, function(header) {
 
-    // The definition of the headerLayout
+    // The definition of container.header.layout
     var HeaderLayout = Marionette.Layout.extend({
 
       template: &quot;components/layout/header/template&quot;,
-      tagName: &quot;header&quot;,
-      //className: &quot;grid-row&quot;,
+      className: &quot;header-layout&quot;,
 
       regions: {
         navigation: &quot;#navigation&quot;,
         banner: &quot;#banner&quot;
       },
 
-      // render handler
       // renders all child views of this layout
       onRender: function() {
         this.navigation.show(header.navigation);

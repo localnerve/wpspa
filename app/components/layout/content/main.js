@@ -1,3 +1,10 @@
+/*
+ * The main content region
+ * This is a fixed region that represents the main content area of the app.
+ * It holds a reference to all the prefetched content data from the cms.
+ * When it receives a content:start event from the app, it 
+ *   creates the appropriate content view for the content by type and id.
+ */
 define([
   "backbone.marionette",
   "app",
@@ -25,7 +32,8 @@ define([
     // Swap out the content from the prefetch
     // See the prefetch create to match up the handlers by signature to the events on the deferred promise
     contentStart: function(options) {
-      contract(options, "object_id", "object_type");
+      contract(options, "options.object_id", "options.object_type");
+      options = options.options;
 
       // Request the appropriate content view type
       var content = app.request("content:view:"+options.object_type);
@@ -50,6 +58,7 @@ define([
         },
         // progress
         function() {
+          // This will only get called if the promise is pending
           // TODO: Add content transition implementation
           // self.show(transitionView)
           var test = 0;

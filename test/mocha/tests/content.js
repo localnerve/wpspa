@@ -21,7 +21,14 @@ describe("Content", function() {
 
     var contentStart_stub = sandbox.stub(contentRegion, "contentStart");
 
-    app.vent.trigger("content:start");
+    app.vent.trigger("content:start", {
+      name: "name",
+      route: "",
+      options: {
+        object_id: "1",
+        object_type: "post"
+      }
+    });
     assert(contentStart_stub.calledOnce, "contentStart should have been called once");
   });
 

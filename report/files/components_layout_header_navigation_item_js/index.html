@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">73.69</p>
+      <p class="stat">73.68</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">29</p>
+      <p class="stat">31</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">10.07</p>
+      <p class="stat">8.56</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.15</p>
+      <p class="stat">0.19</p>
     </div>
   </div>
 </div>
@@ -91,27 +91,29 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="span12">define([
-  &quot;lodash&quot;,
-  &quot;backbone.marionette&quot;
-], function(_, Marionette) {
-
-  // for the UI, make the &quot;&quot; route a slash href
-  function routeToHref(route) {
-    if (_.isString(route) &amp;&amp; route.length === 0) {
-      route = &quot;/&quot;;
-    }
-    return route;
-  }
+  &quot;backbone.marionette&quot;,
+  &quot;app&quot;,
+  &quot;helpers/anchor&quot;,
+  &quot;module&quot;
+], function(Marionette, app, anchor, module) {
 
   // The view definition of each navigation item
   var NavItemView = Marionette.ItemView.extend({
     template: &quot;components/layout/header/navigation/item&quot;,
     tagName: &quot;li&quot;,
 
+    initialize: function() {
+      if (module.config().hideHome) {
+        if (this.model.get(&quot;route&quot;) === &quot;&quot;) {
+          this.$el.css(&quot;display&quot;, &quot;none&quot;);
+        }
+      }
+    },
+
     serializeData: function() {
       return {
         name: this.model.get(&quot;name&quot;),
-        route: routeToHref(this.model.get(&quot;route&quot;)),
+        route: anchor.routeToHref(this.model.get(&quot;route&quot;)),
         navItem: this.model.get(&quot;nav_item&quot;)
       };
     }
