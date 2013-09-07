@@ -23,13 +23,13 @@
 // vendor imports
 @import "normalize";
 // kitchen sink
-@import "foundation";
+//@import "foundation";
 
 // Import specific parts of Foundation by commenting the import "foundation"
 // and uncommenting what you want below. You must uncomment the following if customizing
 
-// @import "foundation/components/global"; // *always required
-// @import "foundation/components/grid";
+@import "foundation/components/global"; // *always required
+@import "foundation/components/grid";
 
 //
 // Use this grid if you want to start using the new Foundation 5 grid early.
@@ -38,9 +38,9 @@
 // @import "foundation/components/grid-5";
 //
 
-// @import "foundation/components/visibility";
+@import "foundation/components/visibility";
 // @import "foundation/components/block-grid";
-// @import "foundation/components/type";
+@import "foundation/components/type";
 // @import "foundation/components/buttons";
 // @import "foundation/components/forms"; // *requires components/buttons
 // @import "foundation/components/custom-forms"; // *requires components/buttons, components/forms
@@ -49,7 +49,7 @@
 // @import "foundation/components/split-buttons"; // *requires components/buttons
 // @import "foundation/components/flex-video";
 // @import "foundation/components/section";
-// @import "foundation/components/top-bar";  // *requires components/grid
+@import "foundation/components/top-bar";  // *requires components/grid
 // @import "foundation/components/orbit";
 // @import "foundation/components/reveal";
 // @import "foundation/components/joyride";
