@@ -8,7 +8,7 @@ define([
 ], function(Marionette, entities) {
 
   var PostView = Marionette.ItemView.extend({
-    template: "components/content/post/template",
+    template: "components/content/post/simpleView",
     className: "grid-row",
 
     serializeData: function() {

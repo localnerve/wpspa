@@ -10,7 +10,11 @@ define([
     return {
       title: data.post.title,
       content: data.post.content,
-      excerpt: data.post.excerpt
+      excerpt: data.post.excerpt,
+      date: data.post.date,
+      categories: data.post.categories,
+      tags: data.post.tags,
+      author: data.post.author
     };
   }
 

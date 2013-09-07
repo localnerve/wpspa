@@ -4,7 +4,7 @@
  */
 define([
   "app",
-  "components/content/post/main"
+  "components/content/post/simpleView"
   ], function(app, post) {
 
     app.reqres.setHandler("content:view:post", function() {
