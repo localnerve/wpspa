@@ -361,7 +361,7 @@ module.exports = function(grunt) {
     // This task will create the html snapshots for indexing.
     html_snapshots: {
       options: {
-        //selector: "#dynamic-content",
+        selector: "#content .grid-row",
         input: "robots",
         source: "robots.txt",
         timeout: 5000
