@@ -58,8 +58,8 @@ module.exports = function(grunt) {
         rjsConfig: "<%= project.app %>/config.js",
         options: {
           exclude: [
-            // these are not compiled
-            "chai", "foundation", "mocha", "sinon", "webshim",
+            // these are not compiled/referenced
+            "chai", "underscore", "mocha", "sinon", "webshim", "almond", "requirejs",
             // these are custom (deviate from package main)
             "lodash", "backbone.marionette"
           ]
@@ -72,8 +72,16 @@ module.exports = function(grunt) {
     // that no files linger from previous builds.
     clean: {
       debug: ["<%= project.dist.debug %>"],
+      debugAfterInline: [
+        "<%= project.dist.debug %>/index.css",
+        "<%= project.dist.debug %>/vendor/js/modernizr"
+      ],
       release: ["<%= project.dist.release %>"],
-      "release-post": ["<%= project.dist.debug %>/require.js"]
+      "release-post": ["<%= project.dist.debug %>/require.js"],
+      releaseAfterInline: [
+        "<%= project.dist.release %>/index.css",
+        "<%= project.dist.release %>/vendor/js/modernizr"
+      ]
     },
 
     // Compass compile task provided by grunt-contrib-compass.
@@ -130,8 +138,10 @@ module.exports = function(grunt) {
       },
       dist: {
         src: [
-          // had to go with require because of dynamically loaded stuff
-          "<%= project.vendor %>/bower/requirejs/require.js",
+          // use require if you have dynamically loaded stuff
+          //"<%= project.vendor %>/bower/requirejs/require.js",
+          // use almond if you don't
+          "<%= project.vendor %>/bower/almond/almond.js",
           "<%= project.dist.debug %>/templates.js",
           "<%= project.dist.debug %>/require.js"
         ],
@@ -222,6 +232,34 @@ module.exports = function(grunt) {
               ]),
               // static files
               mountFolder(connect, grunt.config.process("<%= project.dist.debug %>")),
+              // if we're here, its a 404
+              notfound.four04
+            ];
+          }
+        }
+      },
+      releaseTest: {
+        options: {
+          keepalive: true,
+          port: "<%= project.port.release %>",
+          middleware: function(connect) {
+            return [
+              // handle api
+              proxy.api(
+                grunt.config.process("<%= project.api.host %>"),
+                grunt.config.process("<%= project.api.port %>")
+              ),
+              // rewrite filter
+              rewrite([
+                // if application marked notfound, exit here
+                "^" + rewriteHelper.notfound('(.+)', {
+                  regex: true
+                }) + "$ /404.html [NC] [L]",
+                // if a static resource is not being requested, its an in-app route
+                '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
+              ]),
+              // static files
+              mountFolder(connect, grunt.config.process("<%= project.dist.release %>")),
               // if we're here, its a 404
               notfound.four04
             ];
@@ -339,6 +377,17 @@ module.exports = function(grunt) {
           port: "<%= project.port.release %>",
           outputDir: "<%= project.dist.release %>/snapshots"
         }
+      }
+    },
+
+    // inline task provided by grunt-inline.
+    // This inlines the ATF blocking css and js.
+    inline: {
+      debug: {
+        src: ["<%= project.dist.debug %>/index.html"]
+      },
+      release: {
+        src: ["<%= project.dist.release %>/index.html"]
       }
     },
 
@@ -674,6 +723,8 @@ module.exports = function(grunt) {
     "compass:debug",
     "targethtml:debug",
     "copy:debug",
+    "inline:debug",
+    "clean:debugAfterInline",
     "rev:debug",
     "useminOptions:debug",
     "usemin",
@@ -692,6 +743,8 @@ module.exports = function(grunt) {
     "cssmin:release",
     "targethtml:release",
     "copy:release",
+    "inline:release",
+    "clean:releaseAfterInline",
     "rev:release",
     "useminOptions:release",
     "usemin",

@@ -34,7 +34,8 @@
     "rjs-build-analysis": "~0.0.3",
     "matchdep": "~0.1.2",
     "http-proxy": "~0.10.3",
-    "connect-modrewrite": "~0.5.4"
+    "connect-modrewrite": "~0.5.4",
+    "grunt-inline": "~0.1.9"
   },
   "scripts": {
     "test": "grunt test"

@@ -27,18 +27,28 @@
   <link rel="canonical" href="http://wpspa.localnerve.com/" />
   
   <!--(if target dummy)><!-->
-  <link rel="stylesheet" href="/app/styles/index.css">
+  <link rel="stylesheet" href="/app/styles/index.css" />
   <!--<!(endif)-->
 
   <!--(if target release)>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="index.css?__inline=true">
   <!(endif)-->
 
   <!--(if target debug)>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="index.css?__inline=true">
   <!(endif)-->
 
+  <!--(if target dummy)><!-->
   <script src="/vendor/js/modernizr/modernizr.js"></script>
+  <!--<!(endif)-->
+
+  <!--(if target release)>
+  <script src="vendor/js/modernizr/modernizr.js?__inline=true"></script>
+  <!(endif)-->
+
+  <!--(if target debug)>
+  <script src="vendor/js/modernizr/modernizr.js?__inline=true"></script>
+  <!(endif)-->
 
 </head>
 

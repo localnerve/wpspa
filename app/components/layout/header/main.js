@@ -16,7 +16,7 @@ define([
     var HeaderLayout = Marionette.Layout.extend({
 
       template: "components/layout/header/template",
-      className: "header-layout",
+      className: "site-header",
 
       regions: {
         navigation: "#navigation",

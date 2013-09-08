@@ -12,11 +12,8 @@ require.config({
     unmanaged: "../vendor/js",
     vendor: "../vendor",
     foundation: "../vendor/bower/foundation/js/foundation",
-    polyfiller: "../vendor/bower/webshim/demos/js-webshim/minified/polyfiller",
     "backbone.marionette": "../vendor/bower/backbone.marionette/lib/core/amd/backbone.marionette",
-    requirejs: "../vendor/bower/requirejs/require",
-    "requirejs-text": "../vendor/bower/requirejs-text/text",
-    underscore: "../vendor/bower/underscore/underscore"
+    "requirejs-text": "../vendor/bower/requirejs-text/text"
   },
   config: {
     "loaders/jst": {
