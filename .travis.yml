@@ -8,4 +8,4 @@ before_script:
   - gem install compass
   - npm install -g grunt-cli
   - npm install -g bower
-  - bower install -D -V
+  - bower install --verbose
