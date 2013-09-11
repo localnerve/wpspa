@@ -17,7 +17,7 @@ function four04(req, res, next) {
     res.end(json);
   } else {
     res.writeHead(res.statusCode, { "Content-Type": "text/plain" });
-    res.end(req.url + "was not found on this server");
+    res.end(req.url + " was not found on this server");
   }
 }
 
