@@ -4,8 +4,9 @@ node_js:
 before_install:
   - sudo apt-get update
   - sudo apt-get install rubygems
-before_script:
   - gem install compass
   - npm install -g grunt-cli
   - npm install -g bower
+before_script:
+  - pwd
   - bower install --verbose
