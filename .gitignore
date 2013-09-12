@@ -1,5 +1,5 @@
 .sass-cache
-dist
+/dist
 app/styles
 libpeerconnection.log
 wpspa.sublime-workspace
