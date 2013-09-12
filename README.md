@@ -1,6 +1,7 @@
 # [WPSPA (Work-In-Progress)](http://github.com/localnerve/wpspa)
+<!--
 [![Build Status](https://secure.travis-ci.org/localnerve/wpspa.png?branch=master)](http://travis-ci.org/localnerve/wpspa)
-
+-->
 [static analysis report](http://htmlpreview.github.io/?https://github.com/localnerve/wpspa/blob/master/report/index.html "Plato Report")
 
 > An example single page application that demonstrates using wordpress as an api
