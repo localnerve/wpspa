@@ -7,3 +7,5 @@ before_install:
   - gem install compass
 before_script:
   - npm install -g grunt-cli
+  - which phantomjs
+  - phantomjs --version
