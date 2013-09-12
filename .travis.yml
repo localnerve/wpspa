@@ -5,8 +5,6 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install rubygems
   - gem install compass
+before_script:
   - npm install -g grunt-cli
   - npm install -g bower
-before_script:
-  - pwd
-  - bower install --verbose
