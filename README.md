@@ -1,12 +1,14 @@
 # [WPSPA (Work-In-Progress)](http://github.com/localnerve/wpspa)
-<!--
+
 [![Build Status](https://secure.travis-ci.org/localnerve/wpspa.png?branch=master)](http://travis-ci.org/localnerve/wpspa)
--->
+
 [static analysis report](http://htmlpreview.github.io/?https://github.com/localnerve/wpspa/blob/master/report/index.html "Plato Report")
 
 > An example single page application that demonstrates using wordpress as an api
 
 The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Also, to learn new stuff and keep growing.
+
+>> NOTE: You first have to run npm install on this project if you want to run the test suite.
 
 ## Development Notes
 
