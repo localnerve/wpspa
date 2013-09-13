@@ -1,5 +1,6 @@
 // middleware for static content.
 var mountFolder = function(connect, dir) {
+  console.log("@@@ mounted path: "+require("path").resolve(dir));
   return connect.static(require("path").resolve(dir));
 };
 
