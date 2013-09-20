@@ -33,9 +33,11 @@
     "grunt-plato": "~0.2.1",
     "rjs-build-analysis": "~0.0.3",
     "matchdep": "~0.1.2",
+    "grunt-inline": "~0.1.9",
+    "grunt-express-server": "~0.4.3",
     "http-proxy": "~0.10.3",
     "connect-modrewrite": "~0.5.4",
-    "grunt-inline": "~0.1.9"
+    "connect-injector": "~0.2.2"
   },
   "scripts": {
     "test": "grunt test"
@@ -45,6 +47,9 @@
   },
   "dependencies": {
     "http-proxy": "~0.10.3",
-    "express": "~3.3.5"
+    "connect-modrewrite": "~0.5.4",
+    "express": "~3.3.5",
+    "connect-injector": "~0.2.3",
+    "async": "~0.2.9"
   }
 }

@@ -1,22 +1,15 @@
-// middleware for static content.
-var mountFolder = function(connect, dir) {
-  return connect.static(require("path").resolve(dir));
-};
+// helper function to spawn a child grunt task
+function runTask(grunt, task) {
+  var child = grunt.util.spawn({
+    grunt: true,
+    args: [task]
+  }, function() {});
+  child.stdout.pipe(process.stdout);
+  child.stderr.pipe(process.stderr);
+}
 
 // middleware to mock /api for test
 var mockApi = require("./test/fixtures/mockApi");
-
-// middleware to route /api requests to the backend.
-var proxy = require("./server/node/lib/proxy");
-
-// middleware for rewrites
-var rewrite = require("connect-modrewrite");
-
-// middleware for notfound
-var notfound = require("./server/node/lib/notfound");
-
-// helper for rewrites
-var rewriteHelper = require("./app/helpers/rewrites");
 
 // Grunt callback
 module.exports = function(grunt) {
@@ -24,28 +17,38 @@ module.exports = function(grunt) {
   // load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
 
+  // load the server configurations
+  var Config = require("./server/config");
+  var configTest = new Config("test");
+  var configDebug = new Config("debug");
+  var configRelease = new Config("release");
+  var configDev = new Config("development");
+
   // project configuration
   var projectConfig = {
     dist: {
       debug: "dist/debug",
       release: "dist/release"
     },
-    api: {
-      host: "jsonapi.local",
-      port: 80
-    },
     app: "app",
     report: "report",
     images: "images",
     fonts: "fonts",
+    server: "server",
+    serverMain: "app.js",
     test: "test/mocha",
     vendor: "vendor",
+    mock: {
+      host: configTest.proxy.host,
+      port: configTest.proxy.port
+    },
     port: {
-      test: 9000,
-      dev: 9001,
-      debug: 9002,
-      release: 9003
-    }
+      test: configTest.appPort,
+      dev: configDev.appPort,
+      debug: configDebug.appPort,
+      release: configRelease.appPort
+    },
+    pkg: grunt.file.readJSON("package.json")
   };
 
   // Grunt config
@@ -53,6 +56,7 @@ module.exports = function(grunt) {
 
     project: projectConfig,
 
+    // bower task provided by grunt-bower-requirejs
     bower: {
       all: {
         rjsConfig: "<%= project.app %>/config.js",
@@ -74,13 +78,18 @@ module.exports = function(grunt) {
       debug: ["<%= project.dist.debug %>"],
       debugAfterInline: [
         "<%= project.dist.debug %>/index.css",
-        "<%= project.dist.debug %>/vendor/js/modernizr"
+        "<%= project.dist.debug %>/vendor"
       ],
-      release: ["<%= project.dist.release %>"],
-      "release-post": ["<%= project.dist.debug %>/require.js"],
+      release: [
+        "<%= project.dist.release %>",
+        "<%= project.app %>/styles"
+      ],
+      "release-post": [
+        "<%= project.dist.debug %>/require.js"
+      ],
       releaseAfterInline: [
         "<%= project.dist.release %>/index.css",
-        "<%= project.dist.release %>/vendor/js/modernizr"
+        "<%= project.dist.release %>/vendor"
       ]
     },
 
@@ -99,9 +108,7 @@ module.exports = function(grunt) {
       },
       test: {
         options: {
-          environment: "development",
-          debugInfo: false,
-          force: false
+          environment: "development"
         }
       },
       dev: {
@@ -120,7 +127,6 @@ module.exports = function(grunt) {
       },
       release: {
         environment: "production",
-        debugInfo: false,
         force: true
       }
     },
@@ -152,146 +158,86 @@ module.exports = function(grunt) {
     // connect webserver provided by grunt-contrib-connect
     connect: {
       options: {
-        // change this to '0.0.0.0' to access the server from outside
-        hostname: "localhost"
+        hostname: "<%= project.mock.host %>",
+        port: "<%= project.mock.port %>",
+        middleware: function(connect) {
+          return [
+            mockApi
+            //, TODO: throw an error here
+          ];
+        }
       },
+      // the server to mock the api to run the test suites against
       test: {
-        testdir: "<%= project.test %>",
         options: {
-          port: "<%= project.port.test %>",
-          middleware: function(connect) {
-            return [
-              mockApi,
-              mountFolder(connect, "."),
-              notfound.four04
-            ];
-          }
+          keepalive: false
         }
       },
-      testTest: {
-        testdir: "<%= project.test %>",
+      // the server to mock the api to run the test suites against, interactive
+      // corresponds to express:devTest
+      devTest: {
         options: {
-          port: "<%= project.port.test %>",
-          keepalive: true,
-          middleware: function(connect) {
-            return [
-              mockApi,
-              mountFolder(connect, "."),
-              notfound.four04
-            ];
-          }
+          keepalive: true
         }
+      }
+    },
+
+    // express task provided by grunt-express-server
+    express: {
+      options: {
+        script: "<%= project.serverMain %>"
       },
+      // this server is meant for interactive development
       dev: {
         options: {
-          port: "<%= project.port.dev %>",
-          keepalive: true,
-          middleware: function(connect) {
-            return [
-              // handle api
-              proxy.api(
-                grunt.config.process("<%= project.api.host %>"),
-                grunt.config.process("<%= project.api.port %>")
-              ),
-              // rewrite filter
-              rewrite([
-                // if application marked notfound, exit here
-                "^" + rewriteHelper.notfound('(.+)', {
-                  regex: true
-                }) + "$ /404.html [NC] [L]",
-                // if a static resource is not being requested, its an in-app route
-                '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
-              ]),
-              // static files
-              mountFolder(connect, "."),
-              // if we're here, its a 404
-              notfound.four04
-            ];
-          }
+          node_env: "development",
+          background: false
         }
       },
-      debugTest: {
+      // this server is meant for automated tests
+      test: {
         options: {
-          keepalive: true,
-          port: "<%= project.port.debug %>",
-          middleware: function(connect) {
-            return [
-              // handle api
-              proxy.api(
-                grunt.config.process("<%= project.api.host %>"),
-                grunt.config.process("<%= project.api.port %>")
-              ),
-              // rewrite filter
-              rewrite([
-                // if application marked notfound, exit here
-                "^" + rewriteHelper.notfound('(.+)', {
-                  regex: true
-                }) + "$ /404.html [NC] [L]",
-                // if a static resource is not being requested, its an in-app route
-                '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
-              ]),
-              // static files
-              mountFolder(connect, grunt.config.process("<%= project.dist.debug %>")),
-              // if we're here, its a 404
-              notfound.four04
-            ];
-          }
+          node_env: "test",
+          background: true
         }
       },
-      releaseTest: {
+      // this server is meant for interactive test development
+      devTest: {
         options: {
-          keepalive: true,
-          port: "<%= project.port.release %>",
-          middleware: function(connect) {
-            return [
-              // handle api
-              proxy.api(
-                grunt.config.process("<%= project.api.host %>"),
-                grunt.config.process("<%= project.api.port %>")
-              ),
-              // rewrite filter
-              rewrite([
-                // if application marked notfound, exit here
-                "^" + rewriteHelper.notfound('(.+)', {
-                  regex: true
-                }) + "$ /404.html [NC] [L]",
-                // if a static resource is not being requested, its an in-app route
-                '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC] [L]'
-              ]),
-              // static files
-              mountFolder(connect, grunt.config.process("<%= project.dist.release %>")),
-              // if we're here, its a 404
-              notfound.four04
-            ];
-          }
+          node_env: "test",
+          background: false
         }
       },
+      // this server is meant for the automated debug build
       debug: {
         options: {
-          port: "<%= project.port.debug %>",
-          middleware: function(connect) {
-            return [
-              proxy.api(
-                grunt.config.process("<%= project.api.host %>"),
-                grunt.config.process("<%= project.api.port %>")
-              ),
-              mountFolder(connect, grunt.config.process("<%= project.dist.debug %>"))
-            ];
-          }
+          script: "<%= project.dist.debug %>/<%= project.serverMain %>",
+          node_env: "debug",
+          background: true
         }
       },
+      // this server is meant for interactively testing the debug distribution
+      devDebug: {
+        options: {
+          script: "<%= project.dist.debug %>/<%= project.serverMain %>",
+          node_env: "debug",
+          background: false
+        }
+      },
+      // this server is meant for the automated release build
       release: {
         options: {
-          port: "<%= project.port.release %>",
-          middleware: function(connect) {
-            return [
-              proxy.api(
-                grunt.config.process("<%= project.api.host %>"),
-                grunt.config.process("<%= project.api.port %>")
-              ),
-              mountFolder(connect, grunt.config.process("<%= project.dist.release %>"))
-            ];
-          }
+          script: "<%= project.dist.release %>/<%= project.serverMain %>",
+          node_env: "release",
+          background: true
+        }
+      },
+      // this server is meant for interactively testing the release distribution
+      devRelease: {
+        options: {
+          script: "<%= project.dist.release %>/<%= project.serverMain %>",
+          node_env: "release",
+          background: false
         }
       }
     },
@@ -303,7 +249,7 @@ module.exports = function(grunt) {
     copy: {
       debug: {
         files: [
-          // this is covered by cssmin for release
+          // this is handled by cssmin for release
           {
             src: "<%= project.app %>/styles/index.css",
             dest: "<%= project.dist.debug %>/index.css"
@@ -312,13 +258,20 @@ module.exports = function(grunt) {
           {
             src: [
               // files in root besides index.html
-              "404.html", ".htaccess", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
+              "package.json", "app.js", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
               // other directories
-              "<%= project.images %>/**", "<%= project.fonts %>/**",
+              "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
               // vendor stuff
-              "<%= project.vendor %>/bower/webshim/demos/js-webshim/minified/**",
-              "<%= project.vendor %>/js/modernizr/modernizr.js"
-            ],
+              "<%= project.vendor %>/js/modernizr/modernizr.js",
+              // server stuff
+              "<%= project.app %>/helpers/rewrites.js"
+            ].concat((function(pkg) {
+              var prefix = "node_modules/", suffix = "/**", result = [];
+              for (var dep in pkg.dependencies) {
+                result.push(prefix+dep+suffix);
+              }
+              return result;
+            }(projectConfig.pkg))),
             dest: "<%= project.dist.debug %>/"
           }
         ]
@@ -329,13 +282,20 @@ module.exports = function(grunt) {
           {
             src: [
               // static files in root besides index.html
-              "404.html", ".htaccess", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
+              "package.json", "app.js", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
               // other directories
-              "<%= project.images %>/**", "<%= project.fonts %>/**",
+              "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
               // vendor stuff
-              "<%= project.vendor %>/bower/webshim/demos/js-webshim/minified/**",
-              "<%= project.vendor %>/js/modernizr/modernizr.js"
-            ],
+              "<%= project.vendor %>/js/modernizr/modernizr.js",
+              // server stuff
+              "<%= project.app %>/helpers/rewrites.js"
+            ].concat((function(pkg) {
+              var prefix = "node_modules/", suffix = "/**", result = [];
+              for (var dep in pkg.dependencies) {
+                result.push(prefix+dep+suffix);
+              }
+              return result;
+            }(projectConfig.pkg))),
             dest: "<%= project.dist.release %>/"
           }
         ]
@@ -414,20 +374,28 @@ module.exports = function(grunt) {
     },
 
     // Task provided by grunt-contrib-jshint.
-    // The jshint option for scripturl is set to lax, because the anchor
-    // override inside anchor.js needs to test for them so as to not accidentally
-    // route.
     jshint: {
-      options: {
-        scripturl: true,
+      client: {
+        // The jshint option for scripturl is set to lax, because the anchor
+        // override inside anchor.js needs to test for them so as to not accidentally
+        // route.
+        options: {
+          scripturl: true,
 
-        // Allows the use of expressions in assignments. 
-        // "Expected an assignment or function call and instead saw an expression."
-        "-W093": false
+          // Allows the use of expressions in assignments. 
+          // "Expected an assignment or function call and instead saw an expression."
+          "-W093": false
+        },
+        src: [
+          "Gruntfile.js", "<%= project.app %>/**/*.js"
+        ]
       },
-      files: [
-        "Gruntfile.js", "<%= project.app %>/**/*.js"
-      ],
+      server: {
+        src: [
+          "<%= project.serverMain %>",
+          "<%= project.server %>/**/*.js"
+        ]
+      },
       test: {
         options: {
           "-W030": false,
@@ -461,7 +429,7 @@ module.exports = function(grunt) {
           log: true,
           bail: false,
           urls: [
-            "http://localhost:<%= connect.test.options.port %>/<%= connect.test.testdir %>/index.html"
+            "http://localhost:<%= project.port.test %>/<%= project.test %>/index.html"
           ]
         }
       }
@@ -490,10 +458,6 @@ module.exports = function(grunt) {
           name: "require",
           search: "(\"){1,1}([0-9a-fA-F]+\\.require.js)",
           replace: "$1/$2"
-        }, {
-          name: "css",
-          search: "(\"){1,1}([0-9a-fA-F]+\\.index.css)",
-          replace: "$1/$2"
         }]
       },
       release: {
@@ -501,10 +465,6 @@ module.exports = function(grunt) {
         actions: [{
           name: "require",
           search: "(\"){1,1}([0-9a-fA-F]+\\.require.js)",
-          replace: "$1/$2"
-        }, {
-          name: "css",
-          search: "(\"){1,1}([0-9a-fA-F]+\\.index.css)",
           replace: "$1/$2"
         }]
       }
@@ -561,18 +521,14 @@ module.exports = function(grunt) {
       debug: {
         files: {
           src: [
-            "<%= project.dist.debug %>/require.js",
-            "<%= project.dist.debug %>/index.css",
-            "<%= project.dist.debug %>/<%= project.vendor %>/js/modernizr/modernizr.js"
+            "<%= project.dist.debug %>/require.js"
           ]
         }
       },
       release: {
         files: {
           src: [
-            "<%= project.dist.release %>/require.js",
-            "<%= project.dist.release %>/index.css",
-            "<%= project.dist.release %>/<%= project.vendor %>/js/modernizr/modernizr.js"
+            "<%= project.dist.release %>/require.js"
           ]
         }
       }
@@ -637,12 +593,17 @@ module.exports = function(grunt) {
     // Watch task provided by grunt-contrib-watch
     // We are watching changes to all js, css, and markup.
     // When a change is detected, we run any associated tasks and signal livereload.
+    // This task relies on jshint src settings for js file detection.
     watch: {
       options: {
         livereload: true
       },
       js: {
-        files: ["<%= jshint.files %>", "<%= jshint.test.src %>"],
+        files: [
+        "<%= jshint.client.src %>",
+        "<%= jshint.test.src %>",
+        "<%= jshint.server.src %>"
+        ],
         tasks: ["jshint"]
       },
       css: {
@@ -668,13 +629,14 @@ module.exports = function(grunt) {
     grunt.log.writeln("\tgrunt watch - Run the watch process");
     grunt.log.writeln("\tgrunt format - Run the js formatter");
     grunt.log.writeln("\tgrunt dev - Run the development watch and webserver");
+    grunt.log.writeln("\tgrunt devTest - Run the development watch and webserver for the test suite");
     grunt.log.writeln("\tgrunt plato - Run the static analysis report");
     grunt.log.writeln("\tgrunt debug - Build the debug version of the app");
     grunt.log.writeln("\tgrunt release - Build the release version of the app");
   });
 
   // the standalone test task
-  grunt.registerTask("test", ["compass:test", "connect:test", "mocha"]);
+  grunt.registerTask("test", ["compass:test", "connect:test", "express:test", "mocha"]);
 
   // the standalone lint task
   grunt.registerTask("lint", ["jshint"]);
@@ -688,22 +650,31 @@ module.exports = function(grunt) {
   // the standalone formatter
   grunt.registerTask("format", ["jsbeautifier"]);
 
-  // the development task, run watch and the development webserver in parallel
+  // the standard development task, run watch and the development webserver in parallel
+  // use this for interactive front-end development
   grunt.registerTask("dev", "development task", function() {
-    function runTask(task) {
-      var child = grunt.util.spawn({
-        grunt: true,
-        args: [task]
-      }, function() {});
-      child.stdout.pipe(process.stdout);
-      child.stderr.pipe(process.stderr);
-    }
     grunt.util.async.parallel([
       function() {
-        runTask("watch");
+        runTask(grunt, "watch");
       },
       function() {
-        runTask("connect:dev");
+        runTask(grunt, "express:dev");
+      }
+    ], this.async());
+  });
+
+  // the test development task, run watch, mock api, and the development webserver in parallel
+  // use this for interactive test suite development
+  grunt.registerTask("devTest", "develop the test suite", function() {
+    grunt.util.async.parallel([
+      function() {
+        runTask(grunt, "watch");
+      },
+      function() {
+        runTask(grunt, "connect:devTest");
+      },
+      function() {
+        runTask(grunt, "express:devTest");
       }
     ], this.async());
   });
@@ -729,7 +700,7 @@ module.exports = function(grunt) {
     "useminOptions:debug",
     "usemin",
     "regex-replace:debug",
-    "connect:debug",
+    "express:debug",
     "html_snapshots:debug"
   );
   grunt.registerTask("debug", debugTasks);
@@ -749,7 +720,7 @@ module.exports = function(grunt) {
     "useminOptions:release",
     "usemin",
     "regex-replace:release",
-    "connect:release",
+    "express:release",
     "html_snapshots:release",
     "clean:release-post"
   );
