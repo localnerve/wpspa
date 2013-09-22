@@ -17,8 +17,7 @@ var notfound = require("./notfound");
  * options:
  *   compress - The response compressor
  *   proxy - { host, port, pattern } A proxy to addd
- *   injectCondition - The condition to inject a response
- *   injectResponder - The responder to that condition
+ *   inject - The condition and responder to inject content
  *   rewrites - An array of connect-modrewrite rules
  *   static - A reference to the static responder (connect | express) 
  */

@@ -45,7 +45,7 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">74.95</p>
+      <p class="stat">74.91</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
@@ -109,12 +109,12 @@ define([
         // prepare to mimic an xhr response.
         var dfd = $.Deferred();
 
-        // boostrapped data is there, so succeed
+        // boostrapped data is here, so succeed now
         options.success(bootstrap);
         dfd.resolve(bootstrap);
 
         // mimic an xhr response.
-        return dfd.promise;
+        return dfd.promise();
       } else {
 
         // delegate to Backbone.sync

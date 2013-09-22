@@ -49,7 +49,7 @@
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">33</p>
+      <p class="stat">34</p>
     </div>
   </div>
   <div class="row historical">
@@ -100,6 +100,7 @@ define([
   function parseWidget(widget) {
     contract(widget, &quot;id&quot;, &quot;widget&quot;, &quot;params.before_widget&quot;, &quot;params.after_widget&quot;);
 
+    // strip off the before/after widget content
     var content = widget.widget.replace(widget.params.before_widget, &quot;&quot;);
     var last = content.lastIndexOf(widget.params.after_widget);
     content = content.substr(0, last);
