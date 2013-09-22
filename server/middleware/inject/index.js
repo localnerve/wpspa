@@ -1,7 +1,7 @@
 /*
  * The main index content injector
  * Bootstraps specfic backend content into the main index.html
- * We do this to save requests over mobile networks for content we always need
+ * We do this to save requests over mobile networks for ATF content
  */
 var async = require("async");
 var Config = require("../../config");
@@ -21,14 +21,14 @@ function responder(callback, data, req, res) {
     navigation: request(config.proxy.host, config.proxy.port, config.navigationPath),
     // banner: request(config.proxy.host, config.proxy.port, config.bannerPath),
     footer: request(config.proxy.host, config.proxy.port, config.footerPath),
-    home: request(config.proxy.host, config.proxy.port, config.homePath)
+    recent: request(config.proxy.host, config.proxy.port, config.recentPath)
   },
   // When they complete, inject the content
   function(err, results) {
     callback(
       err,
       data.toString().replace("</body>",
-        "<script>var wpspa=wpspa || {}; wpspa.injected="+JSON.stringify(results)+";</script></body>")
+        "<script>var wpspa="+JSON.stringify(results)+";</script></body>")
     );
   });
 }

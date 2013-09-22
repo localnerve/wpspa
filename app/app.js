@@ -11,7 +11,7 @@ define([
   "loaders/jst",
   "helpers/anchor",
   "helpers/contract",
-  "helpers/rewrites",
+  "server/helpers/rewrites",
   "module"
 ], function(_, Backbone, Marionette, loader, anchor, contract, rewrites, module) {
   // Denote global reference
@@ -42,30 +42,28 @@ define([
     }, options.path, app);
   });
 
+  // Wait for navigation to arrive
+  app.vent.once("app:navigation:success", function() {
+    // Trigger the initial route and enable HTML5 History API support, set the
+    // root folder to app.root.    
+    Backbone.history.start({
+      pushState: true,
+      root: app.root
+    });
+
+    // Initialize anchors
+    anchor.init(app);
+  });
+
+  // Wait for navigation to fail
+  app.vent.once("app:navigation:fail", function(options) {
+    // TODO: implement application level, categorized error handling
+  });
+
   // After app initialization
   app.on("initialize:after", function(options) {
-
-    // Trigger the initial, application render chain
+    // Trigger the initial application render chain
     app.main.show(app.container.layout);
-
-    // Wait for navigation to arrive
-    app.vent.once("app:navigation:success", function() {
-      // Trigger the initial route and enable HTML5 History API support, set the
-      // root folder to app.root.    
-      Backbone.history.start({
-        pushState: true,
-        root: app.root
-      });
-
-      // Initialize anchors
-      anchor.init(app);
-    });
-
-    // Wait for navigation to fail
-    app.vent.once("app:navigation:fail", function(options) {
-      // TODO: implement application, categorized error handling
-    });
-
   });
 
   return app;

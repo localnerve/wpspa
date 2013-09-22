@@ -12,16 +12,13 @@ var path = require("path");
 var middleware = require("./server/middleware");
 var inject = require("./server/middleware/inject");
 var Config = require("./server/config");
-// TODO: this needs to be refactored:
-var rewriteHelper = require("./app/helpers/rewrites");
+var rewriteHelper = require("./server/helpers/rewrites");
 
 // create the app
 var app = express();
 
 // environment specific configuration
 var config = new Config(process.env.NODE_ENV);
-
-//console.log("NODE_ENV: "+process.env.NODE_ENV);
 
 // set the port
 app.set("port", config.appPort || process.env.PORT);
@@ -40,13 +37,12 @@ var stack = middleware({
       regex: true
     }) + "$ /404.html [NC L]",
     // if request is forbidden
-    '^/(server|node_modules|app.js$|package.json$) [F NC L]',
-    // if request is for snapshot
+    config.rewriteForbidden,
+    // if request is for snapshot, TODO: fix
     '^(.*)\\?_escaped_fragment_=.*$ /snapshots/$1 [NC L]',
     // if a static resource is not being requested, its an in-app route
     '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC L]'
   ],
-  //
   static: express.static(path.resolve(config.staticBase))
 });
 

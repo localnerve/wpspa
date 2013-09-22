@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">80.73</p>
+      <p class="stat">76.74</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">23</p>
+      <p class="stat">40</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">7.94</p>
+      <p class="stat">11.95</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.08</p>
+      <p class="stat">0.19</p>
     </div>
   </div>
 </div>
@@ -95,11 +95,28 @@
   &quot;components/layout/header/navigation/parser&quot;,
   &quot;module&quot;
 ], function(Backbone, parser, module) {
+  $w = window;
 
   // definition of the navigation collection
   var NavigationCollection = Backbone.Collection.extend({
     // get endpoint from config
     url: module.config().endpoint,
+
+    // override sync, if injected data not here, delegate to Backbone
+    sync: function(method, collection, options) {
+      // if we have the data already, use it
+      if ($w.wpspa &amp;&amp; $w.wpspa.navigation) {
+        options.success($w.wpspa.navigation);
+        return {
+          done: function(callback) {
+            callback.apply(callback, arguments);
+          }
+        };
+      } else {
+        return Backbone.sync.apply(this, arguments);
+      }
+    },
+
     // delegate response parsing to the given parser
     parse: function(data) {
       return parser(data);
@@ -107,7 +124,7 @@
   });
 
   return {
-    createCollection: function( /*options*/ ) {
+    createCollection: function() {
       return new NavigationCollection();
     }
   };

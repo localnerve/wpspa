@@ -19,4 +19,7 @@ Config.prototype.proxy = {
   pattern: '^\/api\/'
 };
 
+// Allow access to shared server modules (before the build)
+Config.prototype.rewriteForbidden = '^/(node_modules|app.js$|package.json$) [F NC L]';
+
 module.exports = Config;

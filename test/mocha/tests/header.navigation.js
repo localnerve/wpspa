@@ -24,7 +24,7 @@ describe("Navigation", function() {
     expect(navigationView.collection.length).to.be.at.least(1);
   });
 
-  it("should fire addRoute event when item is added to the collection", function(done) {
+  it("should NOT fire addRoute event when item is added to the collection after initialization", function() {
     var name = "dummy1",
       route = "someroute",
       object_type = "post",
@@ -48,26 +48,29 @@ describe("Navigation", function() {
 
     var beforeLength = navigationView.collection.length;
 
-    app.vent.once("wpspa:router:addRoute", function(options) {
-      // inspect the event arguments
-      expect(options.name).to.equal(name);
-      expect(options.route).to.equal(route);
-      expect(options.options.object_type).to.equal(object_type);
-      expect(options.options.object_id).to.equal(object_id);
-
-      assert(addRoute_stub.calledOnce, "addRoute should have been called once");
-
-      // cleanup the collection
-      var models = navigationView.collection.where({
-        nav_item: nav_item
-      });
-      expect(models.length).to.equal(1);
-      navigationView.collection.remove(models);
-      expect(beforeLength).to.equal(navigationView.collection.length);
-
-      done();
-    });
-
     navigationView.collection.add(models);
+
+    assert(!addRoute_stub.called, "addRoute should not have been called");
+
+    // cleanup the collection
+    var foundModels = navigationView.collection.where({
+      nav_item: nav_item
+    });
+    expect(foundModels.length).to.equal(1);
+    navigationView.collection.remove(foundModels);
+    expect(beforeLength).to.equal(navigationView.collection.length);
+  });
+
+  it("should respond to content:start events", function() {
+    contentStart_stub = sandbox.stub(navigationView, "onContentStart");
+    app.vent.trigger("content:start", {
+      name: "name",
+      route: "",
+      options: {
+        object_id: "1",
+        object_type: "post"
+      }
+    });
+    assert(contentStart_stub.calledOnce, "contentStart should have been called once");
   });
 });

@@ -5,7 +5,7 @@ describe("prefetch", function() {
   var sandbox;
 
   beforeEach(function() {
-    prefetch = window.__test.helpers.prefetch;
+    prefetch = __test.standalone.prefetch;
     sandbox = sinon.sandbox.create();
   });
 
@@ -24,11 +24,10 @@ describe("prefetch", function() {
   });
 
   it("should create itself as expected", function() {
-    var promise = prefetch.promise(eventAggregator());
+    var promises = prefetch.promises(eventAggregator());
 
-    expect(promise).to.exist;
-    expect(promise.then).to.exist;
-    expect(promise.then).to.be.a("function");
+    expect(promises).to.exist;
+    expect(promises).to.be.an("object");
   });
 
   it("should respond to the prefetch event", function() {
@@ -42,21 +41,12 @@ describe("prefetch", function() {
   });
 
   it("should fail a bad fetch as expected", function(done) {
+    var object_type = "page";
     var ea = eventAggregator();
     var progress_fn = sandbox.spy();
     var success_fn = sandbox.spy();
 
-    prefetch.promise(ea).then(
-      success_fn,
-      function(response, options) {
-        expect(response).to.exist;
-        expect(options).to.exist;
-        expect(success_fn.callCount).to.equal(0);
-        assert(progress_fn.calledOnce, "progress should have been called once");
-        done();
-      },
-      progress_fn
-    );
+    var pf = prefetch._create(ea);
 
     // intercept the Backbone.sync call and make a bad url, forcing an error.
     var backboneSync = Backbone.sync;
@@ -65,20 +55,42 @@ describe("prefetch", function() {
       backboneSync(method, model, options);
     });
 
-    // start the prefetch
-    ea.trigger("content:prefetch", {
-      items: [1, 2, 3]
-    });
+    // trigger the prefetch    
+    ea.trigger("content:prefetch", [{
+      object_type: object_type,
+      object_id: 1
+    }]);
 
     assert(sync_stub.calledOnce, "Backbone.sync should have been called once");
+
+    pf.promises[object_type]
+    .then(
+      success_fn,
+      function(response, options) {
+        expect(response).to.exist;
+        expect(options).to.exist;
+        expect(success_fn.callCount).to.equal(0);
+        assert(progress_fn.calledOnce, "progress should have been called once");
+        // fail was called so we're good:
+        done();
+      },
+      progress_fn
+    );
   });
 
   it("should succeed as expected", function(done) {
+    var object_type = "page";
     var ea = eventAggregator();
     var progress_fn = sandbox.spy();
     var fail_fn = sandbox.spy();
 
-    prefetch.promise(ea).then(
+    var pf = prefetch._create(ea);
+    ea.trigger("content:prefetch", [{
+      object_type: object_type,
+      object_id: 1
+    }]);
+
+    pf.promises[object_type].then(
       function(collection) {
         expect(collection).to.exist;
         expect(fail_fn.callCount).to.equal(0);
@@ -97,8 +109,8 @@ describe("prefetch", function() {
   it("should throw on no item input", function() {
     var ea = eventAggregator();
 
-    // create a promise we don't do anything with
-    var promise = prefetch.promise(ea);
+    // create a pf we don't do anything with
+    var pf = prefetch._create(ea);
 
     expect(function() {
       ea.trigger("content:prefetch" /* nothing */ );

@@ -12,10 +12,13 @@ Config.prototype = {
   footerPath: "/api/widgets/get_sidebar/?sidebar_id=sidebar-1",
   
   // endpoint for home content (requires JSON API)
-  homePath: "/api/get_recent_posts",
+  recentPath: "/api/get_recent_posts",
 
   // the default static file base path
-  staticBase: "."
+  staticBase: ".",
+
+  // the forbidden access rewrite expression
+  rewriteForbidden: '^/(server|node_modules|app.js$|package.json$) [F NC L]'
 };
 
 module.exports = Config;

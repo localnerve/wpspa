@@ -32,4 +32,12 @@ describe("Content", function() {
     assert(contentStart_stub.calledOnce, "contentStart should have been called once");
   });
 
+  it("should throw an error when a bad view type is requested", function() {
+    var object_type = "superbad99";
+
+    expect(function() {
+      var never = app.request("content:view", object_type);
+    }).to.throw(Error);
+  });
+
 });

@@ -10,13 +10,13 @@ define([
   "components/controller"
 ], function(_, Marionette, contract, app) {
 
-  // The definition for the dynamic WPSPA.router
+  // The definition for the dynamic application level router
   var AppRouter = Marionette.AppRouter.extend({
     appRoutes: {
       "*default": "notfound"
     },
 
-    initialize: function( /*options*/ ) {
+    initialize: function() {
 
       // Add route events handler, adds a dynamic route
       // NOTE: instead of calling this.addRoute, using a function allows test stubs.
@@ -31,7 +31,7 @@ define([
     addRoute: function(options) {
       contract(options, "route", "name");
       app.vent.trigger("wpspa:controller:createHandler", options);
-      // the next line should be un-necessary.
+      // the next line should be un-necessary, come on Marionette.
       this.appRoutes[options.name] = options.route;
       this.appRoute(options.route, options.name);
     }
@@ -39,7 +39,7 @@ define([
 
   // Add the initializer for this module partial
   app.addInitializer(function(options) {
-    // Create the wpspa router
+    // Create a router at the app level
     app.router = new AppRouter(_.extend({
       controller: app.controller
     }, options));

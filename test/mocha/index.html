@@ -68,9 +68,8 @@
                     // set a reference to the app
                     __test.app = app;
 
-                    // create some namespaces
-                    __test.helpers = {};
-                    __test.modules = {};
+                    // create standalone namespace
+                    __test.standalone = {};
                     
                     // Ensure you point to where your tests are, base directory is app/, which
                     // is why ../test is necessary
@@ -79,9 +78,9 @@
                         tests: "../test/mocha/tests"
                       }
                     }, [
-                        // load all helpers and standalone modules for testing
+                        // load all standalone modules for individual testing
                         "helpers/contract",
-                        "helpers/prefetch/main",
+                        "components/layout/content/prefetch",                     
 
                         // load all the tests
                         "tests/environment",
@@ -95,10 +94,9 @@
                         "tests/prefetch"
                         // next test suite here
                     ], function(contract, prefetch) {
-                        // make helpers available                        
-                        __test.helpers.contract = contract;
-                        // make app modules available
-                        __test.helpers.prefetch = prefetch;
+                        // make standalone modules available
+                        __test.standalone.contract = contract;
+                        __test.standalone.prefetch = prefetch;
 
                         // tests and helpers loaded, run it!
                         mocha.run(function() {

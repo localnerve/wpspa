@@ -1,0 +1,31 @@
+<header class="entry-header">
+  <h1 class="entry-title">
+    <a href="<%= model.get('url') %>" rel="bookmark"><%= model.get('title') %></a>
+  </h1>
+  <div class="entry-meta">
+    <span class="date">
+      <a href="<%= model.get('url') %>" title="<%= model.get('title') %>" rel="bookmark">
+        <time class="entry-date" datetime="<%= model.get('datetime') %>">
+          <%= model.get('date') %>
+        </time>
+      </a>
+    </span>
+    <span class="categories-links">
+      <!-- TODO: make this real -->
+      <a href="http://jsonapi.local/category/uncategorized/" title="View all posts in Uncategorized" rel="category tag">Uncategorized</a>
+    </span>
+    <span class="author vcard">
+      <a class="url fn n" href="<%= model.get('author').url %>" title="View all posts by <%= model.get('author').name %>" rel="author"><%= model.get('author').name %></a>
+    </span>
+  </div>
+</header>
+<div class="entry-content">
+  <%= model.get('excerpt') %>
+</div>
+<footer>
+  <div class="comments-link">
+    <a href="<%= model.get('url') %>#respond" title="Comment on <%= model.get('title') %>">
+      <span class="leave-reply">Leave a comment</span>
+    </a>
+  </div>
+</footer>

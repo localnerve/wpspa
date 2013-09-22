@@ -1,20 +1,38 @@
 define([
-  "backbone.marionette",
   "app",
   "components/layout/header/navigation/view"
-], function(Marionette, app, navigationView) {
+], function(app, navigationView) {
 
-  // Create a partial definition for wpspa.container module
-  var thisModule = app.module("container.header", function(header, app) {
+  // Create a partial definition for container.header module
+  var thisModule = app.module("container.header", function(header) {
 
     // add another header module initializer
     header.addInitializer(function(options) {
-
-      // create the navigation view instance
       this.navigation = navigationView.create(options);
+    });
 
+    // add a finalizer to the container.header module 
+    header.addFinalizer(function() {
+      delete this.navigation;
+    });
+
+    // after app initialization, download the data
+    app.on("initialize:after", function() {
+
+      // forward the add event
+      header.listenTo(header.navigation.collection, "add", function(model) {
+        app.vent.trigger("wpspa:router:addRoute", {
+          name: model.get("name"),
+          route: model.get("route"),
+          options: {
+            object_type: model.get("object_type"),
+            object_id: model.get("object_id")
+          }
+        });
+      });
+      
       // start the navigation download
-      this.navigation.collection.fetch({
+      header.navigation.collection.fetch({
         success: function(collection) {
           // send out a pretch content event
           app.vent.trigger("content:prefetch", collection.map(function(model) {
@@ -35,12 +53,9 @@ define([
             options: options
           });
         }
+      }).done(function() {
+        header.stopListening();
       });
-    });
-
-    header.addFinalizer(function() {
-      this.navigation.stopListening();
-      delete this.navigation;
     });
 
   });

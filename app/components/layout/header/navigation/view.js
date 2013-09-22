@@ -16,32 +16,19 @@ define([
     className: "top-bar",
     itemViewContainer: ".wpspa-nav",
 
-    collectionEvents: {
-      "add": "onAdd"
+    initialize: function() {
+      // listen to message bus for content events
+      var self = this;
+      this.listenTo(app.vent, "content:start", function(options) {
+        self.onContentStart(options);
+      });
     },
 
-    initialize: function() {
-      // listen to message bus navigation events        
-      this.listenTo(app.vent, "content:start", this.onContentStart);
-    },
     /*
     appendHtml: function(collectionView, itemView, index) {
       // TODO: implement navigation hierarchy
     },
     */
-
-    // When this view's collection adds a model, this method is triggered
-    // We tell the appRouter to add a route
-    onAdd: function(model) {
-      app.vent.trigger("wpspa:router:addRoute", {
-        name: model.get("name"),
-        route: model.get("route"),
-        options: {
-          object_type: model.get("object_type"),
-          object_id: model.get("object_id")
-        }
-      });
-    },
 
     // Manage the top-bar when content changes
     // Reassign the active item, close the menu if required
@@ -61,8 +48,9 @@ define([
 
   return {
     create: function(options) {
+      options = options || {};
       return new NavigationView(_.extend({
-        collection: entities.createCollection()
+        collection: options.collection || entities.createCollection()
       }, options));
     }
   };

@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">79.75</p>
+      <p class="stat">79.76</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">49</p>
+      <p class="stat">64</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">10.97</p>
+      <p class="stat">12.73</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.25</p>
+      <p class="stat">0.38</p>
     </div>
   </div>
 </div>
@@ -91,22 +91,40 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="span12">define([
-  &quot;backbone.marionette&quot;,
   &quot;app&quot;,
   &quot;components/layout/header/navigation/view&quot;
-], function(Marionette, app, navigationView) {
+], function(app, navigationView) {
 
-  // Create a partial definition for wpspa.container module
-  var thisModule = app.module(&quot;container.header&quot;, function(header, app) {
+  // Create a partial definition for container.header module
+  var thisModule = app.module(&quot;container.header&quot;, function(header) {
 
     // add another header module initializer
     header.addInitializer(function(options) {
-
-      // create the navigation view instance
       this.navigation = navigationView.create(options);
+    });
 
+    // add a finalizer to the container.header module 
+    header.addFinalizer(function() {
+      delete this.navigation;
+    });
+
+    // after app initialization, download the data
+    app.on(&quot;initialize:after&quot;, function() {
+
+      // forward the add event
+      header.listenTo(header.navigation.collection, &quot;add&quot;, function(model) {
+        app.vent.trigger(&quot;wpspa:router:addRoute&quot;, {
+          name: model.get(&quot;name&quot;),
+          route: model.get(&quot;route&quot;),
+          options: {
+            object_type: model.get(&quot;object_type&quot;),
+            object_id: model.get(&quot;object_id&quot;)
+          }
+        });
+      });
+      
       // start the navigation download
-      this.navigation.collection.fetch({
+      header.navigation.collection.fetch({
         success: function(collection) {
           // send out a pretch content event
           app.vent.trigger(&quot;content:prefetch&quot;, collection.map(function(model) {
@@ -127,12 +145,9 @@
             options: options
           });
         }
+      }).done(function() {
+        header.stopListening();
       });
-    });
-
-    header.addFinalizer(function() {
-      this.navigation.stopListening();
-      delete this.navigation;
     });
 
   });

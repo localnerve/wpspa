@@ -2,7 +2,7 @@ describe("contract", function() {
 
   var contract;
   beforeEach(function() {
-    contract = __test.helpers.contract;
+    contract = __test.standalone.contract;
   });
 
   it("should fail if no options supplied", function() {

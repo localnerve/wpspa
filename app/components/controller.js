@@ -12,10 +12,10 @@ define([
   "components/content/main"
 ], function(Marionette, app, contract) {
 
-  // The definition of the appController
+  // The definition of the application level controller
   var AppController = Marionette.Controller.extend({
 
-    initialize: function( /*options*/ ) {
+    initialize: function() {
       var self = this;
       // Create the handler to dynamically add a route handler
       app.vent.on("wpspa:controller:createHandler", function(options) {
@@ -46,7 +46,7 @@ define([
 
   // add an app initialization
   app.addInitializer(function(options) {
-    // Create the wpspa controller
+    // Create a controller at the app level
     app.controller = new AppController(options);
   });
 

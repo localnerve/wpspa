@@ -262,9 +262,8 @@ module.exports = function(grunt) {
               // other directories
               "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
               // vendor stuff
-              "<%= project.vendor %>/js/modernizr/modernizr.js",
-              // server stuff
-              "<%= project.app %>/helpers/rewrites.js"
+              "<%= project.vendor %>/js/modernizr/modernizr.js"
+              //"<%= project.vendor %>/bower/foundation/js/foundation/**"
             ].concat((function(pkg) {
               var prefix = "node_modules/", suffix = "/**", result = [];
               for (var dep in pkg.dependencies) {
@@ -286,9 +285,8 @@ module.exports = function(grunt) {
               // other directories
               "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
               // vendor stuff
-              "<%= project.vendor %>/js/modernizr/modernizr.js",
-              // server stuff
-              "<%= project.app %>/helpers/rewrites.js"
+              "<%= project.vendor %>/js/modernizr/modernizr.js"
+              //"<%= project.vendor %>/bower/foundation/js/foundation/**"
             ].concat((function(pkg) {
               var prefix = "node_modules/", suffix = "/**", result = [];
               for (var dep in pkg.dependencies) {
@@ -321,10 +319,11 @@ module.exports = function(grunt) {
     // This task will create the html snapshots for indexing.
     html_snapshots: {
       options: {
-        selector: "#content .grid-row",
-        input: "robots",
-        source: "robots.txt",
-        timeout: 5000
+        selector: {
+          "/": "#content .multiple-posts",
+          "__default": "#content .grid-row"
+        },
+        source: "robots.txt"
       },
       debug: {
         options: {
@@ -444,7 +443,11 @@ module.exports = function(grunt) {
         },
         files: [{
           dest: "<%= project.report %>",
-          src: "<%= project.app %>/**/*.js"
+          src: [
+            "<%= project.app %>/**/*.js",
+            "<%= project.server %>/**/*.js",
+            "<%= project.serverMain %>"
+          ]
         }]
       }
     },

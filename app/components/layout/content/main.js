@@ -10,7 +10,7 @@ define([
   "app",
   "helpers/vendor-interface",
   "helpers/contract",
-  "helpers/prefetch/main"
+  "components/layout/content/prefetch"
 ], function(Marionette, app, vendor, contract, prefetch) {
 
   // definition of the content region
@@ -18,8 +18,9 @@ define([
     el: "#content",
 
     initialize: function() {
-      // Create a prefetch promise on the app.vent
-      this.promise = prefetch.promise(app.vent);
+      
+      // Create prefetch promises on the app.vent
+      this.promises = prefetch.promises(app.vent);
 
       // Handle content start
       // The handler itself is anonymous because of the testing implications
@@ -30,22 +31,22 @@ define([
     },
 
     // Swap out the content from the prefetch
-    // See the prefetch create to match up the handlers by signature to the events on the deferred promise
+    // See the prefetch to match up the handlers by signature to the events on the deferred promise
     contentStart: function(options) {
       contract(options, "options.object_id", "options.object_type");
-      options = options.options;
+      var subopts = options.options;
 
-      // Request the appropriate content view type
-      var content = app.request("content:view:"+options.object_type);
+      // Request the appropriate content view
+      var content = app.request("content:view", subopts.object_type);
 
       var self = this;
-      this.promise.then(
+      this.promises[subopts.object_type].then(
         // success
         function(collection) {
           self.show(
             content.create({
               model: collection.get({
-                id: options.object_id
+                id: subopts.object_id
               })
             })
           );
@@ -67,7 +68,7 @@ define([
     },
 
     // Called after the region contents render
-    onShow: function( /* view */ ) {
+    onShow: function() {
       vendor.initialize();
     }
 

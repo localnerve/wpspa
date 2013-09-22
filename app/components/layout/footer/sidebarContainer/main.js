@@ -3,28 +3,33 @@
  * Defines the sidebar container and composition
  */
 define([
-  "backbone.marionette",
-  "app"
-], function(Marionette, app) {
+  "app",
+  "components/layout/footer/sidebarContainer/view"
+], function(app, sidebarView) {
 
   // Create a partial definition for container.footer module
   var thisModule = app.module("container.footer", function(footer) {
 
-    // The definition of the SideBarContainerView
-    var SideBarContainerView = Marionette.ItemView.extend({
-      template: "components/layout/footer/sidebarContainer/template",
-      className: "widget-area"
-    });
-
     // add another footer module initializer
     footer.addInitializer(function(options) {
-      this.sidebarContainer = new SideBarContainerView(options);
+      this.sidebarContainer = sidebarView.create(options);
     });
 
     footer.addFinalizer(function() {
       delete this.sidebarContainer;
     });
 
+    app.on("initialize:after", function() {
+      footer.sidebarContainer.collection.fetch({
+        // TODO: finish implementation
+        success: function(collection) {
+          //console.log("sidebar success");
+        },
+        error: function(collection, response, options) {
+          //console.log("sidebar error");
+        }
+      });
+    });
   });
 
   return thisModule;

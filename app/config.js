@@ -9,7 +9,7 @@ require.config({
     backbone: "../vendor/bower/backbone/backbone",
     "backbone.wreqr": "../vendor/bower/backbone.marionette/public/javascripts/backbone.wreqr",
     "backbone.babysitter": "../vendor/bower/backbone.marionette/public/javascripts/backbone.babysitter",
-    unmanaged: "../vendor/js",
+    server: "../server",
     vendor: "../vendor",
     foundation: "../vendor/bower/foundation/js/foundation",
     "backbone.marionette": "../vendor/bower/backbone.marionette/lib/core/amd/backbone.marionette",
@@ -26,8 +26,18 @@ require.config({
     "components/layout/header/navigation/item": {
       hideHome: true
     },
-    "components/content/post/entities": {
-      endpoint: "/api/get_post"
+    "components/layout/footer/sidebarContainer/entities": {
+      endpoint: "/api/widgets/get_sidebar/?sidebar_id=sidebar-1"
+    },
+    "components/content/post/entities/model": {
+      urlRoot: "/api/get_post"
+    },
+    "components/content/post/entities/recent": {
+      endpoint: "/api/get_recent_posts"
+    },
+    "components/content/post/entities/collection": {
+      endpoint: "/api/get_posts/?post_type=any",
+      urlRoot: "/api/get_posts"
     },
     app: {
       root: "/"
