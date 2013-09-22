@@ -61,7 +61,7 @@ describe("Navigation", function() {
     expect(beforeLength).to.equal(navigationView.collection.length);
   });
 
-  it("should respond to content:start events", function() {
+  it("should respond to expected content events", function() {
     contentStart_stub = sandbox.stub(navigationView, "onContentStart");
     app.vent.trigger("content:start", {
       name: "name",

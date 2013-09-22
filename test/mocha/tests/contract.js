@@ -5,6 +5,11 @@ describe("contract", function() {
     contract = __test.standalone.contract;
   });
 
+  it("should be able to get a standalone instance to contract", function() {
+    expect(contract).to.exist;
+    expect(contract).to.be.a("function");
+  });
+
   it("should fail if no options supplied", function() {
     expect(function() {
       contract();
