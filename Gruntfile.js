@@ -630,6 +630,7 @@ module.exports = function(grunt) {
     grunt.log.writeln("\tgrunt lint - Run the linter");
     grunt.log.writeln("\tgrunt ccss - Run compass");
     grunt.log.writeln("\tgrunt watch - Run the watch process");
+    grunt.log.writeln("\tgrunt push - Prepare to push to remote");
     grunt.log.writeln("\tgrunt format - Run the js formatter");
     grunt.log.writeln("\tgrunt dev - Run the development watch and webserver");
     grunt.log.writeln("\tgrunt devTest - Run the development watch and webserver for the test suite");
@@ -643,6 +644,9 @@ module.exports = function(grunt) {
 
   // the standalone lint task
   grunt.registerTask("lint", ["jshint"]);
+
+  // the standalone push task
+  grunt.registerTask("push", ["lint", "test", "plato"]);
 
   // the standalone css compile task
   grunt.registerTask("ccss", ["compass:dev"]);
