@@ -4,7 +4,7 @@
  * The environment specific server config
  */
 
-//var production = require("./production");
+var production = require("./production");
 var Development = require("./development");
 var Test = require("./test");
 var Debug = require("./debug");
@@ -15,8 +15,8 @@ module.exports = function(environment) {
 
   switch(environment) {
 
-//    case "production":
-//      return new Production();
+    case "production":
+      return new Production();
 
     case "release":
       return new Release();

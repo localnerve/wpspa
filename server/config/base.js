@@ -18,7 +18,7 @@ Config.prototype = {
   staticBase: ".",
 
   // the forbidden access rewrite expression
-  rewriteForbidden: '^/(server|node_modules|app.js$|package.json$) [F NC L]'
+  rewriteForbidden: '^/(server|node_modules|Procfile$|app.js$|package.json$) [F NC L]'
 };
 
 module.exports = Config;

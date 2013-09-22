@@ -258,7 +258,7 @@ module.exports = function(grunt) {
           {
             src: [
               // files in root besides index.html
-              "package.json", "app.js", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
+              "package.json", "app.js", "Procfile", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
               // other directories
               "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
               // vendor stuff
@@ -281,7 +281,7 @@ module.exports = function(grunt) {
           {
             src: [
               // static files in root besides index.html
-              "package.json", "app.js", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
+              "package.json", "app.js", "Procfile", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
               // other directories
               "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
               // vendor stuff

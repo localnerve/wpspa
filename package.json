@@ -40,10 +40,12 @@
     "connect-injector": "~0.2.2"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "start": "node app.js"
   },
   "engines": {
-    "node": ">=0.10.5"
+    "node": "0.10.10",
+    "npm": "1.2.25"
   },
   "dependencies": {
     "http-proxy": "~0.10.3",
