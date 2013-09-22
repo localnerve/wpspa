@@ -40,7 +40,8 @@ require.config({
       urlRoot: "/api/get_posts"
     },
     app: {
-      root: "/"
+      root: "/",
+      pushState: true
     }
   },
   map: {

@@ -24,7 +24,8 @@ define([
 
   // Create the app
   var app = new Marionette.Application({
-    root: module.config().root
+    root: module.config().root,
+    pushState: module.config().pushState
   });
 
   // Add the main region
@@ -47,7 +48,7 @@ define([
     // Trigger the initial route and enable HTML5 History API support, set the
     // root folder to app.root.    
     Backbone.history.start({
-      pushState: true,
+      pushState: app.pushState,
       root: app.root
     });
 
