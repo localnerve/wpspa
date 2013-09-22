@@ -4,6 +4,9 @@
  * It holds a reference to all the prefetched content data from the cms.
  * When it receives a content:start event from the app, it 
  *   creates the appropriate content view for the content by type and id.
+ * Content types and ids are object_type and object_id defined in the database on the backend.
+ * object_type and object_id corresponds to the WPSPA object type and id defined by the 
+ *   WPSPA plugin in concert with your normal wordpress menu.
  */
 define([
   "backbone.marionette",

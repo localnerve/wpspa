@@ -1,8 +1,9 @@
 define([
   "backbone",
+  "helpers/sync",
   "components/layout/footer/sidebarContainer/parser",
   "module"
-], function(Backbone, parser, module) {
+], function(Backbone, sync, parser, module) {
   $w = window;
 
   // definition of the footer sidebar collection
@@ -11,19 +12,7 @@ define([
     url: module.config().endpoint,
 
     // override sync, if injected data not here, delegate to Backbone
-    sync: function(method, collection, options) {
-      // if we have the data already, use it
-      if ($w.wpspa && $w.wpspa.footer) {
-        options.success($w.wpspa.footer);
-        return {
-          done: function(callback) {
-            callback.apply(callback, arguments);
-          }
-        };
-      } else {
-        return Backbone.sync.apply(this, arguments);
-      }
-    },
+    sync: sync($w.wpspa ? $w.wpspa.footer : null),
 
     // delegate response parsing to the given parser
     parse: function(data) {

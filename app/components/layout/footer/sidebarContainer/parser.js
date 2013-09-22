@@ -8,6 +8,7 @@ define([
   function parseWidget(widget) {
     contract(widget, "id", "widget", "params.before_widget", "params.after_widget");
 
+    // strip off the before/after widget content
     var content = widget.widget.replace(widget.params.before_widget, "");
     var last = content.lastIndexOf(widget.params.after_widget);
     content = content.substr(0, last);

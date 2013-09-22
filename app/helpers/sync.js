@@ -17,12 +17,12 @@ define([
         // prepare to mimic an xhr response.
         var dfd = $.Deferred();
 
-        // boostrapped data is there, so succeed
+        // boostrapped data is here, so succeed now
         options.success(bootstrap);
         dfd.resolve(bootstrap);
 
         // mimic an xhr response.
-        return dfd.promise;
+        return dfd.promise();
       } else {
 
         // delegate to Backbone.sync

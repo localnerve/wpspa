@@ -1,9 +1,10 @@
 define([
   "backbone",
+  "helpers/sync",
   "components/layout/header/navigation/parser",
   "module"
-], function(Backbone, parser, module) {
-  $w = window;
+], function(Backbone, sync, parser, module) {
+  var $w = window;
 
   // definition of the navigation collection
   var NavigationCollection = Backbone.Collection.extend({
@@ -11,19 +12,7 @@ define([
     url: module.config().endpoint,
 
     // override sync, if injected data not here, delegate to Backbone
-    sync: function(method, collection, options) {
-      // if we have the data already, use it
-      if ($w.wpspa && $w.wpspa.navigation) {
-        options.success($w.wpspa.navigation);
-        return {
-          done: function(callback) {
-            callback.apply(callback, arguments);
-          }
-        };
-      } else {
-        return Backbone.sync.apply(this, arguments);
-      }
-    },
+    sync: sync($w.wpspa ? $w.wpspa.navigation : null),
 
     // delegate response parsing to the given parser
     parse: function(data) {

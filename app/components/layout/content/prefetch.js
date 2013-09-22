@@ -1,7 +1,9 @@
 /*
  * prefetch
+ *
  * Starts the request on the prefetch collection and notifies everyone.
- * prefetch is started on the "content:fetch" event for the given event aggregator.
+ * Prefetch is started on the "content:fetch" event for the given event aggregator.
+ * Allows multiple fetches, can be rerun to add additional, unique fetches.
  */
 define([
   "lodash",
@@ -27,17 +29,16 @@ define([
       contract(items, "0");
 
       // Prefetch unique entity types
-      var oTypes = {};
       _.each(items, function(item) {
-        if (!oTypes[item.object_type]) {
-          oTypes[item.object_type] = 1;
+        // if not already fetched
+        if (!self.promises[item.object_type]) {
+          var dfd = $.Deferred();
 
           // setup unique object_type
           var entity = app.request("content:entity", item.object_type);
-          var dfd = $.Deferred();
           entity.once("request", function() {
             if (dfd.state() === "pending") {
-              // progress
+              // progress notification
               dfd.notify();
             }
           });
@@ -47,12 +48,12 @@ define([
           entity.fetch({
             // Forward the "success" event
             success: function(collection, response, options) {
-              // success
+              // success notification
               dfd.resolve(collection);
             },
             // Forward the "fail" event
             error: function(collection, response, options) {
-              // fail
+              // fail notification
               dfd.reject(response, options);
             }
           });
