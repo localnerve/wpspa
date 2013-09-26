@@ -1,13 +1,55 @@
 define([
+  "lodash",
   "jquery",
   "backbone"
-], function($, Backbone) {
+], function(_, $, Backbone) {
+
+  // build a url path
+  function buildUrlPath(app, start) {
+    var sep = app.pushState ? "/" : "-";
+
+    if (start.charAt(start.length - 1) === sep)
+      start = start.substr(0, start.length - 1);
+
+    var path = start;
+    var components = Array.prototype.slice.call(arguments, 2);
+    _.each(components, function (component) {
+      path += sep + encodeURIComponent(component);
+    });
+
+    return path;
+  }
+
+  // ensure a url root is ok to add on to
+  function normalizeUrlRoot(urlRoot) {
+    if (urlRoot.charAt(urlRoot.length - 1) !== '/') {
+      urlRoot += "/";
+    }
+    if (!/^https?:\/\//.test(urlRoot)) {
+      if (urlRoot.charAt(0) !== '/')
+        urlRoot = "/"+urlRoot;
+    }
+    return urlRoot;
+  }
 
   // Convert a route to an href
   function routeToHref(route) {
-    if (route.length === 0) {
-      route = "/";
+    var href = route;
+    if (route.charAt(0) !== '/') {
+      href = "/" + href;
     }
+    return href;
+  }
+
+  // super simple href to route mapping
+  // handle relative and absolute urls
+  function hrefToRoute(href) {
+    var re = /^https?:\/\/.+(\/)([^\\?]+)\/?$/;
+    var route = href.replace(re, "$2");
+    if (route.charAt(route.length - 1) === '/')
+      route = route.substr(0, route.length - 1);
+    if (route.charAt(0) === '/')
+      route = route.substring(1);
     return route;
   }
 
@@ -49,7 +91,10 @@ define([
 
   return {
     init: init,
-    routeToHref: routeToHref
+    hrefToRoute: hrefToRoute,
+    routeToHref: routeToHref,
+    normalizeUrlRoot: normalizeUrlRoot,
+    buildUrlPath: buildUrlPath
   };
 
 });

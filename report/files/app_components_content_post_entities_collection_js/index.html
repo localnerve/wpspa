@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">79.23</p>
+      <p class="stat">71.43</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">33</p>
+      <p class="stat">42</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">8.27</p>
+      <p class="stat">15.71</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.13</p>
+      <p class="stat">0.32</p>
     </div>
   </div>
 </div>
@@ -91,30 +91,39 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="span12">define([
+  &quot;lodash&quot;,
   &quot;backbone&quot;,
+  &quot;helpers/anchor&quot;,
   &quot;helpers/sync&quot;,
   &quot;components/content/post/entities/parser&quot;,
   &quot;module&quot;
-], function(Backbone, sync, parser, module) {
+], function(_, Backbone, anchor, sync, parser, module) {
   var $w = window;
 
   // definition of a post collection
   var PostCollection = Backbone.Collection.extend({
 
+    urlRoot: module.config().urlRoot,
+
     initialize: function(options) {
-      // TODO: check if overwriting is always safe
-      this.options = options;
+      options = options || {};
+      // preserve any options specified to constructor
+      this.options = _.extend(this.options || {}, { fetchItems: options.items });
     },
 
     url: function() {
-      // TODO: implement
-      // if (this.options.fetchItems)
-      //   (make url from module.config().urlRoot and fetchItems)
-      // else
-      return module.config().endpoint;
+      // if fetchItems are specified, get the specific items
+      if (this.options.fetchItems &amp;&amp; this.options.fetchItems.length &gt; 0) {
+        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        var object_type = this.options.fetchItems[0].object_type;
+        var object_ids = _.pluck(this.options.fetchItems, &quot;object_id&quot;);
+        return urlRoot + &quot;?post_type=&quot;+object_type+&quot;&amp;post__in(&quot;+object_ids.join(&quot;,&quot;)+&quot;)&quot;;
+      } else {
+        return module.config().endpoint;
+      }
     },
 
-    sync: sync($w.wpspa ? $w.wpspa.posts : null),
+    //sync: sync($w.wpspa ? $w.wpspa.posts : null),
 
     parse: function(data) {
       return parser(data);

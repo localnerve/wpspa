@@ -35,9 +35,13 @@ require.config({
     "components/content/post/entities/recent": {
       endpoint: "/api/get_recent_posts"
     },
+    "components/content/post/entities/category": {
+      urlRoot: "/api/get_category_posts/",
+      endpoint: "/api/get_category_posts/?slug=Uncategorized"
+    },
     "components/content/post/entities/collection": {
-      endpoint: "/api/get_posts/?post_type=any",
-      urlRoot: "/api/get_posts"
+      urlRoot: "/api/get_posts",
+      endpoint: "/api/get_posts/?post_type=any"
     },
     app: {
       root: "/",

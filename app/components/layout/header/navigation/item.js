@@ -21,7 +21,7 @@ define([
     serializeData: function() {
       return {
         name: this.model.get("name"),
-        route: anchor.routeToHref(this.model.get("route")),
+        href: anchor.routeToHref(this.model.get("route")),
         navItem: this.model.get("nav_item")
       };
     }

@@ -11,8 +11,9 @@
       </a>
     </span>
     <span class="categories-links">
-      <!-- TODO: make this real -->
-      <a href="http://jsonapi.local/category/uncategorized/" title="View all posts in Uncategorized" rel="category tag">Uncategorized</a>
+      <% _.each(model.get('categories'), function(category) { %>
+        <a href="<%= category.url %>" title="<%= category.description %>" rel="category tag"><%= category.title %></a>
+      <% }); %>
     </span>
     <span class="author vcard">
       <a class="url fn n" href="<%= model.get('author').url %>" title="View all posts by <%= model.get('author').name %>" rel="author"><%= model.get('author').name %></a>
@@ -22,10 +23,16 @@
 <div class="entry-content">
   <%= model.get('excerpt') %>
 </div>
-<footer>
+<footer class="entry-meta">
   <div class="comments-link">
-    <a href="<%= model.get('url') %>#respond" title="Comment on <%= model.get('title') %>">
-      <span class="leave-reply">Leave a comment</span>
-    </a>
+    <% var comments = model.get('comments'); %>
+    <% if (comments.length > 0) { %>
+      <a href="<%= comments.commentUrl %>" title="Comment on <%= model.get('title') %>">
+        <span><%= labelNumber(comments.length) %> <%= labelComment(comments.length) %> so far</span>
+    <% } else { %>
+      <a href="<%= comments.respondUrl %>" title="Comment on <%= model.get('title') %>">
+        <span class="leave-reply">Leave a comment</span>
+      </a>
+    <% } %>
   </div>
 </footer>

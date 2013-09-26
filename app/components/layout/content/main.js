@@ -2,6 +2,7 @@
  * The main content region
  * This is a fixed region that represents the main content area of the app.
  * It holds a reference to all the prefetched content data from the cms.
+ * The main content dispatcher
  * When it receives a content:start event from the app, it 
  *   creates the appropriate content view for the content by type and id.
  * Content types and ids are object_type and object_id defined in the database on the backend.
@@ -50,7 +51,8 @@ define([
             content.create({
               model: collection.get({
                 id: subopts.object_id
-              })
+              }),
+              params: options.params
             })
           );
         },

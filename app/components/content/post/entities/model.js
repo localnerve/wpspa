@@ -1,19 +1,26 @@
 define([
   "backbone",
+  "helpers/anchor",
+  "helpers/sync",
   "components/content/post/entities/parser",
   "module"
-], function(Backbone, parser, module) {
-  
+], function(Backbone, anchor, sync, parser, module) {
+  $w = window;
+
   // definition of a post model
   var PostModel = Backbone.Model.extend({
+
+    initialize: function(options) {
+      options = options || {};
+      this.sync = sync($w.wpspa[options.name]);
+    },
+
     // get urlRoot from config
     urlRoot: module.config().urlRoot,
 
     // make a jsonapi url
     url: function() {
-      var urlRoot = this.urlRoot.charAt(this.urlRoot.length - 1) === '/' ?
-        this.urlRoot : this.urlRoot + "/";
-
+      var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
       return urlRoot + "?id=" + this.id;
     },
 
@@ -24,5 +31,4 @@ define([
   });
 
   return PostModel;
-
 });

@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">76.55</p>
+      <p class="stat">67.86</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">32</p>
+      <p class="stat">116</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">11.73</p>
+      <p class="stat">22.87</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.13</p>
+      <p class="stat">0.70</p>
     </div>
   </div>
 </div>
@@ -95,31 +95,115 @@
  */
 define([
   &quot;lodash&quot;,
-  &quot;helpers/contract&quot;
-], function(_, contract) {
+  &quot;helpers/contract&quot;,
+  &quot;helpers/anchor&quot;,
+  &quot;components/content/post/entities/connect&quot;,
+  &quot;app&quot;
+], function(_, contract, anchor, connect, app) {
+
+  // Parse the categories of a post
+  function parseCategories(post) {
+    var object_type = &quot;category&quot;;
+    
+    // not supporting uncategorized for now...
+    _.each(post.categories, function(category) {
+      
+      // Add derived properties to the category object
+      category.route = anchor.buildUrlPath(app, &quot;category&quot;, category.slug);
+      category.url = anchor.routeToHref(category.route);
+
+      // The category in a post doesn&#039;t contain the post contents.
+      // Also, since the category might contain posts that we haven&#039;t downloaded, get them.
+      app.vent.trigger(&quot;content:prefetch&quot;, [{
+        object_type: object_type,
+        object_id: category.id
+      }]);
+
+      // Setup to route this category
+      app.vent.trigger(&quot;wpspa:router:addRoute&quot;, {
+        name: category.slug,
+        route: category.route,
+        options: {
+          object_type: object_type,
+          object_id: category.id
+        }
+      });
+    });
+  }
+
+  function parseComments(post) {
+
+    // Add derived properties to the comments object
+    post.comments.commentUrl = anchor.buildUrlPath(app, post.url, &quot;comment&quot;);
+    post.comments.respondUrl = anchor.buildUrlPath(app, post.url, &quot;respond&quot;);
+
+    // Add a route to handle comments for this post.
+    // Since the content will be served by type/id, send in a parameter
+    // to tell the presentation that it will need to prepare for comments.
+    app.vent.trigger(&quot;wpspa:router:addRoute&quot;, {
+      name: post.slug+&quot;-comment&quot;,
+      route: anchor.hrefToRoute(post.comments.commentUrl),
+      params: {
+        action: &quot;comment&quot;
+      },
+      options: {
+        object_type: post.type,
+        object_id: post.id
+      }
+    });
+    
+    // Add a route to handle responses for this post.
+    // Since the content will be served by type/id, send in a parameter
+    // to tell the presentation that it will need to prepare for responses.
+    app.vent.trigger(&quot;wpspa:router:addRoute&quot;, {
+      name: post.slug+&quot;-respond&quot;,
+      route: anchor.hrefToRoute(post.comments.respondUrl),
+      params: {
+        action: &quot;respond&quot;
+      },
+      options: {
+        object_type: post.type,
+        object_id: post.id
+      }
+    });
+  }
 
   // parse a single post
   function parsePost(post) {
-    contract(post, &quot;date&quot;);
+    contract(post, &quot;date&quot;, &quot;url&quot;);
+    
+    // Add derived properties to the post object
+    post.route = anchor.hrefToRoute(post.url);
+    post.url = anchor.routeToHref(post.route);
+    post.datetime = post.date.replace(&quot; &quot;, &quot;T&quot;)+&quot;+00.00&quot;;
 
-    return _.extend({
-      // convenience datetime property converts date to YYYY-MM-DDTHH:MM:SS+00:00
-      datetime: post.date.replace(&quot; &quot;, &quot;T&quot;)+&quot;+00.00&quot;
-    }, post);
+    parseCategories(post);
+    parseComments(post);
+
+    return post;
+  }
+
+  // process a new post
+  function process(post) {
+    return connect( parsePost(post) );
   }
 
   // parse response data from json api
   function parse(data) {
 
     if (data.posts) {
+
       // make the models and give them back to the collection
       return _.map(data.posts, function(post) {
-        return parsePost(post);
+        return process(post);
       });
+
     } else if (data.post) {
-      return parsePost(data.post);
+
+      return process(data.post);
+
     } else {
-      throw new Error(&quot;Unexpected response data format&quot;);
+      throw new Error(&quot;Unexpected post data format&quot;);
     }
   }
 

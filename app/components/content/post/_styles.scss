@@ -1,5 +1,35 @@
-.entry-header, .entry-content {
+.entry-header, .entry-content, .entry-meta, .entry-summary {
   margin: 0 auto;
   max-width: 604px;
   width: 100%;
+}
+
+.entry-meta a {
+  color: #bc360a;
+}
+
+.categories-links a:first-child:before {
+  content: "\f301";
+}
+
+.entry-meta .date a:before {
+  content: "\f303";
+}
+
+.entry-meta .author {
+  display: none;
+}
+
+.comments-link a:before {
+  content: "\f300";
+  margin-right: 2px;
+  position: relative;
+  top: -1px;
+}
+
+.date a:before, .categories-links a:first-child:before, .comments-link a:before, {
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font: normal 16px/1 Genericons;
+  vertical-align: text-bottom;
 }

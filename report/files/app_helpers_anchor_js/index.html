@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">71.70</p>
+      <p class="stat">68.74</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">55</p>
+      <p class="stat">100</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">13.00</p>
+      <p class="stat">22.92</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.25</p>
+      <p class="stat">0.68</p>
     </div>
   </div>
 </div>
@@ -91,15 +91,57 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="span12">define([
+  &quot;lodash&quot;,
   &quot;jquery&quot;,
   &quot;backbone&quot;
-], function($, Backbone) {
+], function(_, $, Backbone) {
+
+  // build a url path
+  function buildUrlPath(app, start) {
+    var sep = app.pushState ? &quot;/&quot; : &quot;-&quot;;
+
+    if (start.charAt(start.length - 1) === sep)
+      start = start.substr(0, start.length - 1);
+
+    var path = start;
+    var components = Array.prototype.slice.call(arguments, 2);
+    _.each(components, function (component) {
+      path += sep + encodeURIComponent(component);
+    });
+
+    return path;
+  }
+
+  // ensure a url root is ok to add on to
+  function normalizeUrlRoot(urlRoot) {
+    if (urlRoot.charAt(urlRoot.length - 1) !== &#039;/&#039;) {
+      urlRoot += &quot;/&quot;;
+    }
+    if (!/^https?:\/\//.test(urlRoot)) {
+      if (urlRoot.charAt(0) !== &#039;/&#039;)
+        urlRoot = &quot;/&quot;+urlRoot;
+    }
+    return urlRoot;
+  }
 
   // Convert a route to an href
   function routeToHref(route) {
-    if (route.length === 0) {
-      route = &quot;/&quot;;
+    var href = route;
+    if (route.charAt(0) !== &#039;/&#039;) {
+      href = &quot;/&quot; + href;
     }
+    return href;
+  }
+
+  // super simple href to route mapping
+  // handle relative and absolute urls
+  function hrefToRoute(href) {
+    var re = /^https?:\/\/.+(\/)([^\\?]+)\/?$/;
+    var route = href.replace(re, &quot;$2&quot;);
+    if (route.charAt(route.length - 1) === &#039;/&#039;)
+      route = route.substr(0, route.length - 1);
+    if (route.charAt(0) === &#039;/&#039;)
+      route = route.substring(1);
     return route;
   }
 
@@ -141,7 +183,10 @@
 
   return {
     init: init,
-    routeToHref: routeToHref
+    hrefToRoute: hrefToRoute,
+    routeToHref: routeToHref,
+    normalizeUrlRoot: normalizeUrlRoot,
+    buildUrlPath: buildUrlPath
   };
 
 });</textarea>

@@ -2,8 +2,9 @@ define([
   "helpers/contract",
   "components/content/post/entities/model",
   "components/content/post/entities/collection",
-  "components/content/post/entities/recent"
-], function(contract, PostModel, PostCollection, RecentCollection) {
+  "components/content/post/entities/recent",
+  "components/content/post/entities/category"
+], function(contract, PostModel, PostCollection, RecentPostsCollection, CategoryPostsCollection) {
 
   function createModel(options) {
     contract(options, "object_id");
@@ -14,13 +15,16 @@ define([
 
   function createCollection(options) {
     contract(options, "object_type");
+
     switch (options.object_type) {
       case "recent":
-        return new RecentCollection();
-      // TODO:
-      //case "category":        
-      default:
+        return new RecentPostsCollection();
+      case "empty":
         return new PostCollection();
+      case "category":
+        return new CategoryPostsCollection(options);
+      default:
+        return new PostCollection(options);
     }
   }
 
