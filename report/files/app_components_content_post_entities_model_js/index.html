@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">77.38</p>
+      <p class="stat">77.53</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">28</p>
+      <p class="stat">34</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">12.43</p>
+      <p class="stat">9.90</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.14</p>
+      <p class="stat">0.17</p>
     </div>
   </div>
 </div>
@@ -92,20 +92,27 @@
   <div class="row">
     <textarea id="file-source" class="span12">define([
   &quot;backbone&quot;,
+  &quot;helpers/anchor&quot;,
+  &quot;helpers/sync&quot;,
   &quot;components/content/post/entities/parser&quot;,
   &quot;module&quot;
-], function(Backbone, parser, module) {
-  
+], function(Backbone, anchor, sync, parser, module) {
+  $w = window;
+
   // definition of a post model
   var PostModel = Backbone.Model.extend({
+
+    initialize: function(options) {
+      options = options || {};
+      this.sync = sync($w.wpspa[options.name]);
+    },
+
     // get urlRoot from config
     urlRoot: module.config().urlRoot,
 
     // make a jsonapi url
     url: function() {
-      var urlRoot = this.urlRoot.charAt(this.urlRoot.length - 1) === &#039;/&#039; ?
-        this.urlRoot : this.urlRoot + &quot;/&quot;;
-
+      var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
       return urlRoot + &quot;?id=&quot; + this.id;
     },
 
@@ -116,7 +123,6 @@
   });
 
   return PostModel;
-
 });</textarea>
   </div>
 </div>

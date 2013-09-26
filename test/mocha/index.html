@@ -82,6 +82,7 @@
                         "helpers/contract",
                         "components/layout/content/prefetch",
                         "helpers/sync",
+                        "helpers/anchor",
 
                         // load all the tests
                         "tests/environment",
@@ -93,13 +94,15 @@
                         "tests/header.navigation",
                         "tests/content",
                         "tests/prefetch",
-                        "tests/sync"
+                        "tests/sync",
+                        "tests/anchor"
                         // next test suite here
-                    ], function(contract, prefetch, sync) {
+                    ], function(contract, prefetch, sync, anchor) {
                         // make standalone modules available
                         __test.standalone.contract = contract;
                         __test.standalone.prefetch = prefetch;
                         __test.standalone.sync = sync;
+                        __test.standalone.anchor = anchor;
 
                         // tests and helpers loaded, run it!
                         mocha.run(function() {

@@ -4,6 +4,7 @@
  * Starts the request on the prefetch collection and notifies everyone.
  * Prefetch is started on the "content:fetch" event for the given event aggregator.
  * Allows multiple fetches, can be rerun to add additional, unique fetches.
+ *
  */
 define([
   "lodash",
@@ -20,12 +21,16 @@ define([
 
     // Catch the prefetch event
     var self = this;
-    eventAggregator.once("content:prefetch", function(items) {
+    eventAggregator.on("content:prefetch", function(items) {
       self._fetch(items);
     });
 
     // Method that performs the fetching
     this._fetch = function(items) {
+      if (!_.isArray(items))
+        items = _.toArray(items);
+
+      // if we didn't get at least one item, someone should know
       contract(items, "0");
 
       // Prefetch unique entity types
@@ -35,7 +40,10 @@ define([
           var dfd = $.Deferred();
 
           // setup unique object_type
-          var entity = app.request("content:entity", item.object_type);
+          var entity = app.request("content:entity", {
+            object_type: item.object_type,
+            items: _.where(items, { object_type: item.object_type })
+          });
           entity.once("request", function() {
             if (dfd.state() === "pending") {
               // progress notification

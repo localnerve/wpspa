@@ -45,13 +45,15 @@ describe("prefetch", function() {
     var ea = eventAggregator();
     var progress_fn = sandbox.spy();
     var success_fn = sandbox.spy();
-
+    var modelurl_stub;
     var pf = prefetch._create(ea);
 
     // intercept the Backbone.sync call and make a bad url, forcing an error.
     var backboneSync = Backbone.sync;
     var sync_stub = sandbox.stub(Backbone, "sync", function(method, model, options) {
-      model.url = "badurl";
+      modelurl_stub = sandbox.stub(model, "url", function() {
+        return "badurl";
+      });
       backboneSync(method, model, options);
     });
 
@@ -61,6 +63,7 @@ describe("prefetch", function() {
       object_id: 1
     }]);
 
+    assert(modelurl_stub.calledOnce, "model.url should have been called once");
     assert(sync_stub.calledOnce, "Backbone.sync should have been called once");
 
     pf.promises[object_type]
@@ -100,10 +103,6 @@ describe("prefetch", function() {
       fail_fn,
       progress_fn
     );
-
-    ea.trigger("content:prefetch", {
-      items: [1, 2, 3]
-    });
   });
 
   it("should throw on no item input", function() {

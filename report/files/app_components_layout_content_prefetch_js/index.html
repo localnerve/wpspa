@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">79.80</p>
+      <p class="stat">77.22</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">70</p>
+      <p class="stat">77</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">15.17</p>
+      <p class="stat">16.25</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.33</p>
+      <p class="stat">0.40</p>
     </div>
   </div>
 </div>
@@ -96,6 +96,7 @@
  * Starts the request on the prefetch collection and notifies everyone.
  * Prefetch is started on the &quot;content:fetch&quot; event for the given event aggregator.
  * Allows multiple fetches, can be rerun to add additional, unique fetches.
+ *
  */
 define([
   &quot;lodash&quot;,
@@ -112,12 +113,16 @@ define([
 
     // Catch the prefetch event
     var self = this;
-    eventAggregator.once(&quot;content:prefetch&quot;, function(items) {
+    eventAggregator.on(&quot;content:prefetch&quot;, function(items) {
       self._fetch(items);
     });
 
     // Method that performs the fetching
     this._fetch = function(items) {
+      if (!_.isArray(items))
+        items = _.toArray(items);
+
+      // if we didn&#039;t get at least one item, someone should know
       contract(items, &quot;0&quot;);
 
       // Prefetch unique entity types
@@ -127,7 +132,10 @@ define([
           var dfd = $.Deferred();
 
           // setup unique object_type
-          var entity = app.request(&quot;content:entity&quot;, item.object_type);
+          var entity = app.request(&quot;content:entity&quot;, {
+            object_type: item.object_type,
+            items: _.where(items, { object_type: item.object_type })
+          });
           entity.once(&quot;request&quot;, function() {
             if (dfd.state() === &quot;pending&quot;) {
               // progress notification
