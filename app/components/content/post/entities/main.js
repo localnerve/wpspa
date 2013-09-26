@@ -4,7 +4,7 @@ define([
   "components/content/post/entities/collection",
   "components/content/post/entities/recent",
   "components/content/post/entities/category"
-], function(contract, PostModel, PostCollection, RecentPostsCollection, CategoryPostsCollection) {
+], function(contract, PostModel, PostCollection, Recent, Category) {
 
   function createModel(options) {
     contract(options, "object_id");
@@ -16,13 +16,16 @@ define([
   function createCollection(options) {
     contract(options, "object_type");
 
-    switch (options.object_type) {
+    // if this is a delimited object type, get the base type
+    var type = options.object_type.split(":")[0];
+
+    switch (type) {
       case "recent":
-        return new RecentPostsCollection();
+        return new Recent();
       case "empty":
         return new PostCollection();
       case "category":
-        return new CategoryPostsCollection(options);
+        return new Category(options);
       default:
         return new PostCollection(options);
     }

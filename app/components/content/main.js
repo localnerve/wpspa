@@ -19,7 +19,8 @@ define([
   ], function(app, contract, singleView, multiView, entities) {
 
     app.reqres.setHandler("content:view", function(object_type) {
-      switch(object_type) {
+      var type = object_type.split(":")[0];
+      switch(type) {
         case "recent":
         case "category":
           return multiView;
