@@ -1,7 +1,13 @@
+/*
+ * recent
+ * A collection of recent posts
+ *
+ * If recent posts have been bootstrapped, then uses those to hydrate the collection.
+ */
 define([
   "backbone",
   "helpers/sync",
-  "components/content/post/entities/parser",
+  "components/content/entities/parser",
   "module"
 ], function(Backbone, sync, parser, module) {
   var $w = window;

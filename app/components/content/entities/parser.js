@@ -5,9 +5,8 @@ define([
   "lodash",
   "helpers/contract",
   "helpers/anchor",
-  "components/content/post/entities/connect",
   "app"
-], function(_, contract, anchor, connect, app) {
+], function(_, contract, anchor, app) {
 
   // Parse the categories of a post
   function parseCategories(post) {
@@ -96,7 +95,9 @@ define([
 
   // process a new post
   function process(post) {
-    return connect( parsePost(post) );
+    post = parsePost(post);
+    app.vent.trigger("content:connect", post);
+    return post;
   }
 
   // parse response data from json api

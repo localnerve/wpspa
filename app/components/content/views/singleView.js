@@ -4,11 +4,11 @@
  */
 define([
   "backbone.marionette",
-  "components/content/post/entities/main"
+  "components/content/entities/main"
 ], function(Marionette, entities) {
 
   var PostView = Marionette.ItemView.extend({
-    template: "components/content/post/singleView",
+    template: "components/content/views/singleView",
     className: "grid-row",
 
     serializeData: function() {

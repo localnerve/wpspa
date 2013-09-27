@@ -1,11 +1,17 @@
+/*
+ * collection
+ * A collection of posts
+ *
+ * If items are initially specified, then only gets those posts.
+ * Otherwise, gets the posts specified from a configuration endpoint.
+ */
 define([
   "lodash",
   "backbone",
   "helpers/anchor",
-  "helpers/sync",
-  "components/content/post/entities/parser",
+  "components/content/entities/parser",
   "module"
-], function(_, Backbone, anchor, sync, parser, module) {
+], function(_, Backbone, anchor, parser, module) {
   var $w = window;
 
   // definition of a post collection
@@ -16,22 +22,20 @@ define([
     initialize: function(options) {
       options = options || {};
       // preserve any options specified to constructor
-      this.options = _.extend(this.options || {}, { fetchItems: options.items });
+      this.options = _.extend(this.options || {}, options);
     },
 
     url: function() {
-      // if fetchItems are specified, get the specific items
-      if (this.options.fetchItems && this.options.fetchItems.length > 0) {
+      // if fetch items are specified, get the specific items
+      if (this.options.items && this.options.items.length > 0) {
         var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
-        var object_type = this.options.fetchItems[0].object_type;
-        var object_ids = _.pluck(this.options.fetchItems, "object_id");
+        var object_type = this.options.items[0].object_type;
+        var object_ids = _.pluck(this.options.items, "object_id");
         return urlRoot + "?post_type="+object_type+"&post__in("+object_ids.join(",")+")";
       } else {
         return module.config().endpoint;
       }
     },
-
-    //sync: sync($w.wpspa ? $w.wpspa.posts : null),
 
     parse: function(data) {
       return parser(data);

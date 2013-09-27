@@ -1,9 +1,9 @@
 define([
   "helpers/contract",
-  "components/content/post/entities/model",
-  "components/content/post/entities/collection",
-  "components/content/post/entities/recent",
-  "components/content/post/entities/category"
+  "components/content/entities/model",
+  "components/content/entities/collection",
+  "components/content/entities/recent",
+  "components/content/entities/category"
 ], function(contract, PostModel, PostCollection, Recent, Category) {
 
   function createModel(options) {
@@ -23,7 +23,7 @@ define([
       case "recent":
         return new Recent();
       case "empty":
-        return new PostCollection();
+        return new PostCollection({ createdEmpty: true });
       case "category":
         return new Category(options);
       default:

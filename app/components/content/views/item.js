@@ -5,7 +5,7 @@ define([
 
   // The view definition of each home item
   var PostItemView = Marionette.ItemView.extend({
-    template: "components/content/post/item",
+    template: "components/content/views/item",
     tagName: "article",
     className: "type-post",
 

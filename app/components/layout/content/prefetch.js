@@ -1,7 +1,7 @@
 /*
  * prefetch
  *
- * Starts the request on the prefetch collection and notifies everyone.
+ * Starts requests to populate entities.
  * Prefetch is started on the "content:fetch" event for the given event aggregator.
  * Allows multiple fetches, can be rerun to add additional, unique fetches.
  *
@@ -30,7 +30,7 @@ define([
       if (!_.isArray(items))
         items = _.toArray(items);
 
-      // if we didn't get at least one item, someone should know
+      // if we didn't get at least one item, throw
       contract(items, "0");
 
       // Prefetch unique entity types

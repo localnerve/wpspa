@@ -3,7 +3,7 @@ define([
   "backbone",
   "helpers/anchor",
   "helpers/sync",
-  "components/content/post/entities/parser",
+  "components/content/entities/parser",
   "module"
 ], function(_, Backbone, anchor, sync, parser, module) {
   
@@ -19,8 +19,14 @@ define([
 
     // make a jsonapi url
     url: function() {
-      var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
-      return urlRoot + "?id=" + this.get("items")[0].object_id;
+      var items = this.get("items");
+      if (items && items.length > 0) {
+        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        // the api only allows to get one category
+        return urlRoot + "?id=" + items[0].object_id;
+      } else {
+        return module.config().endpoint;
+      }
     },
 
     // Since we're really just a directory for category posts,

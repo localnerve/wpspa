@@ -1,40 +1,30 @@
 /*
  * content/main
  * The content message handler
+ * Handles content:view and content:entity requests from the main content container.
  *
- * Views are returned by request for TYPE
- * Message = content:view:TYPE
- *    Where TYPE is the WPSPA Post Type as configured in the Wordpress menu via the WPSPA plugin.
+ * Views are returned by request for WPSPA_TYPE
+ * Message = (content:view | content:entity), Param = { object_type: WPSPA_TYPE }
+ *    Where WPSPA_TYPE is the object Type as configured in the Wordpress menu via the WPSPA plugin.
  *
- * Entities are returned by request for TYPE
- * Message = content:entity, Param = TYPE
- *    Where TYPE is the WPSPA Post Type as configured in the Wordpress menu via the WPSPA plugin.
  */
 define([
   "app",
   "helpers/contract",
-  "components/content/post/singleView",
-  "components/content/post/multiView",
-  "components/content/post/entities/main"
-  ], function(app, contract, singleView, multiView, entities) {
+  "components/content/views/main",
+  "components/content/entities/main"
+  ], function(app, contract, views, entities) {
 
-    app.reqres.setHandler("content:view", function(object_type) {
-      var type = object_type.split(":")[0];
-      switch(type) {
-        case "recent":
-        case "category":
-          return multiView;
-
-        case "post":
-        case "page":
-          return singleView;
-
-        default:
-          throw new Error("Unexpected view type requested");
-      }
+    // handle content:view requests
+    app.reqres.setHandler("content:view", function(options) {
+      return views.getView(options);
     });
 
+    // the entity cache
+    // entities are stored by object_type
     var cache = {};
+
+    // handle content:entity requests
     app.reqres.setHandler("content:entity", function(options) {
       contract(options, "object_type");
 
@@ -47,7 +37,6 @@ define([
         options = options.emptyOnNew ? { object_type: "empty" } : options;
         entity = cache[object_type] = entities.createCollection(options);
       }
-        
 
       return entity;
     });

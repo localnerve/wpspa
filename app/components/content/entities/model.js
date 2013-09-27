@@ -2,7 +2,7 @@ define([
   "backbone",
   "helpers/anchor",
   "helpers/sync",
-  "components/content/post/entities/parser",
+  "components/content/entities/parser",
   "module"
 ], function(Backbone, anchor, sync, parser, module) {
   $w = window;

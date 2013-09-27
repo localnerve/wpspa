@@ -14,8 +14,9 @@ define([
   "app",
   "helpers/vendor-interface",
   "helpers/contract",
-  "components/layout/content/prefetch"
-], function(Marionette, app, vendor, contract, prefetch) {
+  "components/layout/content/prefetch",
+  "components/layout/content/connect"
+], function(Marionette, app, vendor, contract, prefetch, connect) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -24,7 +25,13 @@ define([
     initialize: function() {
       
       // Create prefetch promises on the app.vent
-      this.promises = prefetch.promises(app.vent);
+      this._promises = prefetch.promises(app.vent);
+
+      // Create the connector on the app.vent and promises
+      this._connect = connect.create(app.vent, this._promises);
+
+      // For now, just get a single, context free transition
+      this.transition = app.request("content:view", {object_type: "transition"});
 
       // Handle content start
       // The handler itself is anonymous because of the testing implications
@@ -41,10 +48,10 @@ define([
       var subopts = options.options;
 
       // Request the appropriate content view
-      var content = app.request("content:view", subopts.object_type);
+      var content = app.request("content:view", subopts);
 
       var self = this;
-      this.promises[subopts.object_type].then(
+      this._promises[subopts.object_type].then(
         // success
         function(collection) {
           self.show(
@@ -64,10 +71,10 @@ define([
         },
         // progress
         function() {
-          // This will only get called if the promise is pending
-          // TODO: Add content transition implementation
-          // self.show(transitionView)
-          var test = 0;
+          if (this.state() === "pending") {
+            self.show(self.transition.create());
+            var test = 0;
+          }
         }
       );
     },

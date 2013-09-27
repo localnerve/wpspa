@@ -29,16 +29,17 @@ require.config({
     "components/layout/footer/sidebarContainer/entities": {
       endpoint: "/api/widgets/get_sidebar/?sidebar_id=sidebar-1"
     },
-    "components/content/post/entities/model": {
+    "components/content/entities/model": {
       urlRoot: "/api/get_post"
     },
-    "components/content/post/entities/recent": {
+    "components/content/entities/recent": {
       endpoint: "/api/get_recent_posts"
     },
-    "components/content/post/entities/category": {
-      urlRoot: "/api/get_category_posts/"
+    "components/content/entities/category": {
+      urlRoot: "/api/get_category_posts/",
+      endpoint: "/api/get_category_posts/?slug=Uncategorized"
     },
-    "components/content/post/entities/collection": {
+    "components/content/entities/collection": {
       urlRoot: "/api/get_posts",
       endpoint: "/api/get_posts/?post_type=any"
     },

@@ -4,8 +4,8 @@
  */
 define([
   "backbone.marionette",
-  "components/content/post/item",
-  "components/content/post/entities/main"
+  "components/content/views/item",
+  "components/content/entities/main"
 ], function(Marionette, itemView, entities) {
 
   var MultiPostView = Marionette.CollectionView.extend({
