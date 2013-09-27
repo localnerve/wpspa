@@ -93,7 +93,7 @@
     <textarea id="file-source" class="span12">/*
  * prefetch
  *
- * Starts the request on the prefetch collection and notifies everyone.
+ * Starts requests to populate entities.
  * Prefetch is started on the &quot;content:fetch&quot; event for the given event aggregator.
  * Allows multiple fetches, can be rerun to add additional, unique fetches.
  *
@@ -122,7 +122,7 @@ define([
       if (!_.isArray(items))
         items = _.toArray(items);
 
-      // if we didn&#039;t get at least one item, someone should know
+      // if we didn&#039;t get at least one item, throw
       contract(items, &quot;0&quot;);
 
       // Prefetch unique entity types
