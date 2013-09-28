@@ -33,7 +33,10 @@ define([
   function updateCategories(content) {
     // for now, we are not supporting uncategorized
     return alterContent(content, "li a:contains('Uncategorized')", function(el) {
-      el.parentNode.remove();
+      // TODO: revisit why this doesn't work for test sometimes. had to rebuild mockapi.
+      // Make more robust...
+      if (el && el.parentNode && typeof el.parentNode.remove === "function")
+        el.parentNode.remove();
     });
   }
 
