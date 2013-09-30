@@ -3,8 +3,9 @@ define([
   "components/content/entities/model",
   "components/content/entities/collection",
   "components/content/entities/recent",
-  "components/content/entities/category"
-], function(contract, PostModel, PostCollection, Recent, Category) {
+  "components/content/entities/category",
+  "components/content/entities/date"
+], function(contract, PostModel, PostCollection, Recent, Category, Date) {
 
   function createModel(options) {
     contract(options, "object_id");
@@ -26,6 +27,8 @@ define([
         return new PostCollection({ createdEmpty: true });
       case "category":
         return new Category(options);
+      case "date":
+        return new Date(options);
       default:
         return new PostCollection(options);
     }

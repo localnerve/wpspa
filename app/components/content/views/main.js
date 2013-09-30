@@ -17,6 +17,7 @@ define([
 
       case "recent":
       case "category":
+      case "date":
         return MultiView;
 
       case "post":

@@ -43,8 +43,8 @@ define([
     }, options.path, app);
   });
 
-  // Wait for navigation to arrive
-  app.vent.once("app:navigation:success", function() {
+  // Wait for it to be ok to start routing...
+  app.vent.once("app:startRoutes", function() {
     // Trigger the initial route and enable HTML5 History API support, set the
     // root folder to app.root.    
     Backbone.history.start({
@@ -56,9 +56,10 @@ define([
     anchor.init(app);
   });
 
-  // Wait for navigation to fail
-  app.vent.once("app:navigation:fail", function(options) {
+  // On a failure
+  app.vent.once("app:error", function(options) {
     // TODO: implement application level, categorized error handling
+    throw new Error("app:error, needs implementation...");
   });
 
   // After app initialization

@@ -21,12 +21,17 @@ define([
 
     app.on("initialize:after", function() {
       footer.sidebarContainer.collection.fetch({
-        // TODO: finish implementation
         success: function(collection) {
-          //console.log("sidebar success");
+          // footer successfully loaded, tell container
+          app.vent.trigger("container:complete");
         },
         error: function(collection, response, options) {
-          //console.log("sidebar error");
+          // footer failed to load, tell the app
+          app.vent.trigger("app:error", {
+            collection: collection,
+            response: response,
+            options: options
+          });
         }
       });
     });

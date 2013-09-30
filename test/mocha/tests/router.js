@@ -44,9 +44,9 @@ describe("Router", function() {
     });
 
     // trigger the home route
-    for (var name in appRouter.appRoutes) {
-      if (appRouter.appRoutes[name] === "") {
-        appController[name].call(appController);
+    for (var route in appRouter.appRoutes) {
+      if (route === "") {
+        appController[appRouter.appRoutes[route]].call(appController);
         break;
       }
     }

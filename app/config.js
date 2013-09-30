@@ -43,6 +43,9 @@ require.config({
       urlRoot: "/api/get_posts",
       endpoint: "/api/get_posts/?post_type=any"
     },
+    "components/content/entities/date": {
+      urlRoot: "/api/get_date_posts"
+    },
     app: {
       root: "/",
       pushState: true

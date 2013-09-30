@@ -42,12 +42,12 @@ define([
             };
           }));
 
-          // navigation successfully loaded, tell the app
-          app.vent.trigger("app:navigation:success");
+          // navigation successfully loaded, tell the container
+          app.vent.trigger("container:complete");
         },
         error: function(collection, response, options) {
           // navigation failed to load, tell the app
-          app.vent.trigger("app:navigation:error", {
+          app.vent.trigger("app:error", {
             collection: collection,
             response: response,
             options: options
