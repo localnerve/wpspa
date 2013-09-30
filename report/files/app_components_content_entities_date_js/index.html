@@ -37,7 +37,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>app/components/content/views/main.js</h1>
+    <h1>app/components/content/entities/date.js</h1>
   </div>
 </div>
 
@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">66.79</p>
+      <p class="stat">73.73</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">36</p>
+      <p class="stat">43</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">9.96</p>
+      <p class="stat">13.80</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.11</p>
+      <p class="stat">0.24</p>
     </div>
   </div>
 </div>
@@ -90,41 +90,53 @@
 
 <div class="container">
   <div class="row">
-    <textarea id="file-source" class="span12">define([
-  &quot;helpers/contract&quot;,
-  &quot;components/content/views/singleView&quot;,
-  &quot;components/content/views/multiView&quot;,
-  &quot;components/content/views/transitionView&quot;
-], function(contract, SingleView, MultiView, TransitionView) {
+    <textarea id="file-source" class="span12">/*
+ * date
+ * A collection of date posts
+ *
+ */
+define([
+  &quot;lodash&quot;,
+  &quot;backbone&quot;,
+  &quot;helpers/anchor&quot;,
+  &quot;components/content/entities/parser&quot;,
+  &quot;module&quot;
+], function(_, Backbone, anchor, parser, module) {
 
-  function getView(options) {
-    contract(options, &quot;object_type&quot;);
+  // definition of a date model
+  var DateModel = Backbone.Model.extend({
 
-    // if this is a delimited object type, get the base type
-    var type = options.object_type.split(&quot;:&quot;)[0];
+    urlRoot: module.config().urlRoot,
 
-    switch(type) {
-      case &quot;transition&quot;:
-        return TransitionView;
+    url: function() {
+      var items = this.get(&quot;items&quot;);
+      if (items &amp;&amp; items.length &gt; 0) {
+        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        // api allows one date get
+        return urlRoot + &quot;?date=&quot;+items[0].object_id;
+      }
+    },
 
-      case &quot;recent&quot;:
-      case &quot;category&quot;:
-      case &quot;date&quot;:
-        return MultiView;
+    // Since we&#039;re really just a directory for date posts,
+    // Return this directory if appropriate.
+    get: function(attr) {
+      if (_.isObject(attr)) {
+        return this;
+      }
+      return this.attributes[attr];
+    },
 
-      case &quot;post&quot;:
-      case &quot;page&quot;:
-        return SingleView;
-
-      default:
-        throw new Error(&quot;Unexpected view type requested&quot;);
+    parse: function(data) {
+      // we can do this because this is not part of a real collection
+      this.collection = new Backbone.Collection(parser(data));
+      return {
+        // TODO: change this
+        id: this.get(&quot;items&quot;)[0].object_id
+      };
     }
-  }
+  });
 
-  return {
-    getView: getView
-  };
-
+  return DateModel;
 });</textarea>
   </div>
 </div>

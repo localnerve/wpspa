@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">73.55</p>
+      <p class="stat">72.50</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">95</p>
+      <p class="stat">131</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">19.85</p>
+      <p class="stat">24.90</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.61</p>
+      <p class="stat">0.97</p>
     </div>
   </div>
 </div>
@@ -95,8 +95,9 @@ define([
   &quot;lodash&quot;,
   &quot;jquery&quot;,
   &quot;app&quot;,
-  &quot;helpers/contract&quot;
-], function(_, $, app, contract) {
+  &quot;helpers/contract&quot;,
+  &quot;helpers/anchor&quot;
+], function(_, $, app, contract, anchor) {
 
   // helper to alter content
   function alterContent(content, selector, callback) {
@@ -112,12 +113,14 @@ define([
   }
 
   // replace the protocol and host with app.root and remove any trailing /
-  function updateLinks(content) {
+  function updateLinks(content, callback) {
     return content.replace(/(href=(?:\&quot;|&#039;))(https?:\/\/[^\/]+\/)([^\&quot;&#039;]+)/ig,
       function(match, m1, m2, last) {
         if (last.charAt(last.length-1) === &#039;/&#039;)
           last = last.substr(0, last.length-1);
-        return m1+app.root+last;
+        var result = m1+app.root+last;
+        if (callback) callback(last, app.root+last);
+        return result;
       });
   }
 
@@ -125,7 +128,9 @@ define([
   function updateCategories(content) {
     // for now, we are not supporting uncategorized
     return alterContent(content, &quot;li a:contains(&#039;Uncategorized&#039;)&quot;, function(el) {
-      el.parentNode.remove();
+      // protect ourselves against jquery
+      if (el &amp;&amp; el.parentNode &amp;&amp; typeof el.parentNode.remove === &quot;function&quot;)
+        el.parentNode.remove();
     });
   }
 
@@ -134,11 +139,35 @@ define([
     if (app.pushState) {
       // for now, just change a comment link to a supported link
       return alterContent(content, &quot;a[href]&quot;, function(el) {
-        el.href = el.href.replace(/#comment(?:[^\&quot;&#039;]+)/i, &quot;comment&quot;);
+        if (el &amp;&amp; el.href)
+          el.href = el.href.replace(/#comment(?:[^\&quot;&#039;]+)/i, &quot;comment&quot;);
       });
     } else {
       return content;
     }
+  }
+
+  function prepareArchiveRoute(type, routes, id, path) {
+    var slug = id.replace(&quot;/&quot;, &quot;-&quot;);
+    routes.push({
+      name: slug,
+      route: anchor.hrefToRoute(path),
+      options: {
+        object_type: type+&quot;:&quot;+slug,
+        object_id: id
+      }
+    });
+  }
+
+  function addArchiveRoutes(type, routes) {
+    // prefetch the items
+    app.vent.trigger(&quot;content:prefetch&quot;, _.map(routes, function(route) {
+      return route.options;
+    }));
+    // add the routes
+    _.each(routes, function(route) {
+      app.vent.trigger(&quot;wpspa:router:addRoute&quot;, route);
+    });
   }
 
   // parse a single widget to a model
@@ -155,22 +184,29 @@ define([
       case &quot;categories&quot;:
         content = updateLinks(updateCategories(content));
         break;
+
       case &quot;recent comments&quot;:
         content = updateLinks(updateComments(content));
         break;
+
       case &quot;recent posts&quot;:
-      case &quot;archives&quot;:
         content = updateLinks(content);
         break;
+
+      case &quot;archives&quot;:
+        var archiveRoutes = [];
+        content = updateLinks(content, _.partial(prepareArchiveRoute, &quot;date&quot;, archiveRoutes));
+        addArchiveRoutes(&quot;date&quot;, archiveRoutes);
+        break;
+
       default:
         break;
     }
 
-    var model = {
+    return {
       id: widget.id,
       content: content
     };
-    return model;
   }
 
   // parse a response containing wpspa nav_menu_item posts

@@ -122,12 +122,12 @@ define([
     // Dynamically add a route AND a handler
     addRoute: function(options) {
       contract(options, &quot;route&quot;, &quot;name&quot;);
-      if (!this.appRoutes[options.name]) {
+      if (!this.appRoutes[options.route]) {
 
         app.vent.trigger(&quot;wpspa:controller:createHandler&quot;, options);
 
         // the next line should be un-necessary, come on Marionette.
-        this.appRoutes[options.name] = options.route;
+        this.appRoutes[options.route] = options.name;
         this.appRoute(options.route, options.name);
       }
     }

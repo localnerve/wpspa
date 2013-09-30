@@ -134,12 +134,12 @@
             };
           }));
 
-          // navigation successfully loaded, tell the app
-          app.vent.trigger(&quot;app:navigation:success&quot;);
+          // navigation successfully loaded, tell the container
+          app.vent.trigger(&quot;container:complete&quot;);
         },
         error: function(collection, response, options) {
           // navigation failed to load, tell the app
-          app.vent.trigger(&quot;app:navigation:error&quot;, {
+          app.vent.trigger(&quot;app:error&quot;, {
             collection: collection,
             response: response,
             options: options
