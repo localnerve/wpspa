@@ -82,6 +82,7 @@ define([
     // Called after the region contents render
     onShow: function() {
       vendor.initialize();
+      app.container.trigger("container:afterVendorInitialize", vendor);
     }
 
   });

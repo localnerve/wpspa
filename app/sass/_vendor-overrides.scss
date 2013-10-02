@@ -1254,10 +1254,11 @@ $topbar-margin-bottom: emCalc(30);
 
 $topbar-dropdown-bg: #f7f5e7;
 $topbar-dropdown-link-color: #141412;
-// $topbar-dropdown-link-bg: lighten($topbar-bg, 5%);
-// $topbar-dropdown-toggle-size: 5px;
-// $topbar-dropdown-toggle-color: #fff;
-// $topbar-dropdown-toggle-alpha: 0.5;
+$topbar-dropdown-link-bg: $topbar-dropdown-bg;//lighten($topbar-dropdown-bg, 5%);
+
+$topbar-dropdown-toggle-size: 7px;
+$topbar-dropdown-toggle-color: #888;
+$topbar-dropdown-toggle-alpha: 0.8;
 
 // Set the link colors and styles for top-level nav
 

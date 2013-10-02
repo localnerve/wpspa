@@ -12,7 +12,8 @@ define([
         vendorInit = true;
         $(document).foundation();
       }
-    }
+    },
+    topbar: Foundation.libs.topbar
   };
 
 });
