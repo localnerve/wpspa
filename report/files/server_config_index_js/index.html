@@ -107,11 +107,11 @@ var environments = {
 module.exports = function(env) {
   env = env || process.env.NODE_ENV;
 
-  var config = environments[env];
-  if (!config)
-    config = environments.development;
+  var Config = environments[env];
+  if (!Config)
+    Config = environments.development;
 
-  return new config();
+  return new Config();
 };</textarea>
   </div>
 </div>

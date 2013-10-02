@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">64.03</p>
+      <p class="stat">74.64</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">26</p>
+      <p class="stat">39</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">10.65</p>
+      <p class="stat">11.58</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.24</p>
+      <p class="stat">0.28</p>
     </div>
   </div>
 </div>
@@ -97,23 +97,36 @@
 var fs = require(&quot;fs&quot;);
 var path = require(&quot;path&quot;);
 
+function serve404Html(res) {
+  // TODO: make the path part of config
+  var path404 = path.normalize(__dirname + &quot;../../../../404.html&quot;);
+  fs.readFile(path404, { encoding: &quot;utf8&quot; }, function(e, html) {
+    res.setHeader(&quot;Content-Type&quot;, &quot;text/html; charset=utf-8&quot;);
+    res.end(html);
+  });
+}
+
+function serve404Json(res) {
+  var json = &quot;{ error: \&quot;not found\&quot; }&quot;;
+  res.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
+  res.end(json);
+}
+
+function serve404Text(res) {
+  res.writeHead(res.statusCode, { &quot;Content-Type&quot;: &quot;text/plain&quot; });
+  res.end(req.url + &quot; was not found on this server&quot;);
+}
+
 function four04(req, res, next) {
   res.statusCode = 404;
   
-  var accept = req.headers.accept || &#039;&#039;;
+  var accept = req.headers.accept || &quot;&quot;;
   if (~accept.indexOf(&quot;html&quot;)) {
-    var path404 = path.normalize(__dirname + &quot;../../../../404.html&quot;);
-    fs.readFile(path404, { encoding: &quot;utf8&quot; }, function(e, html) {
-      res.setHeader(&quot;Content-Type&quot;, &quot;text/html; charset=utf-8&quot;);
-      res.end(html);
-    });
+    serve404Html(res);
   } else if (~accept.indexOf(&quot;json&quot;)) {
-    var json = &quot;{ error: \&quot;not found\&quot; }&quot;;
-    res.setHeader(&quot;Content-Type&quot;, &quot;application/json&quot;);
-    res.end(json);
+    serve404Json(res);
   } else {
-    res.writeHead(res.statusCode, { &quot;Content-Type&quot;: &quot;text/plain&quot; });
-    res.end(req.url + &quot; was not found on this server&quot;);
+    serve404Text(res);
   }
 }
 

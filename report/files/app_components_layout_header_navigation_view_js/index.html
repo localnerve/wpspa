@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">72.42</p>
+      <p class="stat">69.42</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">58</p>
+      <p class="stat">152</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">11.09</p>
+      <p class="stat">22.61</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.35</p>
+      <p class="stat">1.30</p>
     </div>
   </div>
 </div>
@@ -92,13 +92,14 @@
   <div class="row">
     <textarea id="file-source" class="span12">define([
   &quot;lodash&quot;,
+  &quot;jquery&quot;,
   &quot;backbone.marionette&quot;,
   &quot;app&quot;,
   &quot;helpers/anchor&quot;,
   &quot;helpers/contract&quot;,
   &quot;components/layout/header/navigation/item&quot;,
   &quot;components/layout/header/navigation/entities&quot;
-], function(_, Marionette, app, anchor, contract, itemView, entities) {
+], function(_, $, Marionette, app, anchor, contract, itemView, entities) {
 
   // The definition of navigation view
   var NavigationView = Marionette.CompositeView.extend({
@@ -109,30 +110,123 @@
     itemViewContainer: &quot;.wpspa-nav&quot;,
 
     initialize: function() {
-      // listen to message bus for content events
       var self = this;
+      // listen to container message buss for vendor initialize work
+      this.listenTo(app.container, &quot;container:afterVendorInitialize&quot;, function(options) {
+        self.initializeVendor(options);
+      });
+      // listen to app message bus for content events
       this.listenTo(app.vent, &quot;content:start&quot;, function(options) {
         self.onContentStart(options);
       });
+      // handle resize events and adjust the navigation accordingly
+      this.resizeHandler = _.debounce(function() {
+        if (self.topbar) {
+          var newBreakpoint = self.topbar.breakpoint();
+          // if breakpoint activation changed, then reapply updateDropdowns
+          if (self.breakpoint != newBreakpoint) {
+            self.breakpoint = newBreakpoint;
+            self.updateDropdowns();
+          }
+        }
+      });
+      $(window).on(&quot;resize&quot;, this.resizeHandler);
     },
 
-    /*
-    appendHtml: function(collectionView, itemView, index) {
-      // TODO: implement navigation hierarchy
+    remove: function() {
+      $(window).off(&quot;resize&quot;,this.resizeHandler);
+      // call the superclass remove method
+      Marionette.CompositeView.prototype.remove.apply(this, arguments);
     },
-    */
+
+    // handle vendor initialization
+    initializeVendor: function(options) {
+      contract(options, &quot;topbar&quot;);
+
+      if (!this.topbar) {
+        this.topbar = options.topbar;
+        this.breakpoint = this.topbar.breakpoint();
+
+        // don&#039;t let vendor navigation helpers participate in routing
+        this.$itemViewContainer.find(&quot;.js-generated a[href=&#039;#&#039;]&quot;).attr(&quot;data-bypass&quot;, true);
+
+        this.updateDropdowns();
+      }
+    },
+
+    // update navigation dropdowns, if required
+    updateDropdowns: function() {
+      // if one of our routes was converted into a navigation parent, remove the parent from routing
+      var dropdowns = this.$itemViewContainer.find(&quot;li.has-dropdown.not-click&quot;);
+      dropdowns.each(function(index, item) {
+        var $item = $(item);
+        var anchor = $item.children(&quot;a[data-nav-item]&quot;).first();
+        if (anchor.length &gt; 0) {
+          
+          // find the anchor substitutes
+          var substitutes =
+            $item.find(&quot;ul li a.js-generated.parent-link[href=&#039;&quot;+anchor[0].pathname+&quot;&#039;]&quot;)
+              .filter(&quot;:visible&quot;);
+
+          if (substitutes.length &gt; 0) {
+            // if the anchor was substituted, turn it into a navigation helper only
+            anchor.attr(&quot;data-nav-path&quot;, anchor[0].pathname);
+            anchor.attr(&quot;href&quot;, &quot;#&quot;);
+            anchor.attr(&quot;data-bypass&quot;, true);
+          } else {
+            // otherwise, restore it to the original state
+            var navPath = anchor.attr(&quot;data-nav-path&quot;);
+            if (navPath) {
+              anchor.attr(&quot;href&quot;, navPath);
+              anchor.removeAttr(&quot;data-bypass&quot;);
+            }
+          }
+        }
+      });
+    },
+
+    // update/insert a drop down
+    upsertDropdown: function(parent, itemView) {
+      if (!parent.hasClass(&quot;has-dropdown&quot;)) {
+        parent.addClass(&quot;has-dropdown&quot;);
+        parent.append(&quot;&lt;ul class=&#039;dropdown&#039; data-nav-list&gt;&lt;/ul&gt;&quot;);
+      }
+      parent.find(&quot;ul.dropdown[data-nav-list]&quot;).append(itemView.$el);
+    },
+
+    // if the itemView model has a parent, we shake things up.
+    appendHtml: function(collectionView, itemView, index) {
+      var $container = this.getItemViewContainer(collectionView);
+      var parentId = itemView.model.get(&quot;parent&quot;);
+
+      // if this itemView has a parent, initialize it if required, then add this itemView to the sublist
+      if (parentId &amp;&amp; parentId &gt; 0) {
+        var parent = $container.find(&quot;li a[data-nav-item=&#039;&quot;+parentId+&quot;&#039;]&quot;).parent();
+        this.upsertDropdown(parent, itemView);
+      } else {
+        $container.append(itemView.el);
+      }
+    },
 
     // Manage the top-bar when content changes
     // Reassign the active item, close the menu if required
     onContentStart: function(options) {
       contract(options, &quot;route&quot;);
       
+      // clear anything marked active
       this.$itemViewContainer.find(&quot;.active&quot;).removeClass(&quot;active&quot;);
 
+      // get the anchor we are targeting and mark it active
       var href = anchor.routeToHref(options.route);
-      var item = this.$itemViewContainer.find(&quot;a[href=&#039;&quot;+href+&quot;&#039;]&quot;).parent();
-      item.addClass(&quot;active&quot;);
+      var item = this.$itemViewContainer.find(&quot;a[href=&#039;&quot;+href+&quot;&#039;]&quot;);
+      item.parent().addClass(&quot;active&quot;);
+      
+      // also mark any parent anchors up the tree as active
+      var parentAnchors = item.parents(&quot;ul&quot;).siblings(&quot;a&quot;).first();
+      if (parentAnchors.length &gt; 0)
+        parentAnchors.parent().addClass(&quot;active&quot;);
 
+      // this was a route, so close the menu if required
       if (this.$el.hasClass(&quot;expanded&quot;))
         this.$(&quot;.toggle-topbar&quot;).click();
     }
