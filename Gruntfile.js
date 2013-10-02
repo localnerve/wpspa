@@ -179,6 +179,13 @@ module.exports = function(grunt) {
         options: {
           keepalive: true
         }
+      },
+      // the server to mock the api to run an interactive demo against
+      // corresponds to express:demo
+      demo: {
+        options: {
+          keepalive: true
+        }
       }
     },
 
@@ -187,28 +194,35 @@ module.exports = function(grunt) {
       options: {
         script: "<%= project.serverMain %>"
       },
-      // this server is meant for interactive development
+      // this server is for interactive development
       dev: {
         options: {
           node_env: "development",
           background: false
         }
       },
-      // this server is meant for automated tests
+      // this server is for automated tests
       test: {
         options: {
           node_env: "test",
           background: true
         }
       },
-      // this server is meant for interactive test development
+      // this server is for interactive test development
       devTest: {
         options: {
           node_env: "test",
           background: false
         }
       },
-      // this server is meant for the automated debug build
+      // this server is for demo use without a backend
+      demo: {
+        options: {
+          node_env: "development",
+          background: false
+        }
+      },
+      // this server is for the automated debug build
       debug: {
         options: {
           script: "<%= project.dist.debug %>/<%= project.serverMain %>",
@@ -216,7 +230,7 @@ module.exports = function(grunt) {
           background: true
         }
       },
-      // this server is meant for interactively testing the debug distribution
+      // this server is for interactively testing the debug distribution
       devDebug: {
         options: {
           script: "<%= project.dist.debug %>/<%= project.serverMain %>",
@@ -224,7 +238,7 @@ module.exports = function(grunt) {
           background: false
         }
       },
-      // this server is meant for the automated release build
+      // this server is for the automated release build
       release: {
         options: {
           script: "<%= project.dist.release %>/<%= project.serverMain %>",
@@ -232,7 +246,7 @@ module.exports = function(grunt) {
           background: true
         }
       },
-      // this server is meant for interactively testing the release distribution
+      // this server is for interactively testing the release distribution
       devRelease: {
         options: {
           script: "<%= project.dist.release %>/<%= project.serverMain %>",
@@ -634,6 +648,7 @@ module.exports = function(grunt) {
     grunt.log.writeln("\tgrunt format - Run the js formatter");
     grunt.log.writeln("\tgrunt dev - Run the development watch and webserver");
     grunt.log.writeln("\tgrunt devTest - Run the development watch and webserver for the test suite");
+    grunt.log.writeln("\tgrunt demo - Run the demo development webserver against the mockapi");
     grunt.log.writeln("\tgrunt plato - Run the static analysis report");
     grunt.log.writeln("\tgrunt debug - Build the debug version of the app");
     grunt.log.writeln("\tgrunt release - Build the release version of the app");
@@ -682,6 +697,19 @@ module.exports = function(grunt) {
       },
       function() {
         runTask(grunt, "express:devTest");
+      }
+    ], this.async());
+  });
+
+  // the test development task, run watch, mock api, and the development webserver in parallel
+  // use this for interactive test suite development
+  grunt.registerTask("demo", "run the demo webserver and backend", function() {
+    grunt.util.async.parallel([
+      function() {
+        runTask(grunt, "connect:demo");
+      },
+      function() {
+        runTask(grunt, "express:demo");
       }
     ], this.async());
   });
