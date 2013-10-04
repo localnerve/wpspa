@@ -18,7 +18,16 @@ define([
 
     // handle content:view requests
     app.reqres.setHandler("content:view", function(options) {
-      return views.getView(options);
+      contract(options, "options");
+
+      var view;
+      // if a custom view was specified, use that
+      if (options.view)
+        view = options.view(options.options);
+      else
+        view = views.getView(options.options);
+
+      return view;
     });
 
     // the entity cache

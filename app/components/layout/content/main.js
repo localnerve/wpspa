@@ -31,7 +31,11 @@ define([
       this._connect = connect.create(app.vent, this._promises);
 
       // For now, just get a single, context free transition
-      this.transition = app.request("content:view", {object_type: "transition"});
+      this.transition = app.request("content:view", {
+        options: {
+          object_type: "transition"
+        }
+      });
 
       // Handle content start
       // The handler itself is anonymous because of the testing implications
@@ -48,11 +52,7 @@ define([
       var subopts = options.options;
 
       // Request the appropriate content view
-      var content;
-      if (options.view)
-        content = options.view(options);
-      else
-        content = app.request("content:view", subopts);
+      var content = app.request("content:view", options);
 
       var self = this;
       this._promises[subopts.object_type].then(
