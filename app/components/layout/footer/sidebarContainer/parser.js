@@ -4,38 +4,14 @@ define([
   "jquery",
   "app",
   "helpers/contract",
-  "helpers/anchor"
-], function(_, $, app, contract, anchor) {
-
-  // helper to alter content
-  function alterContent(content, selector, callback) {
-    if (callback) {
-      var tmp = $("<div id='_alter-content'>"+content+"</div>").appendTo("body");
-      $("#_alter-content "+selector).each(function(i ,el) {
-        callback(el);
-      });
-      content = tmp.html();
-      tmp.remove();
-    }
-    return content;
-  }
-
-  // replace the protocol and host with app.root and remove any trailing /
-  function updateLinks(content, callback) {
-    return content.replace(/(href=(?:\"|'))(https?:\/\/[^\/]+\/)([^\"']+)/ig,
-      function(match, m1, m2, last) {
-        if (last.charAt(last.length-1) === '/')
-          last = last.substr(0, last.length-1);
-        var result = m1+app.root+last;
-        if (callback) callback(last, app.root+last);
-        return result;
-      });
-  }
+  "helpers/anchor",
+  "helpers/content"
+], function(_, $, app, contract, anchor, contentLib) {
 
   // update the category content
   function updateCategories(content) {
     // for now, we are not supporting uncategorized
-    return alterContent(content, "li a:contains('Uncategorized')", function(el) {
+    return contentLib.alterContent(content, "li a:contains('Uncategorized')", function(el) {
       var $el = $(el);
       $el.parent().remove();
     });
@@ -45,7 +21,7 @@ define([
   function updateComments(content) {
     if (app.pushState) {
       // for now, just change a comment link to a supported link
-      return alterContent(content, "a[href]", function(el) {
+      return contentLib.alterContent(content, "a[href]", function(el) {
         if (el && el.href)
           el.href = el.href.replace(/#comment(?:[^\"']+)/i, "comment");
       });
@@ -79,7 +55,7 @@ define([
 
   function updateSearch(content) {
     // remove the method and action from the search form
-    return alterContent(content, "form.search-form", function(el) {
+    return contentLib.alterContent(content, "form.search-form", function(el) {
       var $el = $(el);
       $el.removeAttr("method");
       $el.removeAttr("action");
@@ -102,20 +78,20 @@ define([
         break;
 
       case "categories":
-        content = updateLinks(updateCategories(content));
+        content = contentLib.alterLinks(app.root, updateCategories(content));
         break;
 
       case "recent comments":
-        content = updateLinks(updateComments(content));
+        content = contentLib.alterLinks(app.root, updateComments(content));
         break;
 
       case "recent posts":
-        content = updateLinks(content);
+        content = contentLib.alterLinks(app.root, content);
         break;
 
       case "archives":
         var archiveRoutes = [];
-        content = updateLinks(content, _.partial(prepareArchiveRoute, "date", archiveRoutes));
+        content = contentLib.alterLinks(app.root, content, _.partial(prepareArchiveRoute, "date", archiveRoutes));
         addArchiveRoutes("date", archiveRoutes);
         break;
 
