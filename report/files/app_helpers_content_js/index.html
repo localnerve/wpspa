@@ -37,7 +37,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>app/components/layout/content/main.js</h1>
+    <h1>app/helpers/content.js</h1>
   </div>
 </div>
 
@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">75.54</p>
+      <p class="stat">74.29</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">84</p>
+      <p class="stat">42</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">11.96</p>
+      <p class="stat">13.76</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.44</p>
+      <p class="stat">0.23</p>
     </div>
   </div>
 </div>
@@ -91,99 +91,51 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="span12">/*
- * The main content region
- * This is a fixed region that represents the main content area of the app.
- * It holds a reference to all the prefetched content data from the cms.
- * The main content dispatcher
- * When it receives a content:start event from the app, it 
- *   creates the appropriate content view for the content by type and id.
- * Content types and ids are object_type and object_id defined in the database on the backend.
- * object_type and object_id corresponds to the WPSPA object type and id defined by the 
- *   WPSPA plugin in concert with your normal wordpress menu.
+ * content.js
+ *
+ * A module of methods to assist content updates
  */
 define([
-  &quot;backbone.marionette&quot;,
-  &quot;app&quot;,
-  &quot;helpers/vendor-interface&quot;,
-  &quot;helpers/contract&quot;,
-  &quot;components/layout/content/prefetch&quot;,
-  &quot;components/layout/content/connect&quot;
-], function(Marionette, app, vendor, contract, prefetch, connect) {
+  &quot;jquery&quot;
+], function($) {
 
-  // definition of the content region
-  var ContentRegion = Marionette.Region.extend({
-    el: &quot;#content&quot;,
-
-    initialize: function() {
-      
-      // Create prefetch promises on the app.vent
-      this._promises = prefetch.promises(app.vent);
-
-      // Create the connector on the app.vent and promises
-      this._connect = connect.create(app.vent, this._promises);
-
-      // For now, just get a single, context free transition
-      this.transition = app.request(&quot;content:view&quot;, {
-        options: {
-          object_type: &quot;transition&quot;
-        }
+  // Selects elements from content using selector, then calls the callback for each
+  //   Callback is passed the DOM element selected
+  //   Callback must modify content
+  //   Returns the aggregate modified content result
+  function alterContent(content, selector, callback) {
+    if (callback) {
+      var tmp = $(&quot;&lt;div id=&#039;_alter-content&#039;&gt;&quot;+content+&quot;&lt;/div&gt;&quot;).appendTo(&quot;body&quot;);
+      $(&quot;#_alter-content &quot;+selector).each(function(i ,el) {
+        callback(el);
       });
-
-      // Handle content start
-      // The handler itself is anonymous because of the testing implications
-      var self = this;
-      app.vent.on(&quot;content:start&quot;, function(options) {
-        self.contentStart(options);
-      });
-    },
-
-    // Swap out the content from the prefetch
-    // See the prefetch to match up the handlers by signature to the events on the deferred promise
-    contentStart: function(options) {
-      contract(options, &quot;options.object_id&quot;, &quot;options.object_type&quot;);
-      var subopts = options.options;
-
-      // Request the appropriate content view
-      var content = app.request(&quot;content:view&quot;, options);
-
-      var self = this;
-      this._promises[subopts.object_type].then(
-        // success
-        function(collection) {
-          self.show(
-            content.create({
-              model: collection.get({
-                id: subopts.object_id
-              }),
-              params: options.params
-            })
-          );
-        },
-        // fail
-        function(response, options) {
-          // TODO: Add error implementation
-          // self.show(errorView)
-          var test = 0;
-        },
-        // progress
-        function() {
-          if (this.state() === &quot;pending&quot;) {
-            self.show(self.transition.create());
-            var test = 0;
-          }
-        }
-      );
-    },
-
-    // Called after the region contents render
-    onShow: function() {
-      vendor.initialize();
-      app.container.trigger(&quot;container:afterVendorInitialize&quot;, vendor);
+      content = tmp.html();
+      tmp.remove();
     }
+    return content;
+  }
 
-  });
+  // Finds all hrefs in content and replaces the protocol and host with appRoot and removes any trailing /
+  //   If a callback is supplied, it is called given the arguments:
+  //     1) All of the URI matched after &quot;http://host/&quot;
+  //     2) appRoot prepended to argument 1
+  //   Callback cannot modify the link result
+  //   Returns the modified link result
+  function alterLinks(appRoot, content, callback) {
+    return content.replace(/(href=(?:\&quot;|&#039;))(https?:\/\/[^\/]+\/)([^\&quot;&#039;]+)/ig,
+      function(match, m1, m2, last) {
+        if (last.charAt(last.length-1) === &#039;/&#039;)
+          last = last.substr(0, last.length-1);
+        var result = m1+appRoot+last;
+        if (callback) callback(last, appRoot+last);
+        return result;
+      });
+  }
 
-  return ContentRegion;
+  return {
+    alterContent: alterContent,
+    alterLinks: alterLinks
+  };
 });</textarea>
   </div>
 </div>

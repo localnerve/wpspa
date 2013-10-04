@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">72.78</p>
+      <p class="stat">72.24</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">143</p>
+      <p class="stat">119</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">23.75</p>
+      <p class="stat">20.67</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">1.04</p>
+      <p class="stat">0.82</p>
     </div>
   </div>
 </div>
@@ -96,38 +96,14 @@ define([
   &quot;jquery&quot;,
   &quot;app&quot;,
   &quot;helpers/contract&quot;,
-  &quot;helpers/anchor&quot;
-], function(_, $, app, contract, anchor) {
-
-  // helper to alter content
-  function alterContent(content, selector, callback) {
-    if (callback) {
-      var tmp = $(&quot;&lt;div id=&#039;_alter-content&#039;&gt;&quot;+content+&quot;&lt;/div&gt;&quot;).appendTo(&quot;body&quot;);
-      $(&quot;#_alter-content &quot;+selector).each(function(i ,el) {
-        callback(el);
-      });
-      content = tmp.html();
-      tmp.remove();
-    }
-    return content;
-  }
-
-  // replace the protocol and host with app.root and remove any trailing /
-  function updateLinks(content, callback) {
-    return content.replace(/(href=(?:\&quot;|&#039;))(https?:\/\/[^\/]+\/)([^\&quot;&#039;]+)/ig,
-      function(match, m1, m2, last) {
-        if (last.charAt(last.length-1) === &#039;/&#039;)
-          last = last.substr(0, last.length-1);
-        var result = m1+app.root+last;
-        if (callback) callback(last, app.root+last);
-        return result;
-      });
-  }
+  &quot;helpers/anchor&quot;,
+  &quot;helpers/content&quot;
+], function(_, $, app, contract, anchor, contentLib) {
 
   // update the category content
   function updateCategories(content) {
     // for now, we are not supporting uncategorized
-    return alterContent(content, &quot;li a:contains(&#039;Uncategorized&#039;)&quot;, function(el) {
+    return contentLib.alterContent(content, &quot;li a:contains(&#039;Uncategorized&#039;)&quot;, function(el) {
       var $el = $(el);
       $el.parent().remove();
     });
@@ -137,7 +113,7 @@ define([
   function updateComments(content) {
     if (app.pushState) {
       // for now, just change a comment link to a supported link
-      return alterContent(content, &quot;a[href]&quot;, function(el) {
+      return contentLib.alterContent(content, &quot;a[href]&quot;, function(el) {
         if (el &amp;&amp; el.href)
           el.href = el.href.replace(/#comment(?:[^\&quot;&#039;]+)/i, &quot;comment&quot;);
       });
@@ -171,7 +147,7 @@ define([
 
   function updateSearch(content) {
     // remove the method and action from the search form
-    return alterContent(content, &quot;form.search-form&quot;, function(el) {
+    return contentLib.alterContent(content, &quot;form.search-form&quot;, function(el) {
       var $el = $(el);
       $el.removeAttr(&quot;method&quot;);
       $el.removeAttr(&quot;action&quot;);
@@ -194,20 +170,20 @@ define([
         break;
 
       case &quot;categories&quot;:
-        content = updateLinks(updateCategories(content));
+        content = contentLib.alterLinks(app.root, updateCategories(content));
         break;
 
       case &quot;recent comments&quot;:
-        content = updateLinks(updateComments(content));
+        content = contentLib.alterLinks(app.root, updateComments(content));
         break;
 
       case &quot;recent posts&quot;:
-        content = updateLinks(content);
+        content = contentLib.alterLinks(app.root, content);
         break;
 
       case &quot;archives&quot;:
         var archiveRoutes = [];
-        content = updateLinks(content, _.partial(prepareArchiveRoute, &quot;date&quot;, archiveRoutes));
+        content = contentLib.alterLinks(app.root, content, _.partial(prepareArchiveRoute, &quot;date&quot;, archiveRoutes));
         addArchiveRoutes(&quot;date&quot;, archiveRoutes);
         break;
 
