@@ -43,39 +43,41 @@ define([
 
   function parseComments(post) {
 
-    // Add derived properties to the comments object
-    post.comments.commentUrl = anchor.buildUrlPath(app, post.url, "comment");
-    post.comments.respondUrl = anchor.buildUrlPath(app, post.url, "respond");
+    if (post.comment_status === "open") {
+      // Add derived properties to the comments object
+      post.comments.commentUrl = anchor.buildUrlPath(app, post.url, "comment");
+      post.comments.respondUrl = anchor.buildUrlPath(app, post.url, "respond");
 
-    // Add a route to handle comments for this post.
-    // Since the content will be served by type/id, send in a parameter
-    // to tell the presentation that it will need to prepare for comments.
-    app.vent.trigger("wpspa:router:addRoute", {
-      name: post.slug+"-comment",
-      route: anchor.hrefToRoute(post.comments.commentUrl),
-      params: {
-        action: "comment"
-      },
-      options: {
-        object_type: post.type,
-        object_id: post.id
-      }
-    });
-    
-    // Add a route to handle responses for this post.
-    // Since the content will be served by type/id, send in a parameter
-    // to tell the presentation that it will need to prepare for responses.
-    app.vent.trigger("wpspa:router:addRoute", {
-      name: post.slug+"-respond",
-      route: anchor.hrefToRoute(post.comments.respondUrl),
-      params: {
-        action: "respond"
-      },
-      options: {
-        object_type: post.type,
-        object_id: post.id
-      }
-    });
+      // Add a route to handle comments for this post.
+      // Since the content will be served by type/id, send in a parameter
+      // to tell the presentation that it will need to prepare for comments.
+      app.vent.trigger("wpspa:router:addRoute", {
+        name: post.slug+"-comment",
+        route: anchor.hrefToRoute(post.comments.commentUrl),
+        params: {
+          action: "comment"
+        },
+        options: {
+          object_type: post.type,
+          object_id: post.id
+        }
+      });
+      
+      // Add a route to handle responses for this post.
+      // Since the content will be served by type/id, send in a parameter
+      // to tell the presentation that it will need to prepare for responses.
+      app.vent.trigger("wpspa:router:addRoute", {
+        name: post.slug+"-respond",
+        route: anchor.hrefToRoute(post.comments.respondUrl),
+        params: {
+          action: "respond"
+        },
+        options: {
+          object_type: post.type,
+          object_id: post.id
+        }
+      });
+    }
   }
 
   // parse a single post

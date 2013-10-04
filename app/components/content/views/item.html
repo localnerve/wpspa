@@ -26,7 +26,7 @@
 <footer class="entry-meta">
   <div class="comments-link">
     <% var comments = model.get('comments'); %>
-    <% if (comments.length > 0) { %>
+    <% if (comments.length > 0 && model.get('comment_status') === "open") { %>
       <a href="<%= comments.commentUrl %>" title="Comment on <%= model.get('title') %>">
         <span><%= labelNumber(comments.length) %> <%= labelComment(comments.length) %> so far</span>
     <% } else { %>
