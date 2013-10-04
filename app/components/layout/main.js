@@ -8,10 +8,11 @@ define([
   "app",
   "components/layout/content/main",
   "components/layout/header/main",
-  "components/layout/footer/main"
+  "components/layout/footer/main",
+  "components/layout/search/main"
 ], function(_, Marionette, app, content) {
 
-  // Create a partial definition for WPSPA module
+  // Create a partial definition for container module
   var thisModule = app.module("container", function(container) {
 
     // The definition of the container layout
@@ -38,8 +39,8 @@ define([
       this.layout = new AppLayout(options);
 
       // this is the number of container:complete calls required to trigger app:startRoutes
-      // for now, this is header + footer = 2
-      var completions = 2;
+      // for now, this is header + footer + search = 3
+      var completions = 3;
 
       this.listenTo(app.vent, "container:complete", _.after(completions, function() {
         app.vent.trigger("app:startRoutes");

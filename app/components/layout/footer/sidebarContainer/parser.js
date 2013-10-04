@@ -36,9 +36,8 @@ define([
   function updateCategories(content) {
     // for now, we are not supporting uncategorized
     return alterContent(content, "li a:contains('Uncategorized')", function(el) {
-      // protect ourselves against jquery
-      if (el && el.parentNode && typeof el.parentNode.remove === "function")
-        el.parentNode.remove();
+      var $el = $(el);
+      $el.parent().remove();
     });
   }
 
@@ -78,6 +77,15 @@ define([
     });
   }
 
+  function updateSearch(content) {
+    // remove the method and action from the search form
+    return alterContent(content, "form.search-form", function(el) {
+      var $el = $(el);
+      $el.removeAttr("method");
+      $el.removeAttr("action");
+    });
+  }
+
   // parse a single widget to a model
   function parseWidget(widget) {
     contract(widget, "id", "widget", "params.before_widget", "params.after_widget", "params.widget_name");
@@ -89,6 +97,10 @@ define([
 
     // process specific widget types
     switch(widget.params.widget_name.toLowerCase()) {
+      case "search":
+        content = updateSearch(content);
+        break;
+
       case "categories":
         content = updateLinks(updateCategories(content));
         break;

@@ -9,11 +9,12 @@
  *
  */
 define([
+  "lodash",
   "app",
   "helpers/contract",
   "components/content/views/main",
   "components/content/entities/main"
-  ], function(app, contract, views, entities) {
+  ], function(_, app, contract, views, entities) {
 
     // handle content:view requests
     app.reqres.setHandler("content:view", function(options) {
@@ -31,11 +32,17 @@ define([
       // get the cached entity
       var entity = cache[options.object_type];
 
-      // if there is no entity, create a new one, empty is desired.
+      // if there is no entity, create a new one, empty if desired.
       if (!entity) {
         var object_type = options.object_type;
-        options = options.emptyOnNew ? { object_type: "empty" } : options;
-        entity = cache[object_type] = entities.createCollection(options);
+
+        // if a custom create was specified, use that
+        if (options.create) {
+          entity = cache[object_type] = options.create(options);
+        } else {
+          options = options.emptyOnNew ? { object_type: "empty" } : options;
+          entity = cache[object_type] = entities.createCollection(options);
+        }
       }
 
       return entity;

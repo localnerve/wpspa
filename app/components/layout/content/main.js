@@ -48,7 +48,11 @@ define([
       var subopts = options.options;
 
       // Request the appropriate content view
-      var content = app.request("content:view", subopts);
+      var content;
+      if (options.view)
+        content = options.view(options);
+      else
+        content = app.request("content:view", subopts);
 
       var self = this;
       this._promises[subopts.object_type].then(

@@ -28,10 +28,7 @@ define([
     // Method that performs the fetching
     this._fetch = function(items) {
       if (!_.isArray(items))
-        items = _.toArray(items);
-
-      // if we didn't get at least one item, throw
-      contract(items, "0");
+        items = [items];
 
       // Prefetch unique entity types
       _.each(items, function(item) {
@@ -42,7 +39,8 @@ define([
           // setup unique object_type
           var entity = app.request("content:entity", {
             object_type: item.object_type,
-            items: _.where(items, { object_type: item.object_type })
+            items: _.where(items, { object_type: item.object_type }),
+            create: item.create
           });
           entity.once("request", function() {
             if (dfd.state() === "pending") {

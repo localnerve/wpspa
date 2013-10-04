@@ -26,6 +26,9 @@ require.config({
     "components/layout/header/navigation/item": {
       hideHome: true
     },
+    "components/layout/search/model": {
+      urlRoot: "/api/get_search_results"
+    },
     "components/layout/footer/sidebarContainer/entities": {
       endpoint: "/api/widgets/get_sidebar/?sidebar_id=sidebar-1"
     },

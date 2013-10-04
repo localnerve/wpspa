@@ -21,7 +21,7 @@ define([
       var items = this.get("items");
       if (items && items.length > 0) {
         var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
-        // the api only allows to get one category
+        // for the model, we just do one category at a time
         return urlRoot + "?id=" + items[0].object_id;
       } else {
         return module.config().endpoint;

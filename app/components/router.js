@@ -47,6 +47,9 @@ define([
     app.router = new AppRouter(_.extend({
       controller: app.controller
     }, options));
+    // Signal that its ok to add other routers.
+    // Since this handles a default route, it needs to be first, so that it's last to be evaluated by Backbone.Router
+    app.vent.trigger("wpspa:router:initialize");
   });
 
   return AppRouter;
