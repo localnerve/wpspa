@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">72.99</p>
+      <p class="stat">69.82</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">34</p>
+      <p class="stat">41</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">13.83</p>
+      <p class="stat">15.75</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.16</p>
+      <p class="stat">0.19</p>
     </div>
   </div>
 </div>
@@ -101,11 +101,12 @@
  *
  */
 define([
+  &quot;lodash&quot;,
   &quot;app&quot;,
   &quot;helpers/contract&quot;,
   &quot;components/content/views/main&quot;,
   &quot;components/content/entities/main&quot;
-  ], function(app, contract, views, entities) {
+  ], function(_, app, contract, views, entities) {
 
     // handle content:view requests
     app.reqres.setHandler(&quot;content:view&quot;, function(options) {
@@ -123,11 +124,17 @@ define([
       // get the cached entity
       var entity = cache[options.object_type];
 
-      // if there is no entity, create a new one, empty is desired.
+      // if there is no entity, create a new one, empty if desired.
       if (!entity) {
         var object_type = options.object_type;
-        options = options.emptyOnNew ? { object_type: &quot;empty&quot; } : options;
-        entity = cache[object_type] = entities.createCollection(options);
+
+        // if a custom create was specified, use that
+        if (options.create) {
+          entity = cache[object_type] = options.create(options);
+        } else {
+          options = options.emptyOnNew ? { object_type: &quot;empty&quot; } : options;
+          entity = cache[object_type] = entities.createCollection(options);
+        }
       }
 
       return entity;

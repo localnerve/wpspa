@@ -49,7 +49,7 @@
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">54</p>
+      <p class="stat">55</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,7 +63,7 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">10.13</p>
+      <p class="stat">10.02</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
@@ -100,10 +100,11 @@ define([
   &quot;app&quot;,
   &quot;components/layout/content/main&quot;,
   &quot;components/layout/header/main&quot;,
-  &quot;components/layout/footer/main&quot;
+  &quot;components/layout/footer/main&quot;,
+  &quot;components/layout/search/main&quot;
 ], function(_, Marionette, app, content) {
 
-  // Create a partial definition for WPSPA module
+  // Create a partial definition for container module
   var thisModule = app.module(&quot;container&quot;, function(container) {
 
     // The definition of the container layout
@@ -130,8 +131,8 @@ define([
       this.layout = new AppLayout(options);
 
       // this is the number of container:complete calls required to trigger app:startRoutes
-      // for now, this is header + footer = 2
-      var completions = 2;
+      // for now, this is header + footer + search = 3
+      var completions = 3;
 
       this.listenTo(app.vent, &quot;container:complete&quot;, _.after(completions, function() {
         app.vent.trigger(&quot;app:startRoutes&quot;);
