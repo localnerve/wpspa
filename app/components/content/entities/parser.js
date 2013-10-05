@@ -10,17 +10,16 @@ define([
 
   // Parse the categories of a post
   function parseCategories(post) {
-    var object_type = "category";
     
     // not supporting uncategorized for now...
     _.each(post.categories, function(category) {
-      
-      // Add derived properties to the category object
-      category.route = anchor.buildUrlPath(app, object_type, category.slug);
-      category.url = anchor.routeToHref(category.route);
 
       // make the object type specific to this category
-      object_type += ":"+category.slug;
+      var object_type = "category:"+category.slug;
+      
+      // Add derived properties to the category object
+      category.route = anchor.buildUrlPath(app, "category", category.slug);
+      category.url = anchor.routeToHref(category.route);
 
       // The category in a post doesn't contain the post contents.
       // Also, since the category might contain posts that we haven't downloaded, get them.
