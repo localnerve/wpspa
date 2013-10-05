@@ -3,36 +3,47 @@
     <a href="<%= model.get('url') %>" rel="bookmark"><%= model.get('title') %></a>
   </h1>
   <div class="entry-meta">
-    <span class="date">
-      <a href="<%= model.get('url') %>" title="<%= model.get('title') %>" rel="bookmark">
-        <time class="entry-date" datetime="<%= model.get('datetime') %>">
-          <%= model.get('date') %>
-        </time>
-      </a>
-    </span>
-    <span class="categories-links">
-      <% _.each(model.get('categories'), function(category) { %>
-        <a href="<%= category.url %>" title="<%= category.description %>" rel="category tag"><%= category.title %></a>
-      <% }); %>
-    </span>
-    <span class="author vcard">
-      <a class="url fn n" href="<%= model.get('author').url %>" title="View all posts by <%= model.get('author').name %>" rel="author"><%= model.get('author').name %></a>
-    </span>
+    <ul class="entry-meta-list">
+      <li class="date">
+        <a href="<%= model.get('url') %>" title="<%= model.get('title') %>" rel="bookmark">
+          <time class="entry-date" datetime="<%= model.get('datetime') %>">
+            <%= model.get('date') %>
+          </time>
+        </a>
+      </li>
+      <li class="categories-links">
+        <% _.each(model.get('categories'), function(category) { %>
+          <a href="<%= category.url %>" title="<%= category.description %>" rel="category tag">
+            <%= category.title.replace(/\s/g, "&nbsp;") %>
+          </a>
+        <% }); %>
+      </li>
+      <li class="author vcard">
+        <a class="url fn n" href="<%= model.get('author').url %>" title="View all posts by <%= model.get('author').name %>" rel="author">
+          <%= model.get('author').name %>
+        </a>
+      </li>
+    </ul>
   </div>
 </header>
 <div class="entry-content">
   <%= model.get('excerpt') %>
 </div>
 <footer class="entry-meta">
-  <div class="comments-link">
-    <% var comments = model.get('comments'); %>
-    <% if (comments.length > 0 && model.get('comment_status') === "open") { %>
-      <a href="<%= comments.commentUrl %>" title="Comment on <%= model.get('title') %>">
-        <span><%= labelNumber(comments.length) %> <%= labelComment(comments.length) %> so far</span>
-    <% } else { %>
-      <a href="<%= comments.respondUrl %>" title="Comment on <%= model.get('title') %>">
-        <span class="leave-reply">Leave a comment</span>
-      </a>
+  <ul class="entry-meta-list">
+    <% if (model.get('comment_status') === "open") { %>
+      <li class="comments-link">
+        <% var comments = model.get('comments'); %>    
+        <% if (comments.length > 0) { %>
+          <a href="<%= comments.commentUrl %>" title="Comment on <%= model.get('title') %>">
+            <span><%= labelNumber(comments.length) %> <%= labelComment(comments.length) %> so far</span>
+          </a>
+        <% } else { %>
+          <a href="<%= comments.respondUrl %>" title="Comment on <%= model.get('title') %>">
+            <span class="leave-reply">Leave a comment</span>
+          </a>
+        <% } %>
+      </li>
     <% } %>
-  </div>
+  </ul>
 </footer>

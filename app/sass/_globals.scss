@@ -3,5 +3,14 @@
 }
 
 .grid-col {
-  @include grid-column($columns, $last-column, $center, $offset, $push, $pull, $collapse, $float);
+  @include grid-column(
+    $default-columns,
+    $default-last-column,
+    $default-center,
+    $default-offset,
+    $default-push,
+    $default-pull,
+    $default-collapse,
+    $default-float
+    );
 }

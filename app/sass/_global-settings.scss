@@ -3,11 +3,15 @@
 $default-row-behavior: false;
 
 // define grid column defaults
-$columns: 12;
-$last-column: false;
-$center: false;
-$offset: false;
-$push: false;
-$pull: false;
-$collapse: false;
-$float: left;
+$default-columns: 12;
+$default-last-column: false;
+$default-center: false;
+$default-offset: false;
+$default-push: false;
+$default-pull: false;
+$default-collapse: false;
+$default-float: left;
+
+// block-grid defaults
+//$include-block-grid-classes: false;
+//$default-per-row: 

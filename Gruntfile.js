@@ -114,15 +114,15 @@ module.exports = function(grunt) {
       dev: {
         options: {
           environment: "development",
-          debugInfo: true,
-          force: true
+          debugInfo: true//,
+          //force: true
         }
       },
       debug: {
         options: {
           environment: "development",
-          debugInfo: true,
-          force: true
+          debugInfo: true//,
+          //force: true
         }
       },
       release: {

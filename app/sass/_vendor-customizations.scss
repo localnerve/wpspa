@@ -1,0 +1,13 @@
+// override the hardcoded .dropdown li a vertical padding
+@media #{$topbar-media-query} {
+  .top-bar-section {
+    .dropdown {
+      li {
+        a {
+          padding-top: 15px;
+          padding-bottom: 15px;
+        }
+      }
+    }
+  }
+}

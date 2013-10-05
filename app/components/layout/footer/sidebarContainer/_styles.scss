@@ -1,16 +1,49 @@
-.widget-area {
-  padding-left: 20px;
-  padding-right: 20px;
-  text-align: left;
-  // just for now
-  //min-height: emCalc(300);
+.sidebar-container {
+  background-color: #220e10;
+  padding: emCalc(20) 0;
+  @include clearfix();
 }
 
- .widget {
-  margin: 0 0 24px;
-  padding: 20px;
+.widget, .site-footer .widget-title, .site-footer .widget-title a, .site-footer .wp-caption-text {
+  color: #fff;
+}
+
+.widget-area {
+  padding-left: emCalc(20);
+  padding-right: emCalc(20);
+  text-align: left;
+  max-width: emCalc(1040) !important;
+
+  @include grid-row($default-row-behavior);
+}
+
+// total number of widgets across in large grid
+$widget-columns: 3;
+.widget {  
+  
+  padding: emCalc(20);
   word-wrap: break-word;
-} 
+  background: transparent;  
+  margin: 0 auto;
+  max-width: 15em;
+
+  @media #{$small} {
+    margin: 0 0 emCalc(24);
+    max-width: inherit;
+    @include grid-column($total-columns / $widget-columns, true);
+  }
+}
+
+// clear floats when we want a new row, which is a multiple of widget-columns
+// example: $widget-columns = 3, we want to start floating over at 3n+4
+// 4, 7, 10, 13, ...
+.widget:nth-child(#{$widget-columns}n+#{($widget-columns+1)}) {
+  clear: both;
+}
+
+.widget a, .sidebar-container abbr {
+  color: #e6402a;
+}
 
 .widget ul, .widget ol {
   list-style-type: none;
@@ -18,10 +51,9 @@
   padding: 0;
 }
 
-.sidebar-container {
-  background-color: #220e10;
-  padding: 20px 0;
-  @include clearfix();
+.widget .widget-title {
+  font: 300 italic emCalc(20) "Source Sans Pro", Helvetica, sans-serif;
+  margin: 0 0 emCalc(10);
 }
 
 .screen-reader-text {
@@ -31,25 +63,4 @@
 
 .search-form .search-submit {
   display: none;
-}
-
-.site-footer .widget-title, .site-footer .widget-title a, .site-footer .wp-caption-text {
-  color: #fff;
-}
-
-.widget .widget-title {
-  font: 300 italic 20px "Source Sans Pro", Helvetica, sans-serif;
-  margin: 0 0 10px;
-}
-
-.site-footer .widget a {
-  color: #e6402a;
-}
-
-.site-footer .widget {
-  background: transparent;
-  color: #fff;
-  float: left;
-  margin-right: 20px;
-  width: 245px;
 }

@@ -16,14 +16,17 @@
 @import "sprites";
 
 //
-// project vendor overrides
-@import "vendor-overrides";
+// vendor variable overrides
+// this replaces foundation/variables.scss
+@import "vendor-overrides"; 
 
 //
 // vendor imports
 @import "normalize";
+
 // kitchen sink
 //@import "foundation";
+// Or:
 
 // Import specific parts of Foundation by commenting the import "foundation"
 // and uncommenting what you want below. You must uncomment the following if customizing
@@ -39,7 +42,7 @@
 //
 
 @import "foundation/components/visibility";
-// @import "foundation/components/block-grid";
+@import "foundation/components/block-grid";
 @import "foundation/components/type";
 // @import "foundation/components/buttons";
 // @import "foundation/components/forms"; // *requires components/buttons
@@ -72,6 +75,8 @@
 // @import "foundation/components/tooltips";
 // @import "foundation/components/dropdown";
 
+// add customizations after the defined vendor definitions
+@import "vendor-customizations";
 //
 // application styles
 @import "globals";

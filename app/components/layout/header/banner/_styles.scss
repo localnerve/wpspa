@@ -1,5 +1,13 @@
+$banner-scaling-factor: 0.65;
+
+$banner-height: 200;
 #banner {
-  height: emCalc(200);
+  height: emCalc($banner-height * $banner-scaling-factor);
+  overflow: hidden;
+
+  @media #{$small} {
+    height: emCalc($banner-height)
+  }
 }
 
 .main-circle {
@@ -18,18 +26,33 @@
   width: 100%;
 }
 
+$site-title-font-size: 60;
+$site-title-top-padding: 58px;
 .site-title {
-  font-size: 60px;
+  font-size: emCalc($site-title-font-size * $banner-scaling-factor);
   font-weight: bold;
   line-height: 1;
   margin: 0;
-  padding: 58px 0 10px;
+  padding: ($site-title-top-padding * $banner-scaling-factor) 0 10px;
+
+  @media #{$small} {
+    font-size: emCalc($site-title-font-size);
+    padding-top: $site-title-top-padding;
+  }  
 }
 .site-title:hover {
   text-decoration: underline;
 }
 
+$site-description-font-size: 24;
 .site-description {
-  font: 300 italic 24px "Source Sans Pro", Helvetica, sans-serif;
+  font-size: emCalc($site-description-font-size * $banner-scaling-factor);
+  font-weight: 300;
+  font-style: italic;
+  font-family: "Source Sans Pro", Helvetica, sans-serif;
   margin: 0;
+
+  @media #{$small} {
+    font-size: emCalc($site-description-font-size);
+  }  
 }
