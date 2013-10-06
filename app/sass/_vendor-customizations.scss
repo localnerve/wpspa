@@ -11,3 +11,10 @@
     }
   }
 }
+
+// fix the top-bar name unitless font-size bug
+.top-bar {
+  .name {
+    font-size: emCalc($em-base) !important
+  }
+}
