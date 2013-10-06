@@ -1,6 +1,7 @@
 .sass-cache
 /dist
 /node_modules/grunt-mocha
+/node_modules/grunt-contrib-imagemin
 app/styles
 libpeerconnection.log
 wpspa.sublime-workspace

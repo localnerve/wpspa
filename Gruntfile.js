@@ -297,7 +297,10 @@ module.exports = function(grunt) {
               // static files in root besides index.html
               "package.json", "app.js", "Procfile", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
               // other directories
-              "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
+              "<%= project.server %>/**",
+              // this is covered by imagemin for release builds
+              //"<%= project.images %>/*.png",
+              "<%= project.fonts %>/**",
               // vendor stuff
               "<%= project.vendor %>/js/modernizr/modernizr.js"
               //"<%= project.vendor %>/bower/foundation/js/foundation/**"
@@ -350,6 +353,19 @@ module.exports = function(grunt) {
           port: "<%= project.port.release %>",
           outputDir: "<%= project.dist.release %>/snapshots"
         }
+      }
+    },
+
+    // image minification provided by grunt-contrib-imagemin task
+    // takes sprited pngs from images and places them in release/images
+    imagemin: {
+      release: {
+        files: [{
+          expand: true,
+          cwd: "<%= project.images %>",
+          src: ["*.png"],
+          dest: "<%= project.dist.release %>/<%= project.images %>"
+        }]
       }
     },
 
@@ -747,6 +763,7 @@ module.exports = function(grunt) {
     "compass:release",
     "uglify:release",
     "cssmin:release",
+    "imagemin:release",
     "targethtml:release",
     "copy:release",
     "inline:release",

@@ -37,7 +37,8 @@
     "grunt-express-server": "~0.4.3",
     "http-proxy": "~0.10.3",
     "connect-modrewrite": "~0.5.4",
-    "connect-injector": "~0.2.2"
+    "connect-injector": "~0.2.2",
+    "grunt-contrib-imagemin": "~0.3.0"
   },
   "scripts": {
     "test": "grunt test",
