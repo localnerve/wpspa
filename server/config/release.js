@@ -14,7 +14,7 @@ Config.prototype.appPort = 9003;
 
 // Use a proxy
 Config.prototype.proxy = {
-  host: "jsonapi.local", // TODO: change this to the real backend
+  host: "wpspa.localnerve.com",
   port: 80,
   pattern: '^\/api\/'
 };
