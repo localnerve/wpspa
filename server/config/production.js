@@ -10,7 +10,7 @@ function Config() {}
 util.inherits(Config, Base);
 
 // The main application port that browsers use
-Config.prototype.appPort = 80;
+//Config.prototype.appPort = 80;
 
 // Use a proxy
 Config.prototype.proxy = {
