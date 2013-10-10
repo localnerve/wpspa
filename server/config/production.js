@@ -14,7 +14,7 @@ util.inherits(Config, Base);
 
 // Use a proxy
 Config.prototype.proxy = {
-  host: "wpspa.localerve.com",
+  host: "wpspa.localnerve.com",
   port: 80,
   pattern: '^\/api\/'
 };
