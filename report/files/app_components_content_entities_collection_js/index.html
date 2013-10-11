@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">72.07</p>
+      <p class="stat">72.68</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">39</p>
+      <p class="stat">38</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">15.96</p>
+      <p class="stat">16.42</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.30</p>
+      <p class="stat">0.29</p>
     </div>
   </div>
 </div>
@@ -100,11 +100,10 @@
 define([
   &quot;lodash&quot;,
   &quot;backbone&quot;,
-  &quot;helpers/anchor&quot;,
+  &quot;helpers/urls&quot;,
   &quot;components/content/entities/parser&quot;,
   &quot;module&quot;
-], function(_, Backbone, anchor, parser, module) {
-  var $w = window;
+], function(_, Backbone, urls, parser, module) {
 
   // definition of a post collection
   var PostCollection = Backbone.Collection.extend({
@@ -120,7 +119,7 @@ define([
     url: function() {
       // if fetch items are specified, get the specific items
       if (this.options.items &amp;&amp; this.options.items.length &gt; 0) {
-        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
         var object_type = this.options.items[0].object_type;
         var object_ids = _.pluck(this.options.items, &quot;object_id&quot;);
         return urlRoot + &quot;?post_type=&quot;+object_type+&quot;&amp;post__in(&quot;+object_ids.join(&quot;,&quot;)+&quot;)&quot;;

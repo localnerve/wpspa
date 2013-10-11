@@ -92,11 +92,11 @@
   <div class="row">
     <textarea id="file-source" class="span12">define([
   &quot;backbone&quot;,
-  &quot;helpers/anchor&quot;,
-  &quot;helpers/sync&quot;,
+  &quot;helpers/urls&quot;,
+  &quot;helpers/backbone/sync&quot;,
   &quot;components/content/entities/parser&quot;,
   &quot;module&quot;
-], function(Backbone, anchor, sync, parser, module) {
+], function(Backbone, urls, sync, parser, module) {
   $w = window;
 
   // definition of a post model
@@ -112,7 +112,7 @@
 
     // make a jsonapi url
     url: function() {
-      var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+      var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
       return urlRoot + &quot;?id=&quot; + this.id;
     },
 

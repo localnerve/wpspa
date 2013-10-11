@@ -93,10 +93,10 @@
     <textarea id="file-source" class="span12">define([
   &quot;lodash&quot;,
   &quot;backbone&quot;,
-  &quot;helpers/anchor&quot;,
+  &quot;helpers/urls&quot;,
   &quot;components/content/entities/parser&quot;,
   &quot;module&quot;
-], function(_, Backbone, anchor, parser, module) {
+], function(_, Backbone, urls, parser, module) {
   
   // Definition of a category model
   // a CategoryModel is a model with its own collection of posts.
@@ -112,7 +112,7 @@
     url: function() {
       var items = this.get(&quot;items&quot;);
       if (items &amp;&amp; items.length &gt; 0) {
-        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
         // for the model, we just do one category at a time
         return urlRoot + &quot;?id=&quot; + items[0].object_id;
       } else {

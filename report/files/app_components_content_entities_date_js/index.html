@@ -98,10 +98,10 @@
 define([
   &quot;lodash&quot;,
   &quot;backbone&quot;,
-  &quot;helpers/anchor&quot;,
+  &quot;helpers/urls&quot;,
   &quot;components/content/entities/parser&quot;,
   &quot;module&quot;
-], function(_, Backbone, anchor, parser, module) {
+], function(_, Backbone, urls, parser, module) {
 
   // definition of a date model
   var DateModel = Backbone.Model.extend({
@@ -111,7 +111,7 @@ define([
     url: function() {
       var items = this.get(&quot;items&quot;);
       if (items &amp;&amp; items.length &gt; 0) {
-        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
         // api allows one date get
         return urlRoot + &quot;?date=&quot;+items[0].object_id;
       }

@@ -93,12 +93,12 @@
     <textarea id="file-source" class="span12">define([
   &quot;lodash&quot;,
   &quot;backbone&quot;,
-  &quot;helpers/anchor&quot;,
+  &quot;helpers/urls&quot;,
   &quot;helpers/contract&quot;,
   // TODO: Restructure this
   &quot;components/content/entities/parser&quot;,
   &quot;module&quot;
-], function(_, Backbone, anchor, contract, parser, module) {
+], function(_, Backbone, urls, contract, parser, module) {
 
   // definition of the search model
   var SearchModel = Backbone.Model.extend({
@@ -107,7 +107,7 @@
 
     url: function() {
       // api allows one search retrieval
-      return anchor.normalizeUrlRoot(this.urlRoot) + &quot;?search=&quot;+this.get(&quot;id&quot;);
+      return urls.normalizeUrlRoot(this.urlRoot) + &quot;?search=&quot;+this.get(&quot;id&quot;);
     },
 
     // Since we&#039;re really just a directory for search results,

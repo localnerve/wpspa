@@ -45,11 +45,11 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">69.41</p>
+      <p class="stat">69.57</p>
     </div>
     <div class="span6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">154</p>
+      <p class="stat">152</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,7 +63,7 @@
   <div class="row">
     <div class="span6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">22.72</p>
+      <p class="stat">22.28</p>
     </div>
     <div class="span6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
@@ -95,11 +95,11 @@
   &quot;jquery&quot;,
   &quot;backbone.marionette&quot;,
   &quot;app&quot;,
-  &quot;helpers/anchor&quot;,
+  &quot;helpers/routes&quot;,
   &quot;helpers/contract&quot;,
   &quot;components/layout/header/navigation/item&quot;,
   &quot;components/layout/header/navigation/entities&quot;
-], function(_, $, Marionette, app, anchor, contract, itemView, entities) {
+], function(_, $, Marionette, app, routes, contract, itemView, entities) {
 
   // The definition of navigation view
   var NavigationView = Marionette.CompositeView.extend({
@@ -129,7 +129,7 @@
             self.updateDropdowns();
           }
         }
-      });
+      }, 100);
       $(window).on(&quot;resize&quot;, this.resizeHandler);
     },
 
@@ -215,21 +215,19 @@
       // clear anything marked active
       this.$itemViewContainer.find(&quot;.active&quot;).removeClass(&quot;active&quot;);
 
-      // if this was called as a result of a route
-      if (options.route) {
-        // get the anchor we are targeting and mark it active
-        var href = anchor.routeToHref(options.route);
-        var item = this.$itemViewContainer.find(&quot;a[href=&#039;&quot;+href+&quot;&#039;]&quot;);
-        item.parent().addClass(&quot;active&quot;);
-        
-        // also mark any parent anchors up the tree as active
-        var parentAnchors = item.parents(&quot;ul&quot;).siblings(&quot;a&quot;).first();
-        if (parentAnchors.length &gt; 0)
-          parentAnchors.parent().addClass(&quot;active&quot;);
+      // get the anchor we are targeting and mark it active
+      var href = routes.routeToHref(options.route);
+      var item = this.$itemViewContainer.find(&quot;a[href=&#039;&quot;+href+&quot;&#039;]&quot;);
+      item.parent().addClass(&quot;active&quot;);
+      
+      // also mark any parent anchors up the tree as active
+      var parentAnchors = item.parents(&quot;ul&quot;).siblings(&quot;a&quot;).first();
+      if (parentAnchors.length &gt; 0)
+        parentAnchors.parent().addClass(&quot;active&quot;);
 
-        // this was a route, so close the menu if required
-        if (this.$el.hasClass(&quot;expanded&quot;))
-          this.$(&quot;.toggle-topbar&quot;).click();
+      // this was a route, so close the menu if required
+      if (this.$el.hasClass(&quot;expanded&quot;)) {
+        this.$(&quot;.toggle-topbar&quot;).click();
       }
     }
   });
