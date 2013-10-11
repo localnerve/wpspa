@@ -1,10 +1,10 @@
 define([
   "lodash",
   "backbone",
-  "helpers/anchor",
+  "helpers/urls",
   "components/content/entities/parser",
   "module"
-], function(_, Backbone, anchor, parser, module) {
+], function(_, Backbone, urls, parser, module) {
   
   // Definition of a category model
   // a CategoryModel is a model with its own collection of posts.
@@ -20,7 +20,7 @@ define([
     url: function() {
       var items = this.get("items");
       if (items && items.length > 0) {
-        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
         // for the model, we just do one category at a time
         return urlRoot + "?id=" + items[0].object_id;
       } else {

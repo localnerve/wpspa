@@ -4,9 +4,9 @@
 define([
   "lodash",
   "helpers/contract",
-  "helpers/anchor",
+  "helpers/routes",
   "app"
-], function(_, contract, anchor, app) {
+], function(_, contract, routes, app) {
 
   // Parse the categories of a post
   function parseCategories(post) {
@@ -18,8 +18,8 @@ define([
       var object_type = "category:"+category.slug;
       
       // Add derived properties to the category object
-      category.route = anchor.buildUrlPath(app, "category", category.slug);
-      category.url = anchor.routeToHref(category.route);
+      category.route = routes.buildRoutePath(app.pushState, "category", category.slug);
+      category.url = routes.routeToHref(category.route);
 
       // The category in a post doesn't contain the post contents.
       // Also, since the category might contain posts that we haven't downloaded, get them.
@@ -44,15 +44,15 @@ define([
 
     if (post.comment_status === "open") {
       // Add derived properties to the comments object
-      post.comments.commentUrl = anchor.buildUrlPath(app, post.url, "comment");
-      post.comments.respondUrl = anchor.buildUrlPath(app, post.url, "respond");
+      post.comments.commentUrl = routes.buildRoutePath(app.pushState, post.url, "comment");
+      post.comments.respondUrl = routes.buildRoutePath(app.pushState, post.url, "respond");
 
       // Add a route to handle comments for this post.
       // Since the content will be served by type/id, send in a parameter
       // to tell the presentation that it will need to prepare for comments.
       app.vent.trigger("wpspa:router:addRoute", {
         name: post.slug+"-comment",
-        route: anchor.hrefToRoute(post.comments.commentUrl),
+        route: routes.hrefToRoute(post.comments.commentUrl),
         params: {
           action: "comment"
         },
@@ -67,7 +67,7 @@ define([
       // to tell the presentation that it will need to prepare for responses.
       app.vent.trigger("wpspa:router:addRoute", {
         name: post.slug+"-respond",
-        route: anchor.hrefToRoute(post.comments.respondUrl),
+        route: routes.hrefToRoute(post.comments.respondUrl),
         params: {
           action: "respond"
         },
@@ -84,8 +84,8 @@ define([
     contract(post, "date", "url");
     
     // Add derived properties to the post object
-    post.route = anchor.hrefToRoute(post.url);
-    post.url = anchor.routeToHref(post.route);
+    post.route = routes.hrefToRoute(post.url);
+    post.url = routes.routeToHref(post.route);
     post.datetime = post.date.replace(" ", "T")+"+00.00";
 
     parseCategories(post);

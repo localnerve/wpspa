@@ -12,11 +12,11 @@
 define([
   "backbone.marionette",
   "app",
-  "helpers/vendor-interface",
   "helpers/contract",
+  "components/layout/content/vendor-interface",
   "components/layout/content/prefetch",
   "components/layout/content/connect"
-], function(Marionette, app, vendor, contract, prefetch, connect) {
+], function(Marionette, app, contract, vendor, prefetch, connect) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({

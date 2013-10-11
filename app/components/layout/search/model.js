@@ -1,12 +1,12 @@
 define([
   "lodash",
   "backbone",
-  "helpers/anchor",
+  "helpers/urls",
   "helpers/contract",
   // TODO: Restructure this
   "components/content/entities/parser",
   "module"
-], function(_, Backbone, anchor, contract, parser, module) {
+], function(_, Backbone, urls, contract, parser, module) {
 
   // definition of the search model
   var SearchModel = Backbone.Model.extend({
@@ -15,7 +15,7 @@ define([
 
     url: function() {
       // api allows one search retrieval
-      return anchor.normalizeUrlRoot(this.urlRoot) + "?search="+this.get("id");
+      return urls.normalizeUrlRoot(this.urlRoot) + "?search="+this.get("id");
     },
 
     // Since we're really just a directory for search results,

@@ -8,11 +8,10 @@
 define([
   "lodash",
   "backbone",
-  "helpers/anchor",
+  "helpers/urls",
   "components/content/entities/parser",
   "module"
-], function(_, Backbone, anchor, parser, module) {
-  var $w = window;
+], function(_, Backbone, urls, parser, module) {
 
   // definition of a post collection
   var PostCollection = Backbone.Collection.extend({
@@ -28,7 +27,7 @@ define([
     url: function() {
       // if fetch items are specified, get the specific items
       if (this.options.items && this.options.items.length > 0) {
-        var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+        var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
         var object_type = this.options.items[0].object_type;
         var object_ids = _.pluck(this.options.items, "object_id");
         return urlRoot + "?post_type="+object_type+"&post__in("+object_ids.join(",")+")";

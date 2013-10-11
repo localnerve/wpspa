@@ -6,7 +6,7 @@
  */
 define([
   "backbone",
-  "helpers/sync",
+  "helpers/backbone/sync",
   "components/content/entities/parser",
   "module"
 ], function(Backbone, sync, parser, module) {

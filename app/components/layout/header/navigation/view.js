@@ -3,11 +3,11 @@ define([
   "jquery",
   "backbone.marionette",
   "app",
-  "helpers/anchor",
+  "helpers/routes",
   "helpers/contract",
   "components/layout/header/navigation/item",
   "components/layout/header/navigation/entities"
-], function(_, $, Marionette, app, anchor, contract, itemView, entities) {
+], function(_, $, Marionette, app, routes, contract, itemView, entities) {
 
   // The definition of navigation view
   var NavigationView = Marionette.CompositeView.extend({
@@ -124,7 +124,7 @@ define([
       this.$itemViewContainer.find(".active").removeClass("active");
 
       // get the anchor we are targeting and mark it active
-      var href = anchor.routeToHref(options.route);
+      var href = routes.routeToHref(options.route);
       var item = this.$itemViewContainer.find("a[href='"+href+"']");
       item.parent().addClass("active");
       

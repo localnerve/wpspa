@@ -1,6 +1,6 @@
 define([
   "backbone",
-  "helpers/sync",
+  "helpers/backbone/sync",
   "components/layout/footer/sidebarContainer/parser",
   "module"
 ], function(Backbone, sync, parser, module) {

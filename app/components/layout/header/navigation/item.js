@@ -1,9 +1,9 @@
 define([
   "backbone.marionette",
   "app",
-  "helpers/anchor",
+  "helpers/routes",
   "module"
-], function(Marionette, app, anchor, module) {
+], function(Marionette, app, routes, module) {
 
   // The view definition of each navigation item
   var NavItemView = Marionette.ItemView.extend({
@@ -21,7 +21,7 @@ define([
     serializeData: function() {
       return {
         name: this.model.get("name"),
-        href: anchor.routeToHref(this.model.get("route")),
+        href: routes.routeToHref(this.model.get("route")),
         navItem: this.model.get("nav_item")
       };
     }

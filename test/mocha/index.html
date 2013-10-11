@@ -53,6 +53,17 @@
         // Setup our global test harness
         var __test = (function() {
 
+            // helper to get parameter names
+            var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+            function getParamNames(func) {
+                var fnStr = func.toString().replace(STRIP_COMMENTS, '');
+                var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(/([^\s,]+)/g);
+                if (result === null) {
+                    result = [];
+                }
+                return result;
+            }
+
             // Called on app exit (to not found) if called from test harness.
             // This is because the test harness is an invalid route.
             function testRunner(path, app) {
@@ -81,8 +92,9 @@
                         // load all standalone modules for individual testing
                         "helpers/contract",
                         "components/layout/content/prefetch",
-                        "helpers/sync",
-                        "helpers/anchor",
+                        "helpers/backbone/sync",
+                        "helpers/routes",
+                        "helpers/urls",
 
                         // load all the tests
                         "tests/environment",
@@ -95,14 +107,19 @@
                         "tests/content",
                         "tests/prefetch",
                         "tests/sync",
-                        "tests/anchor"
+                        "tests/routes",
+                        "tests/urls"
                         // next test suite here
-                    ], function(contract, prefetch, sync, anchor) {
-                        // make standalone modules available
-                        __test.standalone.contract = contract;
-                        __test.standalone.prefetch = prefetch;
-                        __test.standalone.sync = sync;
-                        __test.standalone.anchor = anchor;
+                    ], 
+                    // receive the standalone modules we explicitly want to reference
+                    function(contract, prefetch, sync, routes, urls) {
+                        var paramNames = getParamNames(arguments.callee);
+                        var paramValues = Array.prototype.slice.call(arguments);
+
+                        // make standalone modules available in the namespace
+                        for (var i = 0; i < paramNames.length; i++) {
+                            __test.standalone[paramNames[i]] = paramValues[i];
+                        }
 
                         // tests and helpers loaded, run it!
                         mocha.run(function() {
@@ -114,7 +131,6 @@
                     });
                 } else {
                     __test.exit(path);
-                    //window.location.replace("/" + path + ".notfound");
                 }                
             }
 

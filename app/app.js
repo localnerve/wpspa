@@ -9,7 +9,7 @@ define([
   "backbone",
   "backbone.marionette",
   "loaders/jst",
-  "helpers/anchor",
+  "helpers/backbone/anchor",
   "helpers/contract",
   "server/helpers/rewrites",
   "module"
@@ -53,7 +53,7 @@ define([
     });
 
     // Initialize anchors
-    anchor.init(app);
+    anchor.init(app.root);
   });
 
   // On a failure

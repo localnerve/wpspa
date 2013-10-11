@@ -4,9 +4,9 @@ define([
   "jquery",
   "app",
   "helpers/contract",
-  "helpers/anchor",
+  "helpers/routes",
   "helpers/content"
-], function(_, $, app, contract, anchor, contentLib) {
+], function(_, $, app, contract, routesLib, contentLib) {
 
   // update the category content
   function updateCategories(content) {
@@ -34,7 +34,7 @@ define([
     var slug = id.replace("/", "-");
     routes.push({
       name: slug,
-      route: anchor.hrefToRoute(path),
+      route: routesLib.hrefToRoute(path),
       options: {
         object_type: type+":"+slug,
         object_id: id

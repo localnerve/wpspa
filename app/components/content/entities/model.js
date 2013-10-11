@@ -1,10 +1,10 @@
 define([
   "backbone",
-  "helpers/anchor",
-  "helpers/sync",
+  "helpers/urls",
+  "helpers/backbone/sync",
   "components/content/entities/parser",
   "module"
-], function(Backbone, anchor, sync, parser, module) {
+], function(Backbone, urls, sync, parser, module) {
   $w = window;
 
   // definition of a post model
@@ -20,7 +20,7 @@ define([
 
     // make a jsonapi url
     url: function() {
-      var urlRoot = anchor.normalizeUrlRoot(this.urlRoot);
+      var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
       return urlRoot + "?id=" + this.id;
     },
 
