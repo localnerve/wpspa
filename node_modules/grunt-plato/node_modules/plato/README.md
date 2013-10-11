@@ -6,9 +6,9 @@ Visualize JavaScript source complexity with plato.
 
 ## Example report on popular projects
 
- - [jquery](http://jsoverson.github.com/plato/examples/jquery/)
- - [grunt](http://jsoverson.github.com/plato/examples/grunt/)
- - [marionettejs](http://jsoverson.github.com/plato/examples/marionette/)
+ - [jquery](http://es-analysis.github.com/plato/examples/jquery/)
+ - [grunt](http://es-analysis.github.com/plato/examples/grunt/)
+ - [marionettejs](http://es-analysis.github.com/plato/examples/marionette/)
 
 ## Installation
 Install the module with: `npm install -g plato`
@@ -43,6 +43,12 @@ Usage : plato [options] file1.js file2.js ... fileN.js
 plato -r -d report src
 ```
 
+Extended example
+
+```
+plato -r -d report -l .jshintrc -t "My Awesome App" -x .json routes/*.js
+```
+
 ## Data sources
 
   - Complexity data by [Phil Booth](https://github.com/philbooth)'s [complexity-report](https://github.com/philbooth/complexityReport.js)
@@ -54,6 +60,9 @@ plato -r -d report src
 
 ## Release History
 
+  - 0.6.2 Added sortable file list, updated to bootstrap 3
+  - 0.6.1 Fixed width overflow issues in file reports
+  - 0.6.0 updated major dependency complexity-report
   - 0.5.0 Added historical reports
   - 0.4.7 Updated jshint to 1.1.0 (via #22) to jshint to address #16
   - 0.4.6 Performance improvements on file view
