@@ -37,7 +37,7 @@ define([
             self.updateDropdowns();
           }
         }
-      });
+      }, 100);
       $(window).on("resize", this.resizeHandler);
     },
 
