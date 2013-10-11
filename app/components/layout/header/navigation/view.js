@@ -123,21 +123,19 @@ define([
       // clear anything marked active
       this.$itemViewContainer.find(".active").removeClass("active");
 
-      // if this was called as a result of a route
-      if (options.route) {
-        // get the anchor we are targeting and mark it active
-        var href = anchor.routeToHref(options.route);
-        var item = this.$itemViewContainer.find("a[href='"+href+"']");
-        item.parent().addClass("active");
-        
-        // also mark any parent anchors up the tree as active
-        var parentAnchors = item.parents("ul").siblings("a").first();
-        if (parentAnchors.length > 0)
-          parentAnchors.parent().addClass("active");
+      // get the anchor we are targeting and mark it active
+      var href = anchor.routeToHref(options.route);
+      var item = this.$itemViewContainer.find("a[href='"+href+"']");
+      item.parent().addClass("active");
+      
+      // also mark any parent anchors up the tree as active
+      var parentAnchors = item.parents("ul").siblings("a").first();
+      if (parentAnchors.length > 0)
+        parentAnchors.parent().addClass("active");
 
-        // this was a route, so close the menu if required
-        if (this.$el.hasClass("expanded"))
-          this.$(".toggle-topbar").click();
+      // this was a route, so close the menu if required
+      if (this.$el.hasClass("expanded")) {
+        this.$(".toggle-topbar").click();
       }
     }
   });
