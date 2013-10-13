@@ -21,6 +21,9 @@ Config.prototype.proxy = {
 
 Config.prototype.staticBase = "dist/release";
 
+// This assumes you have redis installed
+//Config.prototype.injectorUseRedis = true;
+
 // add more development properties/functions here
 
 module.exports = Config;
