@@ -30,7 +30,11 @@ var stack = middleware({
     condition: inject.condition,
     responder: inject.responder
   },
-  //compress: express.compress(),
+  compress: express.compress({
+    filter: function(req, res) {
+      return (/json|javascript/).test(res.getHeader('Content-Type'));
+    }
+  }),
   rewrite: [
     // if application marked notfound, exit here
     "^" + rewriteHelper.notfound('(.+)', {
