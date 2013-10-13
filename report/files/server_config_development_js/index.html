@@ -49,7 +49,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">22</p>
+      <p class="stat">25</p>
     </div>
   </div>
   <div class="row historical">
@@ -110,6 +110,9 @@ Config.prototype.proxy = {
   port: 80,
   pattern: &#039;^\/api\/&#039;
 };
+
+// Use to develop redis code
+//Config.prototype.injectorUseRedis = true;
 
 // Allow access to shared server modules (before the build)
 Config.prototype.rewriteForbidden = &#039;^/(node_modules|Procfile$|app.js$|package.json$) [F NC L]&#039;;

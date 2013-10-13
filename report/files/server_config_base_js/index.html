@@ -49,7 +49,7 @@
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">20</p>
+      <p class="stat">33</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">2.83</p>
+      <p class="stat">2.74</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.04</p>
+      <p class="stat">0.06</p>
     </div>
   </div>
 </div>
@@ -108,6 +108,19 @@ Config.prototype = {
 
   // the default static file base path
   staticBase: &quot;.&quot;,
+
+  // the name of the 404 file resource
+  four04File: &quot;404.html&quot;,
+
+  // the default injector redis setting
+  injectorUseRedis: false,
+  
+  // compression content type expression
+  //  overrides default: http://www.senchalabs.org/connect/compress.html
+  // leaves out text/html because atf content injector is not supporting compression,
+  //  (atf content injection is still faster with compression off)
+  // ref: https://github.com/localnerve/wpspa/issues/10
+  compressExpression: /json|javascript|text\/css/,
 
   // the forbidden access rewrite expression
   rewriteForbidden: &#039;^/(server|node_modules|Procfile$|app.js$|package.json$) [F NC L]&#039;
