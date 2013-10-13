@@ -19,6 +19,8 @@ Config.prototype.proxy = {
   pattern: '^\/api\/'
 };
 
+Config.prototype.injectorUseRedis = true;
+
 // add more development properties/functions here
 
 module.exports = Config;

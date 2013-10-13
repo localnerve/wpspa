@@ -18,7 +18,6 @@ module.exports = function(hostname, port, path) {
         buffer += chunk;
       });
       res.on("end", function() {
-        //console.log("result: "+buffer);
         callback(null, JSON.parse(buffer));
       });
     });

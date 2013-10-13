@@ -17,6 +17,9 @@ Config.prototype = {
   // the default static file base path
   staticBase: ".",
 
+  // the default injector redis setting
+  injectorUseRedis: false,
+  
   // the forbidden access rewrite expression
   rewriteForbidden: '^/(server|node_modules|Procfile$|app.js$|package.json$) [F NC L]'
 };

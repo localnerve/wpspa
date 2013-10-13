@@ -38,7 +38,8 @@
     "http-proxy": "~0.10.3",
     "connect-modrewrite": "~0.5.4",
     "connect-injector": "~0.2.2",
-    "grunt-contrib-imagemin": "~0.3.0"
+    "grunt-contrib-imagemin": "~0.3.0",
+    "grunt-external-daemon": "~1.1.0"
   },
   "scripts": {
     "test": "grunt test",
@@ -53,6 +54,8 @@
     "connect-modrewrite": "~0.5.4",
     "express": "~3.3.5",
     "connect-injector": "~0.2.3",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "redis": "~0.8.6",
+    "hiredis": "~0.1.15"
   }
 }

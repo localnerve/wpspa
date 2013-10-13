@@ -8,6 +8,15 @@ function runTask(grunt, task) {
   child.stderr.pipe(process.stderr);
 }
 
+// helper function to get an array of node dependencies
+function nodeDeps(pkg) {
+  var prefix = "node_modules/", suffix = "/**", result = [];
+  for (var dep in pkg.dependencies) {
+    result.push(prefix+dep+suffix);
+  }
+  return result;
+}
+
 // middleware to mock /api for test
 var mockApi = require("./test/fixtures/mockApi");
 
@@ -57,6 +66,7 @@ module.exports = function(grunt) {
     project: projectConfig,
 
     // bower task provided by grunt-bower-requirejs
+    // This automatically updates our requirejs config with our bower dependencies
     bower: {
       all: {
         rjsConfig: "<%= project.app %>/config.js",
@@ -189,6 +199,15 @@ module.exports = function(grunt) {
       }
     },
 
+    // external daemon task provided by grunt-external-daemon
+    // We use this to start redis
+/*    external_daemon: {
+      redis: {
+        cmd: "redis-server",
+        args: ["<%= project.redis_config %>"]
+      }
+    },
+*/
     // express task provided by grunt-express-server
     express: {
       options: {
@@ -278,13 +297,7 @@ module.exports = function(grunt) {
               // vendor stuff
               "<%= project.vendor %>/js/modernizr/modernizr.js"
               //"<%= project.vendor %>/bower/foundation/js/foundation/**"
-            ].concat((function(pkg) {
-              var prefix = "node_modules/", suffix = "/**", result = [];
-              for (var dep in pkg.dependencies) {
-                result.push(prefix+dep+suffix);
-              }
-              return result;
-            }(projectConfig.pkg))),
+            ].concat(nodeDeps(projectConfig.pkg)),
             dest: "<%= project.dist.debug %>/"
           }
         ]
@@ -304,13 +317,7 @@ module.exports = function(grunt) {
               // vendor stuff
               "<%= project.vendor %>/js/modernizr/modernizr.js"
               //"<%= project.vendor %>/bower/foundation/js/foundation/**"
-            ].concat((function(pkg) {
-              var prefix = "node_modules/", suffix = "/**", result = [];
-              for (var dep in pkg.dependencies) {
-                result.push(prefix+dep+suffix);
-              }
-              return result;
-            }(projectConfig.pkg))),
+            ].concat(nodeDeps(projectConfig.pkg)),
             dest: "<%= project.dist.release %>/"
           }
         ]
