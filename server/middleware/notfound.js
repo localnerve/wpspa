@@ -5,9 +5,11 @@
 var fs = require("fs");
 var path = require("path");
 
+var Config = require("../config");
+var config = new Config(process.env.NODE_ENV || "development");
+
 function serve404Html(res) {
-  // TODO: make the path part of config
-  var path404 = path.normalize(__dirname + "../../../../404.html");
+  var path404 = path.normalize(__dirname + "../../../"+config.four04File);
   fs.readFile(path404, { encoding: "utf8" }, function(e, html) {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.end(html);

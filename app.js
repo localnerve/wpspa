@@ -32,14 +32,14 @@ var stack = middleware({
   },
   compress: express.compress({
     filter: function(req, res) {
-      return (/json|javascript/).test(res.getHeader('Content-Type'));
+      return config.compressExpression.test(res.getHeader('Content-Type'));
     }
   }),
   rewrite: [
     // if application marked notfound, exit here
     "^" + rewriteHelper.notfound('(.+)', {
       regex: true
-    }) + "$ /404.html [NC L]",
+    }) + "$ /"+config.four04File+" [NC L]",
     // if request is forbidden
     config.rewriteForbidden,
     // if request is for snapshot, TODO: fix

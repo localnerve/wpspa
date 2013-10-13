@@ -17,9 +17,19 @@ Config.prototype = {
   // the default static file base path
   staticBase: ".",
 
+  // the name of the 404 file resource
+  four04File: "404.html",
+
   // the default injector redis setting
   injectorUseRedis: false,
   
+  // compression content type expression
+  //  overrides default: http://www.senchalabs.org/connect/compress.html
+  // leaves out text/html because atf content injector is not supporting compression,
+  //  (atf content injection is still faster with compression off)
+  // ref: https://github.com/localnerve/wpspa/issues/10
+  compressExpression: /json|javascript|text\/css/,
+
   // the forbidden access rewrite expression
   rewriteForbidden: '^/(server|node_modules|Procfile$|app.js$|package.json$) [F NC L]'
 };
