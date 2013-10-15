@@ -2,6 +2,8 @@
  * The main index content injector
  * Bootstraps specfic backend content into the main index.html
  * We do this to save requests over mobile networks for ATF content
+ *
+ * This is currently not in use, but left in case this approach becomes practical again
  */
 var async = require("async");
 var Config = require("../config");

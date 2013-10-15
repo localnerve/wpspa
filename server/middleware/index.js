@@ -5,7 +5,7 @@
 
 // module dependencies
 var rewrite = require("connect-modrewrite");
-var injector = require("connect-injector");
+//var injector = require("connect-injector");
 
 var proxy = require("./proxy");
 var notfound = require("./notfound");
@@ -16,11 +16,11 @@ function addProxy(stack, options) {
   }
 }
 
-function addInjector(stack, options) {
+/*function addInjector(stack, options) {
   if (options.inject) {
     stack.push(injector(options.inject.condition, options.inject.responder));
   }
-}
+}*/
 
 function addCompressor(stack, options) {
   if (options.compress) {
@@ -56,7 +56,7 @@ function middleware(options) {
   var stack = [];
 
   addProxy(stack, options);
-  addInjector(stack, options);
+//  addInjector(stack, options);
   addCompressor(stack, options);
   addRewrites(stack, options);
   addStatic(stack, options);

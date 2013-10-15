@@ -10,6 +10,7 @@ function Config() {}
 util.inherits(Config, Base);
 
 // The main application port that browsers use
+// This is left for the host to define
 //Config.prototype.appPort = 80;
 
 // Use a proxy
@@ -18,8 +19,6 @@ Config.prototype.proxy = {
   port: 80,
   pattern: '^\/api\/'
 };
-
-Config.prototype.injectorUseRedis = true;
 
 // add more development properties/functions here
 

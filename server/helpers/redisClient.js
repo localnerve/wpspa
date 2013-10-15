@@ -1,5 +1,7 @@
 /*
  * Get a connected redis client
+ *
+ * This is presently not in use, but left, for now, in case it becomes useful
  */
 
 module.exports = function() {

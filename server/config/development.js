@@ -19,9 +19,6 @@ Config.prototype.proxy = {
   pattern: '^\/api\/'
 };
 
-// Use to develop redis code
-//Config.prototype.injectorUseRedis = true;
-
 // Allow access to shared server modules (before the build)
 Config.prototype.rewriteForbidden = '^/(node_modules|Procfile$|app.js$|package.json$) [F NC L]';
 

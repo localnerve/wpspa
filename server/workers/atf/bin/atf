@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+var path = require("path");
+var atf = require("../lib");
+
+// target the main index.html
+atf.update(path.normalize(__dirname + "../../../../../index.html"), function() {
+  console.log("succeeded");
+});

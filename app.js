@@ -10,7 +10,6 @@ var http = require("http");
 var path = require("path");
 
 var middleware = require("./server/middleware");
-var inject = require("./server/middleware/inject");
 var Config = require("./server/config");
 var rewriteHelper = require("./server/helpers/rewrites");
 
@@ -26,15 +25,7 @@ app.set("port", config.appPort || process.env.PORT);
 // build middleware stack
 var stack = middleware({
   proxy: config.proxy,
-  inject: {
-    condition: inject.condition,
-    responder: inject.responder
-  },
-  compress: express.compress({
-    filter: function(req, res) {
-      return config.compressExpression.test(res.getHeader('Content-Type'));
-    }
-  }),
+  compress: express.compress(),
   rewrite: [
     // if application marked notfound, exit here
     "^" + rewriteHelper.notfound('(.+)', {

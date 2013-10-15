@@ -6,7 +6,7 @@
 
 The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, first load is more than twice as fast. This design features data-driven asynchronous prefetching of deeper content, so loads of other pages are likely to have completed in the background before the user requests them.
 
-> latest [free-tier performance results](http://www.webpagetest.org/result/131013_N3_A77/) over a 3G network.
+> latest [free-tier performance results](http://www.webpagetest.org/result/131015_E4_HD/) over a 3G network on an iPhone 4.
 
 By adding an SPA font-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
@@ -64,9 +64,6 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 + Npm
 + Grunt-cli
 + Bower
-
-##### Server
-+ Redis (optional - only needed if you config injector to use redis)
 
 #### Unmanaged Vendor packages
 + modernizr, still waiting on grunt-modernizr/Moderizr 3

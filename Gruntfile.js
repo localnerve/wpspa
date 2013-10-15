@@ -65,6 +65,17 @@ module.exports = function(grunt) {
 
     project: projectConfig,
 
+    // atfUpdate custom internal task
+    // Updates targetFile with remote atf content
+    atfUpdate: {
+      index: {
+        dest: "index.html"
+      },
+      test: {
+        dest: "<%= project.test %>/index.html"
+      }
+    },
+
     // bower task provided by grunt-bower-requirejs
     // This automatically updates our requirejs config with our bower dependencies
     bower: {
@@ -199,15 +210,6 @@ module.exports = function(grunt) {
       }
     },
 
-    // external daemon task provided by grunt-external-daemon
-    // We use this to start redis
-/*    external_daemon: {
-      redis: {
-        cmd: "redis-server",
-        args: ["<%= project.redis_config %>"]
-      }
-    },
-*/
     // express task provided by grunt-express-server
     express: {
       options: {
@@ -607,7 +609,7 @@ module.exports = function(grunt) {
       }
     },
 
-    // useminOptions custom task
+    // useminOptions custom internal task
     // usemin provided by grunt-usemin
     useminOptions: {
       debug: {
@@ -661,6 +663,19 @@ module.exports = function(grunt) {
     grunt.config.set("usemin", this.data.usemin);
   });
 
+  // custom internal task to update files with atf content
+  grunt.registerMultiTask("atfUpdate", "update atf content in targets", function() {
+    var atf = require("./server/workers/atf/lib");
+    var count = 0, fileCount = this.files.length;
+    var done = this.async();
+    this.files.forEach(function(file) {
+      atf.update(file.dest, function() {
+        count++;
+        if (count === fileCount) done();
+      });
+    });
+  });
+
   grunt.registerTask("default", "workflow menu", function() {
     grunt.log.writeln("Workflow menu:");
     grunt.log.writeln("\tgrunt test - Run the test suites");
@@ -678,7 +693,7 @@ module.exports = function(grunt) {
   });
 
   // the standalone test task
-  grunt.registerTask("test", ["compass:test", "connect:test", "express:test", "mocha"]);
+  grunt.registerTask("test", ["atfUpdate:test", "compass:test", "connect:test", "express:test", "mocha"]);
 
   // the standalone lint task
   grunt.registerTask("lint", ["jshint"]);
@@ -689,9 +704,6 @@ module.exports = function(grunt) {
   // the standalone css compile task
   grunt.registerTask("ccss", ["compass:dev"]);
 
-  // the standalone watch task (implied)
-  // grunt watch
-
   // the standalone formatter
   grunt.registerTask("format", ["jsbeautifier"]);
 
@@ -701,6 +713,9 @@ module.exports = function(grunt) {
     grunt.util.async.parallel([
       function() {
         runTask(grunt, "watch");
+      },
+      function() {
+        runTask(grunt, "atfUpdate:index");
       },
       function() {
         runTask(grunt, "express:dev");
@@ -714,6 +729,9 @@ module.exports = function(grunt) {
     grunt.util.async.parallel([
       function() {
         runTask(grunt, "watch");
+      },
+      function() {
+        runTask(grunt, "atfUpdate:test");
       },
       function() {
         runTask(grunt, "connect:devTest");
@@ -732,6 +750,9 @@ module.exports = function(grunt) {
         runTask(grunt, "connect:demo");
       },
       function() {
+        runTask(grunt, "atfUpdate:index");
+      },
+      function() {
         runTask(grunt, "express:demo");
       }
     ], this.async());
@@ -740,7 +761,7 @@ module.exports = function(grunt) {
   // build tasks: debug, release
 
   // tasks common to any build
-  var commonTasks = ["bower", "jshint", "jst", "requirejs", "concat"];
+  var commonTasks = ["bower", "jshint", "jst", "requirejs", "concat", "atfUpdate:index"];
 
   // The debug task will remove all contents inside the dist/ folder, lint
   // all your code, precompile all the underscore templates into
