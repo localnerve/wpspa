@@ -37,7 +37,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <h1>server/config/development.js</h1>
+    <h1>server/workers/atf/lib/index.js</h1>
   </div>
 </div>
 
@@ -45,11 +45,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"></i></a></h2>
-      <p class="stat">100.00</p>
+      <p class="stat">75.25</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC"></i></h2>
-      <p class="stat">22</p>
+      <p class="stat">77</p>
     </div>
   </div>
   <div class="row historical">
@@ -63,11 +63,11 @@
   <div class="row">
     <div class="col-md-6">
       <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty"></i></a></h2>
-      <p class="stat">5.09</p>
+      <p class="stat">17.94</p>
     </div>
     <div class="col-md-6">
       <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs"></i></a></h2>
-      <p class="stat">0.09</p>
+      <p class="stat">0.52</p>
     </div>
   </div>
 </div>
@@ -91,32 +91,90 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="col-md-12">/*
- * development.js
+ * atf.js
  *
- * Development environment configuration settings
+ * The purpose of this worker is to retrieve the ATF content from the backend and inline it.
+ * This decouples the back-end from the front-end for ATF content thereby removing any 
+ * back-end slowness from the equation.
+ * The more often you run it, the more up-to-date the ATF content from frontend is with the backend.
  */
-var util = require(&quot;util&quot;);
-var Base = require(&quot;./base&quot;);
+var fs = require(&quot;fs&quot;);
+var path = require(&quot;path&quot;);
+var async = require(&quot;async&quot;);
+var request = require(&quot;../../../helpers/request&quot;);
+var Config = require(&quot;../../../config&quot;);
 
-function Config() {}
-util.inherits(Config, Base);
+var config = new Config(process.env.NODE_ENV || &quot;development&quot;);
 
-// The main application port that browsers use
-Config.prototype.appPort = 9001;
+// script helpers
+var scriptStart = &quot;&lt;script&gt;var wpspa=&quot;,
+    scriptEnd = &quot;&lt;/script&gt;&lt;/body&gt;&quot;;
 
-// Use a proxy
-Config.prototype.proxy = {
-  host: &quot;jsonapi.local&quot;,
-  port: 80,
-  pattern: &#039;^\/api\/&#039;
-};
+// remove any existing bootstrapped results from html
+function stripBootstrappedResults(html) {
+  return html.replace(new RegExp(scriptStart+&quot;.+&quot;+scriptEnd), &quot;&lt;/body&gt;&quot;);
+}
 
-// Allow access to shared server modules (before the build)
-Config.prototype.rewriteForbidden = &#039;^/(node_modules|Procfile$|app.js$|package.json$) [F NC L]&#039;;
+/**
+ * Update the target with the remote atf content
+ * target is the path to the target file
+ * success is a callback that is called if the operation succeeds, else throws error.
+ */
+function update(target, success) {
+  // start the atf content requests in parallel
+  async.parallel({
+    navigation: request(config.proxy.host, config.proxy.port, config.navigationPath),
+    // banner: request(config.proxy.host, config.proxy.port, config.bannerPath),
+    footer: request(config.proxy.host, config.proxy.port, config.footerPath),
+    recent: request(config.proxy.host, config.proxy.port, config.recentPath)
+  },
+  // When they complete, update the target
+  function(errorAsync, results) {
+    if (errorAsync) throw errorAsync;
 
-// add more development properties/functions here
+    // read the target file
+    fs.readFile(target, { encoding: &quot;utf8&quot; }, function(errorRead, html) {
+      if (errorRead) throw errorRead;
 
-module.exports = Config;</textarea>
+      html = stripBootstrappedResults(html);
+
+      // update the target file
+      fs.writeFile(
+        target,
+        html.replace(&quot;&lt;/body&gt;&quot;, scriptStart+JSON.stringify(results)+&quot;;&quot;+scriptEnd),
+        { encoding: &quot;utf8&quot; },
+        function(errorWrite) {
+          if (errorWrite) throw errorWrite;
+          if (success) success(target);
+        }
+      );
+    });
+  });
+}
+
+/**
+ * Remove the remote atf content from the target
+ */
+function remove(target, success) {
+  // read the target file
+  fs.readFile(target, { encoding: &quot;utf8&quot; }, function(errorRead, html) {
+    if (errorRead) throw errorRead;
+
+    html = stripBootstrappedResults(html);
+
+    // update the target file
+    fs.writeFile(target, html, { encoding: &quot;utf8&quot; }, function(errorWrite) {
+        if (errorWrite) throw errorWrite;
+        if (success) success(target);
+      }
+    );
+  });
+}
+
+module.exports = {
+  update: update,
+  remove: remove
+};</textarea>
   </div>
 </div>
 
