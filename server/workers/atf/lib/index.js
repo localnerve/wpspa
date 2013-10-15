@@ -18,7 +18,7 @@ var scriptStart = "<script>var wpspa=",
 
 // remove any existing bootstrapped results from html
 function stripBootstrappedResults(html) {
-  return html.replace(new RegExp(scriptStart+".+"+scriptEnd), "</body>");
+  return html.toString().replace(new RegExp(scriptStart+".+"+scriptEnd), "</body>");
 }
 
 /**
