@@ -14,6 +14,15 @@ var Config = require("../../../config");
 
 var config = new Config(process.env.NODE_ENV || "development");
 
+// script helpers
+var scriptStart = "<script>var wpspa=",
+    scriptEnd = "</script></body>";
+
+// remove any existing bootstrapped results from html
+function stripBootstrappedResults(html) {
+  return html.replace(new RegExp(scriptStart+".+"+scriptEnd), "</body>");
+}
+
 /**
  * Update the target with the remote atf content
  * target is the path to the target file
@@ -29,32 +38,48 @@ function update(target, success) {
   },
   // When they complete, update the target
   function(errorAsync, results) {
-    
     if (errorAsync) throw errorAsync;
 
+    // read the target file
     fs.readFile(target, { encoding: "utf8" }, function(errorRead, html) {
       if (errorRead) throw errorRead;
 
-      var scriptStart = "<script>var wpspa=",
-          scriptEnd = "</script></body>";
+      html = stripBootstrappedResults(html);
 
-      // remove any existing bootstrapped results
-      html = html.replace(new RegExp(scriptStart+".+</script></body>"), "</body>");
-
-      // write the new target file
+      // update the target file
       fs.writeFile(
         target,
         html.replace("</body>", scriptStart+JSON.stringify(results)+";"+scriptEnd),
         { encoding: "utf8" },
         function(errorWrite) {
           if (errorWrite) throw errorWrite;
-          if (success) success();
+          if (success) success(target);
         }
       );
     });
   });
 }
 
+/**
+ * Remove the remote atf content from the target
+ */
+function remove(target, success) {
+  // read the target file
+  fs.readFile(target, { encoding: "utf8" }, function(errorRead, html) {
+    if (errorRead) throw errorRead;
+
+    html = stripBootstrappedResults(html);
+
+    // update the target file
+    fs.writeFile(target, html, { encoding: "utf8" }, function(errorWrite) {
+        if (errorWrite) throw errorWrite;
+        if (success) success(target);
+      }
+    );
+  });
+}
+
 module.exports = {
-  update: update
+  update: update,
+  remove: remove
 };

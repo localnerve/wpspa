@@ -68,11 +68,28 @@ module.exports = function(grunt) {
     // atfUpdate custom internal task
     // Updates targetFile with remote atf content
     atfUpdate: {
-      index: {
+      dev: {
         dest: "index.html"
       },
       test: {
         dest: "<%= project.test %>/index.html"
+      },
+      debug: {
+        dest: "<%= project.dist.debug %>/index.html"
+      },
+      release: {
+        dest: "<%= project.dist.release %>/index.html"
+      }
+    },
+
+    // atfRemove custom internal task
+    // Removes the bootstrapped atf content from the html source
+    atfRemove: {
+      all: {
+        src: [
+          "index.html",
+          "<%= project.test %>/index.html"
+        ]
       }
     },
 
@@ -666,12 +683,33 @@ module.exports = function(grunt) {
   // custom internal task to update files with atf content
   grunt.registerMultiTask("atfUpdate", "update atf content in targets", function() {
     var atf = require("./server/workers/atf/lib");
-    var count = 0, fileCount = this.files.length;
+    var count = 0, files = this.files;
     var done = this.async();
     this.files.forEach(function(file) {
-      atf.update(file.dest, function() {
+      atf.update(file.dest, function(target) {
+        grunt.log.writeln("updated "+target+" with atf content");
         count++;
-        if (count === fileCount) done();
+        if (count === files.length) {
+          grunt.log.ok(files.length + " files updated");
+          done();
+        }
+      });
+    });
+  });
+
+  // custom internal task to remove atf content from files
+  grunt.registerMultiTask("atfRemove", "remove atf content from target files", function() {
+    var atf = require("./server/workers/atf/lib");
+    var count = 0, files = this.filesSrc;
+    var done = this.async();
+    this.filesSrc.forEach(function(file) {
+      atf.remove(file, function(target) {
+        grunt.log.writeln("removed atf content from "+target);
+        count++;
+        if (count === files.length) {
+          grunt.log.ok(files.length + " files updated");
+          done();
+        }
       });
     });
   });
@@ -715,7 +753,7 @@ module.exports = function(grunt) {
         runTask(grunt, "watch");
       },
       function() {
-        runTask(grunt, "atfUpdate:index");
+        runTask(grunt, "atfUpdate:dev");
       },
       function() {
         runTask(grunt, "express:dev");
@@ -750,7 +788,7 @@ module.exports = function(grunt) {
         runTask(grunt, "connect:demo");
       },
       function() {
-        runTask(grunt, "atfUpdate:index");
+        runTask(grunt, "atfUpdate:dev");
       },
       function() {
         runTask(grunt, "express:demo");
@@ -761,7 +799,7 @@ module.exports = function(grunt) {
   // build tasks: debug, release
 
   // tasks common to any build
-  var commonTasks = ["bower", "jshint", "jst", "requirejs", "concat", "atfUpdate:index"];
+  var commonTasks = ["bower", "jshint", "jst", "requirejs", "concat"];
 
   // The debug task will remove all contents inside the dist/ folder, lint
   // all your code, precompile all the underscore templates into
@@ -779,6 +817,7 @@ module.exports = function(grunt) {
     "useminOptions:debug",
     "usemin",
     "regex-replace:debug",
+    "atfUpdate:debug",
     "express:debug",
     "html_snapshots:debug"
   );
@@ -800,6 +839,7 @@ module.exports = function(grunt) {
     "useminOptions:release",
     "usemin",
     "regex-replace:release",
+    "atfUpdate:release",
     "express:release",
     "html_snapshots:release",
     "clean:release-post"
