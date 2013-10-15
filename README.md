@@ -4,7 +4,7 @@
 
 > An example single page application that takes Wordpress optimization to a whole new level.
 
-The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, first load is more than twice as fast. This design features data-driven asynchronous prefetching of deeper content, so loads of other pages are likely to have completed in the background before the user requests them.
+The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, the first load is many times faster than an any optimized Wordpress site. This design features data-driven asynchronous prefetching of deeper content, so loads of other pages are likely to have completed in the background before the user requests them.
 
 > latest [free-tier performance results](http://www.webpagetest.org/result/131015_E4_HD/) over a 3G network on an iPhone 4.
 
