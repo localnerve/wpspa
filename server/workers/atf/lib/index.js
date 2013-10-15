@@ -12,8 +12,6 @@ var async = require("async");
 var request = require("../../../helpers/request");
 var Config = require("../../../config");
 
-var config = new Config(process.env.NODE_ENV || "development");
-
 // script helpers
 var scriptStart = "<script>var wpspa=",
     scriptEnd = "</script></body>";
@@ -28,7 +26,9 @@ function stripBootstrappedResults(html) {
  * target is the path to the target file
  * success is a callback that is called if the operation succeeds, else throws error.
  */
-function update(target, success) {
+function update(target, success, environment) {
+  var config = new Config(environment || process.env.NODE_ENV);
+
   // start the atf content requests in parallel
   async.parallel({
     navigation: request(config.proxy.host, config.proxy.port, config.navigationPath),

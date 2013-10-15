@@ -1,9 +1,12 @@
 // helper function to spawn a child grunt task
-function runTask(grunt, task) {
+function runTask(grunt, task, stdoutData) {
   var child = grunt.util.spawn({
     grunt: true,
     args: [task]
   }, function() {});
+  if (stdoutData) {
+    child.stdout.on("data", stdoutData);
+  }
   child.stdout.pipe(process.stdout);
   child.stderr.pipe(process.stderr);
 }
@@ -69,16 +72,28 @@ module.exports = function(grunt) {
     // Updates targetFile with remote atf content
     atfUpdate: {
       dev: {
-        dest: "index.html"
+        options: {
+          environment: "development"
+        },
+        src: ["index.html"]
       },
       test: {
-        dest: "<%= project.test %>/index.html"
+        options: {
+          environment: "test"
+        },
+        src: ["<%= project.test %>/index.html"]
       },
       debug: {
-        dest: "<%= project.dist.debug %>/index.html"
+        options: {
+          environment: "debug"
+        },
+        src: ["<%= project.dist.debug %>/index.html"]
       },
       release: {
-        dest: "<%= project.dist.release %>/index.html"
+        options: {
+          environment: "release"
+        },
+        src: ["<%= project.dist.release %>/index.html"]
       }
     },
 
@@ -683,26 +698,29 @@ module.exports = function(grunt) {
   // custom internal task to update files with atf content
   grunt.registerMultiTask("atfUpdate", "update atf content in targets", function() {
     var atf = require("./server/workers/atf/lib");
-    var count = 0, files = this.files;
-    var done = this.async();
-    this.files.forEach(function(file) {
-      atf.update(file.dest, function(target) {
+    var count = 0,
+        files = this.filesSrc,
+        options = this.options(),
+        done = this.async();
+    files.forEach(function(file) {
+      atf.update(file, function(target) {
         grunt.log.writeln("updated "+target+" with atf content");
         count++;
         if (count === files.length) {
           grunt.log.ok(files.length + " files updated");
           done();
         }
-      });
+      }, options.environment);
     });
   });
 
   // custom internal task to remove atf content from files
   grunt.registerMultiTask("atfRemove", "remove atf content from target files", function() {
     var atf = require("./server/workers/atf/lib");
-    var count = 0, files = this.filesSrc;
-    var done = this.async();
-    this.filesSrc.forEach(function(file) {
+    var count = 0,
+        files = this.filesSrc,
+        done = this.async();
+    files.forEach(function(file) {
       atf.remove(file, function(target) {
         grunt.log.writeln("removed atf content from "+target);
         count++;
@@ -731,7 +749,7 @@ module.exports = function(grunt) {
   });
 
   // the standalone test task
-  grunt.registerTask("test", ["atfUpdate:test", "compass:test", "connect:test", "express:test", "mocha"]);
+  grunt.registerTask("test", ["compass:test", "connect:test", "atfUpdate:test", "express:test", "mocha"]);
 
   // the standalone lint task
   grunt.registerTask("lint", ["jshint"]);
@@ -769,10 +787,11 @@ module.exports = function(grunt) {
         runTask(grunt, "watch");
       },
       function() {
-        runTask(grunt, "atfUpdate:test");
-      },
-      function() {
-        runTask(grunt, "connect:devTest");
+        runTask(grunt, "connect:devTest", function(chunk) {
+          if (/Started connect/ig.test(chunk)) {
+            runTask(grunt, "atfUpdate:test");
+          }
+        });
       },
       function() {
         runTask(grunt, "express:devTest");
