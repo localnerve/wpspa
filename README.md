@@ -1,14 +1,14 @@
-# [WPSPA (Work-In-Progress)](http://github.com/localnerve/wpspa)
+# [WPSPA](http://github.com/localnerve/wpspa)
 
 [![Build Status](https://secure.travis-ci.org/localnerve/wpspa.png?branch=master)](http://travis-ci.org/localnerve/wpspa)
 
 > An example single page application that takes Wordpress optimization to a whole new level.
 
-The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, the first load is many times faster than any optimized Wordpress site. This design features data-driven asynchronous prefetching of deeper content, so loads of other pages are likely to have completed in the background before the user requests them.
+The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, the first load is much faster than any optimized Wordpress site. This design features data-driven, asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
 
 > latest [free-tier performance results](http://www.webpagetest.org/result/131015_E4_HD/) over a 3G network on an iPhone 4.
 
-By adding an SPA font-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
+By adding an SPA front-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
 The only changes required on your Wordpress site are that you install the [jsonapi](http://wordpress.org/plugins/json-api/) plugin and the WPSPA plugin. The WPSPA plugin simply extends an existing WP menu to add custom fields for SPA routes. The WPSPA plugin is not public yet.
 
@@ -18,6 +18,7 @@ The only changes required on your Wordpress site are that you install the [jsona
   * Foundation 4
   * RequireJS
   * Compass/Sass
+
 + Server-side
   * ExpressJS
 
@@ -42,12 +43,14 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 #### Multi-Device Wordpress (Performance)
 + Demonstrates WP structures that play well with an SPA architecture
   * WPSPA Wordpress plugin extends menu admin interface for SPA route mapping
-+ Targeting one second response for Mobile user (ATF 1st response). This is currently at ~4 seconds over 3G with no further optimization.
++ Targeting one second response for Mobile user (ATF 1st response). 1st response (only) is currently at ~3 seconds (1.8 seconds for return visit) over 3G with no further optimization.
 
 #### Demonstrated Learning
-+ Demonstrate optimal build procedure for development and SEO
++ Demonstrate optimized build procedure for development and SEO
+  * Portable environments make testing, integration, and development easier.
+
 + Model a scalable, extensible application architecture
-  * Separate structure from layout
+  * Separate layout (structure) from content
   * SRP, Modular 
   * Composite Application Archtiecture
 + Separate, portable backend and frontend 
@@ -66,7 +69,7 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 + Bower
 
 #### Unmanaged Vendor packages
-+ modernizr, still waiting on grunt-modernizr/Moderizr 3
++ Modernizr, still manually building it with their website. Waiting on grunt-modernizr/Moderizr 3
 
 #### Dynamically loaded modules
 ##### Dynamic and Conditionally loaded modules
