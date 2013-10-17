@@ -27,7 +27,7 @@ To run the demo, you first must have Node installed (to run the front-end and ba
 
 ## Development Notes
 
-[static analysis report](http://htmlpreview.github.io/?https://github.com/localnerve/wpspa/blob/master/report/index.html "Plato Report")
+[static analysis report](http://htmlpreview.github.io/?https://github.com/localnerve/wpspa-report/blob/master/report/index.html "Plato Report")
 
 > You first have to run npm install on this project first if you want to run the test suite or builds.
 
