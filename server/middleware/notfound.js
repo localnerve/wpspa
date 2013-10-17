@@ -9,7 +9,7 @@ var Config = require("../config");
 var config = new Config(process.env.NODE_ENV || "development");
 
 function serve404Html(res) {
-  var path404 = path.normalize(__dirname + "../../../"+config.four04File);
+  var path404 = path.join(__dirname, "/../../", config.four04File);
   fs.readFile(path404, { encoding: "utf8" }, function(e, html) {
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.end(html);

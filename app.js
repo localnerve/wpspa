@@ -45,6 +45,7 @@ app.use(express.compress());
 app.use(proxy(config.proxy.host, config.proxy.port, config.proxy.pattern));
 app.use(rewrite(rewriteRules));
 app.use(express.static(path.resolve(config.staticBase)));
+app.use(notfound.four04);
 
 // development only
 if ('development' == app.get('env')) {
