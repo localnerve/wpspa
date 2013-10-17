@@ -23,6 +23,9 @@ function nodeDeps(pkg) {
 // middleware to mock /api for test
 var mockApi = require("./test/fixtures/mockApi");
 
+// path helper
+var path = require("path");
+
 // Grunt callback
 module.exports = function(grunt) {
 
@@ -506,7 +509,8 @@ module.exports = function(grunt) {
     },
 
     // plato task provided by grunt-plato
-    // This runs introspection reports.
+    // This runs introspection reports. 
+    // path is used so that this can be run from a reporting repo and tracked there.
     plato: {
       client: {
         options: {
@@ -515,9 +519,9 @@ module.exports = function(grunt) {
         files: [{
           dest: "<%= project.report %>",
           src: [
-            "<%= project.app %>/**/*.js",
-            "<%= project.server %>/**/*.js",
-            "<%= project.serverMain %>"
+            path.join(__dirname, "<%= project.app %>")+"/**/*.js",
+            path.join(__dirname, "<%= project.server %>")+"/**/*.js",
+            path.join(__dirname, "<%= project.serverMain %>")
           ]
         }]
       }
