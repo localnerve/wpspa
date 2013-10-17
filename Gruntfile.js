@@ -759,7 +759,7 @@ module.exports = function(grunt) {
   grunt.registerTask("lint", ["jshint"]);
 
   // the standalone push task
-  grunt.registerTask("push", ["lint", "test", "plato"]);
+  grunt.registerTask("push", ["lint", "test", "atfRemove", "plato"]);
 
   // the standalone css compile task
   grunt.registerTask("ccss", ["compass:dev"]);
