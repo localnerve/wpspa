@@ -20,6 +20,9 @@ Config.prototype = {
   // the name of the 404 file resource
   four04File: "404.html",
 
+  // the logger format
+  loggerFormat: "dev",
+
   // the forbidden access rewrite expression
   rewriteForbidden: '^/(server|node_modules|Procfile$|app.js$|package.json$) [F NC L]'
 };

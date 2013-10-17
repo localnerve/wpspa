@@ -8,10 +8,12 @@
 var express = require("express");
 var http = require("http");
 var path = require("path");
+var rewrite = require("connect-modrewrite");
 
-var middleware = require("./server/middleware");
-var Config = require("./server/config");
 var rewriteHelper = require("./server/helpers/rewrites");
+var proxy = require("./server/middleware/proxy");
+var notfound = require("./server/middleware/notfound");
+var Config = require("./server/config");
 
 // create the app
 var app = express();
@@ -22,31 +24,27 @@ var config = new Config(process.env.NODE_ENV);
 // set the port
 app.set("port", config.appPort || process.env.PORT);
 
-// build middleware stack
-var stack = middleware({
-  proxy: config.proxy,
-  compress: express.compress(),
-  rewrite: [
-    // if application marked notfound, exit here
-    "^" + rewriteHelper.notfound('(.+)', {
-      regex: true
-    }) + "$ /"+config.four04File+" [NC L]",
-    // if request is forbidden
-    config.rewriteForbidden,
-    // if request is for snapshot, TODO: fix
-    '^(.*)\\?_escaped_fragment_=.*$ /snapshots/$1 [NC L]',
-    // if a static resource is not being requested, its an in-app route
-    '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC L]'
-  ],
-  static: express.static(path.resolve(config.staticBase))
-});
+// define rewrite rules
+var rewriteRules = [
+  // if application marked request notfound, exit here
+  "^" + rewriteHelper.notfound('(.+)', {
+    regex: true
+  }) + "$ /"+config.four04File+" [NC L]",
+  // if request is forbidden
+  config.rewriteForbidden,
+  // if request is for snapshot, TODO: fix
+  '^(.*)\\?_escaped_fragment_=.*$ /snapshots/$1 [NC L]',
+  // if a static resource is not being requested, its an in-app route
+  '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC L]'
+];
 
-// assign the middleware stack to the application
+// build the middleware stack in order
 app.use(express.favicon());
-app.use(express.logger("dev"));
-for (var i = 0; i < stack.length; i++) {
-  app.use(stack[i]);
-}
+app.use(express.logger(config.loggerFormat));
+app.use(express.compress());
+app.use(proxy(config.proxy.host, config.proxy.port, config.proxy.pattern));
+app.use(rewrite(rewriteRules));
+app.use(express.static(path.resolve(config.staticBase)));
 
 // development only
 if ('development' == app.get('env')) {

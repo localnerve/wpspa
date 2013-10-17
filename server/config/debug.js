@@ -19,7 +19,6 @@ Config.prototype.proxy = {
   pattern: '^\/api\/'
 };
 
-// TODO: read this from a common config
 Config.prototype.staticBase = "dist/debug";
 
 // add more development properties/functions here

@@ -13,6 +13,9 @@ util.inherits(Config, Base);
 // This is left for the host to define
 //Config.prototype.appPort = 80;
 
+// Reduce production logging to minimal
+Config.prototype.loggerFormat = "tiny";
+
 // Use a proxy
 Config.prototype.proxy = {
   host: "wpspa.localnerve.com",

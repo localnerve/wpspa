@@ -3,7 +3,6 @@
  *
  * The environment specific server config
  */
-
 var environments = {
   production: require("./production"),
   development: require("./development"),
@@ -12,12 +11,9 @@ var environments = {
   release: require("./release")
 };
 
-module.exports = function(env) {
+function createConfig(env) {
   env = env || process.env.NODE_ENV;
+  return new environments[env]();
+}
 
-  var Config = environments[env];
-  if (!Config)
-    Config = environments.development;
-
-  return new Config();
-};
+module.exports = createConfig;
