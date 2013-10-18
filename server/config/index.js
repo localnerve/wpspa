@@ -8,7 +8,8 @@ var environments = {
   development: require("./development"),
   test: require("./test"),
   debug: require("./debug"),
-  release: require("./release")
+  release: require("./release"),
+  all: require("./all")
 };
 
 function createConfig(env) {

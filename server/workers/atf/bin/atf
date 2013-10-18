@@ -3,7 +3,10 @@
 var path = require("path");
 var atf = require("../lib");
 
-// target the main index.html
-atf.update(path.normalize(__dirname + "../../../../../index.html"), function(target) {
-  console.log("succesfully updated "+ target);
-});
+// target the main index.html, process.env.NODE_ENV must be defined
+atf.update(
+  path.normalize(__dirname + "../../../../../index.html"),
+  function(target) {
+    console.log("succesfully updated "+ target);
+  }
+);

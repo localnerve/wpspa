@@ -4,10 +4,10 @@
  * production configuration settings
  */
 var util = require("util");
-var Base = require("./base");
+var All = require("./all");
 
 function Config() {}
-util.inherits(Config, Base);
+util.inherits(Config, All);
 
 // The main application port that browsers use
 // This is left for the host to define
@@ -15,6 +15,9 @@ util.inherits(Config, Base);
 
 // Reduce production logging to minimal
 Config.prototype.loggerFormat = "tiny";
+
+// Define the far-future expiry of statics (in milliseconds)
+Config.prototype.staticAge = 31556926000; // one year
 
 // Use a proxy
 Config.prototype.proxy = {

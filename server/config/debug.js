@@ -4,10 +4,10 @@
  * Debug build configuration settings
  */
 var util = require("util");
-var Base = require("./base");
+var All = require("./all");
 
 function Config() {}
-util.inherits(Config, Base);
+util.inherits(Config, All);
 
 // The main application port that browsers use
 Config.prototype.appPort = 9002;
@@ -20,6 +20,7 @@ Config.prototype.proxy = {
 };
 
 Config.prototype.staticBase = "dist/debug";
+Config.prototype.staticAge = 9002; // for debugging response headers
 
 // add more development properties/functions here
 

@@ -4,10 +4,10 @@
  * Development environment configuration settings
  */
 var util = require("util");
-var Base = require("./base");
+var All = require("./all");
 
 function Config() {}
-util.inherits(Config, Base);
+util.inherits(Config, All);
 
 // The main application port that browsers use
 Config.prototype.appPort = 9001;

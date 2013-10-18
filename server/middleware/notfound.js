@@ -16,13 +16,13 @@ function serve404Html(res) {
   });
 }
 
-function serve404Json(res) {
-  var json = "{ error: \"not found\" }";
+function serve404Json(req, res) {
+  var json = "{ error: \""+req.url+" not found\" }";
   res.setHeader("Content-Type", "application/json");
   res.end(json);
 }
 
-function serve404Text(res) {
+function serve404Text(req, res) {
   res.writeHead(res.statusCode, { "Content-Type": "text/plain" });
   res.end(req.url + " was not found on this server");
 }
@@ -34,9 +34,9 @@ function four04(req, res, next) {
   if (~accept.indexOf("html")) {
     serve404Html(res);
   } else if (~accept.indexOf("json")) {
-    serve404Json(res);
+    serve404Json(req, res);
   } else {
-    serve404Text(res);
+    serve404Text(req, res);
   }
 }
 

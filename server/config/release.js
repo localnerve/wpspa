@@ -4,10 +4,10 @@
  * Release build configuration settings
  */
 var util = require("util");
-var Base = require("./base");
+var All = require("./all");
 
 function Config() {}
-util.inherits(Config, Base);
+util.inherits(Config, All);
 
 // The main application port that browsers use
 Config.prototype.appPort = 9003;
@@ -20,6 +20,7 @@ Config.prototype.proxy = {
 };
 
 Config.prototype.staticBase = "dist/release";
+Config.prototype.staticAge = 9003; // for debugging response headers
 
 // add more development properties/functions here
 

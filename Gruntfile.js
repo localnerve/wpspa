@@ -33,7 +33,9 @@ module.exports = function(grunt) {
   require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
 
   // load the server configurations
-  var Config = require("./server/config");
+  var serverDir = "server";
+  var Config = require("./"+serverDir+"/config");
+  var configAll = new Config("all");
   var configTest = new Config("test");
   var configDebug = new Config("debug");
   var configRelease = new Config("release");
@@ -47,9 +49,10 @@ module.exports = function(grunt) {
     },
     app: "app",
     report: "report",
-    images: "images",
-    fonts: "fonts",
-    server: "server",
+    images: configAll.imagesDir,
+    fonts: configAll.fontsDir,
+    scripts: configAll.scriptsDir,
+    server: serverDir,
     serverMain: "app.js",
     test: "test/mocha",
     vendor: "vendor",
@@ -141,7 +144,7 @@ module.exports = function(grunt) {
         "<%= project.app %>/styles"
       ],
       "release-post": [
-        "<%= project.dist.debug %>/require.js"
+        "<%= project.dist.debug %>/<%= project.scripts %>/require.js"
       ],
       releaseAfterInline: [
         "<%= project.dist.release %>/index.css",
@@ -189,11 +192,8 @@ module.exports = function(grunt) {
 
     // Task provided by grunt-contrib-concat.
     // Builds the un-optimized application distribution js.
-    // Outputs to dist/debug/require.js.
     // The concatenate task is used here to merge the almond require/define
-    // shim and the templates into the application code.  It's named
-    // dist/debug/require.js, because we want to only load one script file in
-    // index.html.
+    // shim and the templates into the application code.
     concat: {
       options: {
         separator: ";"
@@ -204,10 +204,10 @@ module.exports = function(grunt) {
           //"<%= project.vendor %>/bower/requirejs/require.js",
           // use almond if you don't
           "<%= project.vendor %>/bower/almond/almond.js",
-          "<%= project.dist.debug %>/templates.js",
-          "<%= project.dist.debug %>/require.js"
+          "<%= project.dist.debug %>/<%= project.scripts %>/templates.js",
+          "<%= project.dist.debug %>/<%= project.scripts %>/require.js"
         ],
-        dest: "<%= project.dist.debug %>/require.js"
+        dest: "<%= project.dist.debug %>/<%= project.scripts %>/require.js"
       }
     },
 
@@ -219,7 +219,7 @@ module.exports = function(grunt) {
         middleware: function(connect) {
           return [
             mockApi
-            //, TODO: throw an error here
+            //, TODO: add better error here
           ];
         }
       },
@@ -313,8 +313,8 @@ module.exports = function(grunt) {
     },
 
     // Copy task provided by grunt-contrib-copy.
-    // This task will copy assets into your build directory,
-    // automatically.  This makes an entirely encapsulated build into
+    // This task will copy assets into your build directory.
+    // This makes an entirely encapsulated build into
     // each directory.
     copy: {
       debug: {
@@ -324,7 +324,7 @@ module.exports = function(grunt) {
             src: "<%= project.app %>/styles/index.css",
             dest: "<%= project.dist.debug %>/index.css"
           },
-          // the main dist copy
+          // the rest
           {
             src: [
               // files in root besides index.html
@@ -488,7 +488,7 @@ module.exports = function(grunt) {
       compile: {
         files: [{
           src: ["<%= project.app %>/**/*.html"],
-          dest: "<%= project.dist.debug %>/templates.js"
+          dest: "<%= project.dist.debug %>/<%= project.scripts %>/templates.js"
         }]
       }
     },
@@ -527,27 +527,6 @@ module.exports = function(grunt) {
       }
     },
 
-    // regex replace task provided by grunt-regex-replace
-    // Ensures that usemin replacements are preceeded by a /
-    "regex-replace": {
-      debug: {
-        src: ["<%= project.dist.debug %>/index.html"],
-        actions: [{
-          name: "require",
-          search: "(\"){1,1}([0-9a-fA-F]+\\.require.js)",
-          replace: "$1/$2"
-        }]
-      },
-      release: {
-        src: ["<%= project.dist.release %>/index.html"],
-        actions: [{
-          name: "require",
-          search: "(\"){1,1}([0-9a-fA-F]+\\.require.js)",
-          replace: "$1/$2"
-        }]
-      }
-    },
-
     // Task provided by grunt-contrib-requirejs.
     // This task uses James Burke's excellent r.js AMD build tool.  In the
     // future other builders may be contributed as drop-in alternatives.
@@ -564,7 +543,7 @@ module.exports = function(grunt) {
           mainConfigFile: "<%= project.app %>/config.js",
 
           // Output file.
-          out: "<%= project.dist.debug %>/require.js",
+          out: "<%= project.dist.debug %>/<%= project.scripts %>/require.js",
 
           // Root application module.
           name: "config",
@@ -599,14 +578,14 @@ module.exports = function(grunt) {
       debug: {
         files: {
           src: [
-            "<%= project.dist.debug %>/require.js"
+            "<%= project.dist.debug %>/<%= project.scripts %>/require.js"
           ]
         }
       },
       release: {
         files: {
           src: [
-            "<%= project.dist.release %>/require.js"
+            "<%= project.dist.release %>/<%= project.scripts %>/require.js"
           ]
         }
       }
@@ -639,8 +618,8 @@ module.exports = function(grunt) {
       },
       release: {
         files: [{
-          src: ["<%= project.dist.debug %>/require.js"],
-          dest: "<%= project.dist.release %>/require.js"
+          src: ["<%= project.dist.debug %>/<%= project.scripts %>/require.js"],
+          dest: "<%= project.dist.release %>/<%= project.scripts %>/require.js"
         }]
       }
     },
@@ -839,7 +818,6 @@ module.exports = function(grunt) {
     "rev:debug",
     "useminOptions:debug",
     "usemin",
-    "regex-replace:debug",
     "atfUpdate:debug",
     "express:debug",
     "html_snapshots:debug"
@@ -861,7 +839,6 @@ module.exports = function(grunt) {
     "rev:release",
     "useminOptions:release",
     "usemin",
-    "regex-replace:release",
     "atfUpdate:release",
     "express:release",
     "html_snapshots:release",
