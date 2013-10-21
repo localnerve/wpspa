@@ -13,12 +13,14 @@ var request = require("../../../helpers/request");
 var Config = require("../../../config");
 
 // script helpers
-var scriptStart = "<script>var wpspa=",
-    scriptEnd = "</script></body>";
+var scriptExpression = /(<script id=(?:"|')wpspa-data-atf(?:"|')>)(.*)(<\/script>)/ig,
+    scriptStart = "var wpspa=";
 
 // remove any existing bootstrapped results from html
 function stripBootstrappedResults(html) {
-  return html.toString().replace(new RegExp(scriptStart+".+"+scriptEnd), "</body>");
+  return html.toString().replace(scriptExpression, function(match, startTag, content, endTag) {
+    return startTag+endTag;
+  });
 }
 
 /**
@@ -49,7 +51,9 @@ function update(target, success, environment) {
       // update the target file
       fs.writeFile(
         target,
-        html.replace("</body>", scriptStart+JSON.stringify(results)+";"+scriptEnd),
+        html.replace(scriptExpression, function(match, startTag, content, endTag) {
+          return startTag+scriptStart+JSON.stringify(results)+";"+endTag;
+        }),
         { encoding: "utf8" },
         function(errorWrite) {
           if (errorWrite) throw errorWrite;

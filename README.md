@@ -6,7 +6,7 @@
 
 The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, the first load is much faster than any optimized Wordpress site. This design features data-driven, asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
 
-> latest [free-tier performance results](http://www.webpagetest.org/result/131018_1C_NDA/) over a 3G network on an iPhone 4.
+> latest [free-tier performance results](http://www.webpagetest.org/result/131021_6S_45Z/) over a 3G network.
 
 By adding an SPA front-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
@@ -43,7 +43,7 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 #### Multi-Device Wordpress (Performance)
 + Demonstrates WP structures that play well with an SPA architecture
   * WPSPA Wordpress plugin extends menu admin interface for SPA route mapping
-+ Targeting one second response for Mobile user (ATF 1st response). 1st response (only) is currently at ~3 seconds (1.8 seconds for return visit) over 3G with no further optimization.
++ Targeting one second response for Mobile user (ATF 1st response).
 
 #### Demonstrated Learning
 + Demonstrate optimized build procedure for development and SEO
