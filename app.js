@@ -11,13 +11,11 @@ var rewrite = require("connect-modrewrite");
 var rewriteHelper = require("./server/helpers/rewrites");
 var proxy = require("./server/middleware/proxy");
 var notfound = require("./server/middleware/notfound");
-var Config = require("./server/config");
+
+var config = require("./server/config").create(process.env.NODE_ENV);
 
 // create the app
 var app = express();
-
-// environment specific configuration
-var config = new Config(process.env.NODE_ENV);
 
 // set the port
 app.set("port", config.appPort || process.env.PORT);

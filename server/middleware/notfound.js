@@ -4,9 +4,7 @@
  */
 var fs = require("fs");
 var path = require("path");
-
-var Config = require("../config");
-var config = new Config(process.env.NODE_ENV || "development");
+var config = require("../config").create(process.env.NODE_ENV || "development");
 
 function serve404Html(res) {
   var path404 = path.join(__dirname, "/../../", config.four04File);

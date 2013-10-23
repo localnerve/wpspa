@@ -12,9 +12,11 @@ var environments = {
   all: require("./all")
 };
 
-function createConfig(env) {
+function create(env) {
   env = env || process.env.NODE_ENV;
   return new environments[env]();
 }
 
-module.exports = createConfig;
+module.exports = {
+  create: create
+};

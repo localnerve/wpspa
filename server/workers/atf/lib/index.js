@@ -10,7 +10,7 @@ var fs = require("fs");
 var path = require("path");
 var async = require("async");
 var request = require("../../../helpers/request");
-var Config = require("../../../config");
+var configLib = require("../../../config");
 
 // script helpers
 var scriptExpression = /(<script id=(?:"|')wpspa-data-atf(?:"|')>)(.*)(<\/script>)/ig,
@@ -29,7 +29,7 @@ function stripBootstrappedResults(html) {
  * success is a callback that is called if the operation succeeds, else throws error.
  */
 function update(target, success, environment) {
-  var config = new Config(environment || process.env.NODE_ENV);
+  var config = configLib.create(environment || process.env.NODE_ENV);
 
   // start the atf content requests in parallel
   async.parallel({

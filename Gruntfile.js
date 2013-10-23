@@ -34,12 +34,12 @@ module.exports = function(grunt) {
 
   // load the server configurations
   var serverDir = "server";
-  var Config = require("./"+serverDir+"/config");
-  var configAll = new Config("all");
-  var configTest = new Config("test");
-  var configDebug = new Config("debug");
-  var configRelease = new Config("release");
-  var configDev = new Config("development");
+  var config = require("./"+serverDir+"/config");
+  var configAll = config.create("all");
+  var configTest = config.create("test");
+  var configDebug = config.create("debug");
+  var configRelease = config.create("release");
+  var configDev = config.create("development");
 
   // project configuration
   var projectConfig = {

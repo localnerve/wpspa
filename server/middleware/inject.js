@@ -6,10 +6,8 @@
  * This is currently not in use, but left in case this approach becomes practical again
  */
 var async = require("async");
-var Config = require("../config");
 var request = require("../helpers/request");
-
-var config = new Config(process.env.NODE_ENV || "development");
+var config = require("../config").create(process.env.NODE_ENV || "development");
 
 // If serving index.html...
 function condition(req, res) {
