@@ -173,20 +173,19 @@ module.exports = function(grunt) {
       dev: {
         options: {
           environment: "development",
-          debugInfo: true//,
-          //force: true
+          debugInfo: true
         }
       },
       debug: {
         options: {
           environment: "development",
-          debugInfo: true//,
-          //force: true
+          debugInfo: true
         }
       },
       release: {
-        environment: "production",
-        force: true
+        options: {
+          environment: "production"
+        }
       }
     },
 
