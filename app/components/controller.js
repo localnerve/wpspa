@@ -6,10 +6,12 @@ define([
   "backbone.marionette",
   "app",
   "helpers/contract",
-  // Load the layout
+  // Load the layout container
   "components/layout/main",
   // Load the content factory
-  "components/content/main"
+  "components/content/main",
+  // Load the search component
+  "components/search/main"
 ], function(Marionette, app, contract) {
 
   // The definition of the application level controller

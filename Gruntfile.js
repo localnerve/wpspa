@@ -731,13 +731,13 @@ module.exports = function(grunt) {
   });
 
   // the standalone test task
-  grunt.registerTask("test", ["compass:test", "connect:test", "atfUpdate:test", "express:test", "mocha"]);
+  grunt.registerTask("test", ["compass:test", "connect:test", "atfUpdate:test", "express:test", "mocha", "atfRemove"]);
 
   // the standalone lint task
   grunt.registerTask("lint", ["jshint"]);
 
   // the standalone push task
-  grunt.registerTask("push", ["lint", "test", "atfRemove", "plato"]);
+  grunt.registerTask("push", ["lint", "test", "plato"]);
 
   // the standalone css compile task
   grunt.registerTask("ccss", ["compass:dev"]);

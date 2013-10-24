@@ -1,11 +1,7 @@
 /*
  * content/main
  * The content message handler
- * Handles content:view and content:entity requests from the main content container.
- *
- * Views are returned by request for WPSPA_TYPE
- * Message = (content:view | content:entity), Param = { object_type: WPSPA_TYPE }
- *    Where WPSPA_TYPE is the object Type as configured in the Wordpress menu via the WPSPA plugin.
+ * Handles view and entity requests from the main content container.
  *
  */
 define([
@@ -13,25 +9,46 @@ define([
   "app",
   "helpers/contract",
   "components/content/views/main",
+  "components/content/transitions/main",
+  "components/content/errors/main",
   "components/content/entities/main"
-  ], function(_, app, contract, views, entities) {
+  ], function(_, app, contract, contentViews, transitionViews, errorViews, entities) {
 
-    // handle content:view requests
-    app.reqres.setHandler("content:view", function(options) {
+    /**
+     * Get a view type
+     * Use a custom factory if one was specified, otherwise use a default
+     */
+    function getView(options, viewType, defaultViewFactory) {
       contract(options, "options");
 
       var view;
-      // if a custom view was specified, use that
-      if (options.view)
-        view = options.view(options.options);
+
+      // if a custom view factory was specified, use that
+      if (options[viewType])
+        view = options[viewType](options.options);
       else
-        view = views.getView(options.options);
+        view = defaultViewFactory.getView(options.options);
 
       return view;
+    }
+
+    // handle content:view requests
+    app.reqres.setHandler("content:view", function(options) {
+      return getView(options, "view", contentViews);
+    });
+
+    // handle content:transition requests
+    app.reqres.setHandler("content:transition", function(options) {
+      return getView(options, "transition", transitionViews);
+    });
+
+    // handle content:error requests
+    app.reqres.setHandler("content:error", function(options) {
+      return getView(options, "error", errorViews);
     });
 
     // the entity cache
-    // entities are stored by object_type
+    // entities are keyed by object_type
     var cache = {};
 
     // handle content:entity requests

@@ -4,7 +4,7 @@ define([
 ], function($, Marionette) {
   
   var TransitionView = Marionette.ItemView.extend({
-    template: "components/content/views/transitionView",
+    template: "components/content/transitions/transitionView",
     className: "grid-row",
 
     onRender: function() {

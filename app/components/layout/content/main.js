@@ -30,13 +30,6 @@ define([
       // Create the connector on the app.vent and promises
       this._connect = connect.create(app.vent, this._promises);
 
-      // For now, just get a single, context free transition
-      this.transition = app.request("content:view", {
-        options: {
-          object_type: "transition"
-        }
-      });
-
       // Handle content start
       // The handler itself is anonymous because of the testing implications
       var self = this;
@@ -54,6 +47,12 @@ define([
       // Request the appropriate content view
       var content = app.request("content:view", options);
 
+      // Request the appropriate transition view
+      var transition = app.request("content:transition", options);
+
+      // Request the appropriate error view
+      var error = app.request("content:error", options);
+
       var self = this;
       this._promises[subopts.object_type].then(
         // success
@@ -69,15 +68,12 @@ define([
         },
         // fail
         function(response, options) {
-          // TODO: Add error implementation
-          // self.show(errorView)
-          var test = 0;
+          self.show(error.create());
         },
         // progress
         function() {
           if (this.state() === "pending") {
-            self.show(self.transition.create());
-            var test = 0;
+            self.show(transition.create());
           }
         }
       );

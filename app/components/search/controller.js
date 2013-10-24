@@ -1,16 +1,16 @@
 /*
- * The container.search controller.
+ * The search controller.
  * Responds to search queries.
  */
 define([
   "backbone.marionette",
   "app",
-  "components/layout/search/model",
-  // TODO: restructure this
+  "components/search/model",
+  // Reuse multiview for our result set
   "components/content/views/multiView"
 ], function(Marionette, app, model, view) {
 
-  var thisModule = app.module("container.search", function(search) {
+  var thisModule = app.module("search", function(search) {
 
     // The definition of the search controller
     var SearchController = Marionette.Controller.extend({
@@ -44,6 +44,10 @@ define([
     search.addInitializer(function(options) {
       // Create the search controller instance
       this.controller = new SearchController(options);
+    });
+
+    search.addFinalizer(function() {
+      delete this.controller;
     });
 
   });

@@ -3,7 +3,7 @@ define([
   "backbone",
   "helpers/urls",
   "helpers/contract",
-  // TODO: Restructure this
+  // Reuse the main content parser
   "components/content/entities/parser",
   "module"
 ], function(_, Backbone, urls, contract, parser, module) {

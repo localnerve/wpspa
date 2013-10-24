@@ -21,8 +21,6 @@ require.config({
       suffix: ".html"
     },
     "components/layout/main": {
-      // this is the number of container:complete events required to trigger the start of application routing
-      // right now, this is header + footer + search = 3
       containerCompletions: 3
     },
     "components/layout/header/navigation/entities": {
@@ -31,7 +29,7 @@ require.config({
     "components/layout/header/navigation/item": {
       hideHome: true
     },
-    "components/layout/search/model": {
+    "components/search/model": {
       urlRoot: "/api/get_search_results"
     },
     "components/layout/footer/sidebarContainer/entities": {

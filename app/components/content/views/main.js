@@ -1,9 +1,8 @@
 define([
   "helpers/contract",
   "components/content/views/singleView",
-  "components/content/views/multiView",
-  "components/content/views/transitionView"
-], function(contract, SingleView, MultiView, TransitionView) {
+  "components/content/views/multiView"
+], function(contract, SingleView, MultiView) {
 
   function getView(options) {
     contract(options, "object_type");
@@ -11,22 +10,13 @@ define([
     // if this is a delimited object type, get the base type
     var type = options.object_type.split(":")[0];
 
-    switch(type) {
-      case "transition":
-        return TransitionView;
-
-      case "recent":
-      case "category":
-      case "date":
-        return MultiView;
-
-      case "post":
-      case "page":
-        return SingleView;
-
-      default:
-        throw new Error("Unexpected view type requested");
-    }
+    // if this is a singular wordpress type, return the SingleView.
+    // otherwise, its a MultiView by default.
+    // To override this behavior, specify a view factory.
+    if (type === "post" || type === "page")
+      return SingleView;
+    else
+      return MultiView;
   }
 
   return {

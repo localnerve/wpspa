@@ -1,14 +1,14 @@
 /*
- * The container.search router
+ * The search router
  * Routes search requests
  */
 define([
   "backbone.marionette",
   "app",
-  "components/layout/search/controller"
+  "components/search/controller"
 ], function(Marionette, app) {
 
-  var thisModule = app.module("container.search", function(search) {
+  var thisModule = app.module("search", function(search) {
 
     // The definition for the search router
     var SearchRouter = Marionette.AppRouter.extend({
@@ -23,6 +23,10 @@ define([
       });
     });
 
+    search.addFinalizer(function() {
+      if (this.router)
+        delete this.router;
+    });
   });
 
   return thisModule;

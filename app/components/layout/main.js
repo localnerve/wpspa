@@ -9,8 +9,7 @@ define([
   "module",
   "components/layout/content/main",
   "components/layout/header/main",
-  "components/layout/footer/main",
-  "components/layout/search/main"
+  "components/layout/footer/main"
 ], function(_, Marionette, app, module, content) {
 
   // Create a partial definition for container module
