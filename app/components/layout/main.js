@@ -6,11 +6,12 @@ define([
   "lodash",
   "backbone.marionette",
   "app",
+  "module",
   "components/layout/content/main",
   "components/layout/header/main",
   "components/layout/footer/main",
   "components/layout/search/main"
-], function(_, Marionette, app, content) {
+], function(_, Marionette, app, module, content) {
 
   // Create a partial definition for container module
   var thisModule = app.module("container", function(container) {
@@ -34,16 +35,21 @@ define([
       }
     });
 
+    // Extend the container object
+    _.extend(container, {
+      startRouting: function() {
+        app.vent.trigger("app:startRoutes");
+      },
+      // after N container:complete events, start application routing
+      completions: module.config().containerCompletions
+    });
 
     container.addInitializer(function(options) {
       this.layout = new AppLayout(options);
 
-      // this is the number of container:complete calls required to trigger app:startRoutes
-      // for now, this is header + footer + search = 3
-      var completions = 3;
-
-      this.listenTo(app.vent, "container:complete", _.after(completions, function() {
-        app.vent.trigger("app:startRoutes");
+      this.listenTo(app.vent, "container:complete", _.after(container.completions, function() {
+        container.startRouting();
+        container.stopListening();
       }));
     });
 
