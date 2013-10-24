@@ -1,11 +1,21 @@
 define([
+  "lodash",
   "helpers/contract",
+  "helpers/code",
   "components/content/entities/model",
   "components/content/entities/collection",
   "components/content/entities/recent",
   "components/content/entities/category",
   "components/content/entities/date"
-], function(contract, PostModel, PostCollection, Recent, Category, Date) {
+],
+// parameters preceeded with two underscores get considered as collection prototypes
+function(_, contract, code, PostModel, PostCollection, __recent, __category, __date) {
+
+  // create a parameter object of this factory's parameters by name, value
+  var params = _.object(
+    code.getParamNames(arguments.callee),
+    Array.prototype.slice.call(arguments)
+  );
 
   function createModel(options) {
     contract(options, "object_id");
@@ -20,17 +30,17 @@ define([
     // if this is a delimited object type, get the base type
     var type = options.object_type.split(":")[0];
 
-    switch (type) {
-      case "recent":
-        return new Recent();
-      case "empty":
-        return new PostCollection({ createdEmpty: true });
-      case "category":
-        return new Category(options);
-      case "date":
-        return new Date(options);
-      default:
-        return new PostCollection(options);
+    // conform the type to a collection prototype specialization
+    type = "__"+type.toString();
+
+    // if we have a specialized prototype, create it
+    if (params[type]) {
+      return new params[type](options);
+    } else {
+      // otherwise, this is a generic PostCollection
+      return new PostCollection(
+        type === "__empty" ? { createdEmpty: true } : options
+      );
     }
   }
 

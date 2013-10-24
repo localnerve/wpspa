@@ -52,18 +52,7 @@
     <script type="text/javascript" charset="utf-8">
         // Setup our global test harness
         var __test = (function() {
-
-            // helper to get parameter names
-            var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
-            function getParamNames(func) {
-                var fnStr = func.toString().replace(STRIP_COMMENTS, '');
-                var result = fnStr.slice(fnStr.indexOf('(')+1, fnStr.indexOf(')')).match(/([^\s,]+)/g);
-                if (result === null) {
-                    result = [];
-                }
-                return result;
-            }
-
+            
             // Called on app exit (to not found) if called from test harness.
             // This is because the test harness is an invalid route.
             function testRunner(path, app) {
@@ -90,6 +79,7 @@
                       }
                     }, [
                         // load all standalone modules for individual testing
+                        "helpers/code",
                         "helpers/contract",
                         "components/layout/content/prefetch",
                         "helpers/backbone/sync",
@@ -113,8 +103,8 @@
                         // next test suite here
                     ], 
                     // receive the standalone modules we explicitly want to reference
-                    function(contract, prefetch, sync, routes, urls) {
-                        var paramNames = getParamNames(arguments.callee);
+                    function(code, contract, prefetch, sync, routes, urls) {
+                        var paramNames = code.getParamNames(arguments.callee);
                         var paramValues = Array.prototype.slice.call(arguments);
 
                         // make standalone modules available in the namespace
