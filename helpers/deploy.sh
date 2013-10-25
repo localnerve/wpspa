@@ -21,59 +21,66 @@ dest=/home/agrant/var/www/content/wpspa-heroku
 # deployment message
 message="production deployment `date +%F-%H.%M.%S`"
 
-# change to the deployment repo
-if [ -d "$dest" ] && [ -d "$dest/.git" ]; then
-  cd "$dest"
-  if [ $? -eq 0 ] && [ "`pwd`" = "$dest" ]; then
-    if [ -d "$src" ]; then
+# refresh the release build
+grunt release
+if [ $? -eq 0 ]; then
 
-      echo "cleaning $dest..."
-      find ./ ! -path "./.git*" ! -name "*.sublime*" ! -name "." -delete
-      delResult=$?
+  # change to the deployment repo
+  if [ -d "$dest" ] && [ -d "$dest/.git" ]; then
+    cd "$dest"
+    if [ $? -eq 0 ] && [ "`pwd`" = "$dest" ]; then
+      if [ -d "$src" ]; then
 
-      clean=`find ./ ! -path "./.git*" ! -name "*.sublime*" ! -name "." -print | wc -l`
-      if [ $delResult -eq 0 ] && [ $clean -eq 0 ]; then
+        echo "cleaning $dest..."
+        find ./ ! -path "./.git*" ! -name "*.sublime*" ! -name "." -delete
+        delResult=$?
 
-        echo "copying $src to $dest..."
-        cp -r $src/* .
-        cpResult=$?
+        clean=`find ./ ! -path "./.git*" ! -name "*.sublime*" ! -name "." -print | wc -l`
+        if [ $delResult -eq 0 ] && [ $clean -eq 0 ]; then
 
-        files=`find ./ -type f ! -path "./.git*" ! -name "*.sublime*" ! -name "." -print | wc -l`
-        if [ $cpResult -eq 0 ] && [ $files -gt 0 ]; then
-          echo "copied $files files for deployment..."
+          echo "copying $src to $dest..."
+          cp -r $src/* .
+          cpResult=$?
 
-          git status | grep -i "nothing to commit"
-          status=$?
-          if [ $status -ne 0 ]; then
-            echo "deploying to heroku..."
-            
-            git add --all
-            git commit -m "$message"
-            
-            heroku config:set NODE_ENV=production
+          files=`find ./ -type f ! -path "./.git*" ! -name "*.sublime*" ! -name "." -print | wc -l`
+          if [ $cpResult -eq 0 ] && [ $files -gt 0 ]; then
+            echo "copied $files files for deployment..."
 
-            git push heroku master
-            heroku open
+            git status | grep -i "nothing to commit"
+            status=$?
+            if [ $status -ne 0 ]; then
+              echo "deploying to heroku..."
+              
+              git add --all
+              git commit -m "$message"
+              
+              heroku config:set NODE_ENV=production
+
+              git push heroku master
+              heroku open
+            else
+              echo "no changes, deployment cancelled"
+              git checkout -- .
+            fi
           else
-            echo "no changes, deployment cancelled"
+            echo "ERROR failed to copy any files to the repo"
             git checkout -- .
           fi
         else
-          echo "ERROR failed to copy any files to the repo"
+          echo "ERROR failed to clean $dest prior to deployment"
           git checkout -- .
         fi
       else
-        echo "ERROR failed to clean $dest prior to deployment"
-        git checkout -- .
+        echo "ERROR directory $src not found"
       fi
+      #go back to wherever we started.
+      cd - >/dev/null
     else
-      echo "ERROR directory $src not found"
+      echo "ERROR change to directory $dest failed"
     fi
-    #go back to wherever we started.
-    cd - >/dev/null
   else
-    echo "ERROR change to directory $dest failed"
+    echo "ERROR repo $dest not found"
   fi
 else
-  echo "ERROR repo $dest not found"
+  echo "ERROR release build failed"
 fi
