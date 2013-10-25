@@ -9,5 +9,6 @@
     "commit": "49b2d401d3ee02021485512f2b089b8b97d1918d"
   },
   "_source": "git://github.com/marionettejs/backbone.babysitter.git",
-  "_target": "~0.0.6"
+  "_target": "~0.0.6",
+  "_originalSource": "git://github.com/marionettejs/backbone.babysitter.git"
 }

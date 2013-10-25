@@ -31,7 +31,6 @@ define([
       // we can do this because this is not part of a real collection
       this.collection = new Backbone.Collection(parser(data));
       return {
-        // TODO: change this
         id: this.get("id")
       };
     }
@@ -46,5 +45,4 @@ define([
       });
     }
   };
-
 });

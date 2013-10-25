@@ -1,3 +1,5 @@
+// These are vendor customizations not offered by the vendor as overrides.
+
 // override the hardcoded .dropdown li a vertical padding
 @media #{$topbar-media-query} {
   .top-bar-section {
@@ -16,5 +18,17 @@
 .top-bar {
   .name {
     font-size: emCalc($em-base) !important
+  }
+}
+
+// enforce the hover backgrounds 
+.top-bar-section {
+  ul {
+    li {
+      &> a:hover {
+        background-color: #220e10;
+        color: #fff;
+      }
+    }
   }
 }

@@ -6,9 +6,8 @@ define([
   "backbone.marionette",
   "app",
   "components/search/model",
-  // Reuse multiview for our result set
-  "components/content/views/multiView"
-], function(Marionette, app, model, view) {
+  "components/search/views/main"
+], function(Marionette, app, model, views) {
 
   var thisModule = app.module("search", function(search) {
 
@@ -33,8 +32,20 @@ define([
             object_type: object_type,
             object_id: object_id
           },
-          view: function() {
-            return view;
+          params: {
+            emptyView: function() {
+              views.Empty.prototype.query = query;
+              return views.Empty;
+            }
+          },
+          content: function() {
+            return views.content;
+          },
+          error: function() {
+            return views.error;
+          },
+          transition: function() {
+            return views.transition;
           }
         });
       }

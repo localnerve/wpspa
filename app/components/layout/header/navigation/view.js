@@ -37,7 +37,7 @@ define([
             self.updateDropdowns();
           }
         }
-      }, 100);
+      }, 150); // throw out calls until ms expires
       $(window).on("resize", this.resizeHandler);
     },
 
@@ -63,7 +63,9 @@ define([
     },
 
     // update navigation dropdowns, if required
+    // if this is the collapsed menu, then child dropdowns will turn into nav helpers.
     updateDropdowns: function() {
+      var breakpoint = this.breakpoint;
       // if one of our routes was converted into a navigation parent, remove the parent from routing
       var dropdowns = this.$itemViewContainer.find("li.has-dropdown.not-click");
       dropdowns.each(function(index, item) {
@@ -71,12 +73,11 @@ define([
         var anchor = $item.children("a[data-nav-item]").first();
         if (anchor.length > 0) {
           
-          // find the anchor substitutes
+          // find the anchor substitutes for this anchor.
           var substitutes =
-            $item.find("ul li a.js-generated.parent-link[href='"+anchor[0].pathname+"']")
-              .filter(":visible");
+            $item.find("ul li a.js-generated.parent-link[href='"+anchor[0].pathname+"']");
 
-          if (substitutes.length > 0) {
+          if (substitutes.length > 0 && breakpoint) {
             // if the anchor was substituted, turn it into a navigation helper only
             anchor.attr("data-nav-path", anchor[0].pathname);
             anchor.attr("href", "#");

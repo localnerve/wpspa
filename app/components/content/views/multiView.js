@@ -10,7 +10,14 @@ define([
 
   var MultiPostView = Marionette.CollectionView.extend({
     className: "multiple-posts",
-    itemView: itemView
+    itemView: itemView,
+
+    getEmptyView: function() {
+      if (this.options.params) {
+        return this.options.params.emptyView();
+      }
+      return undefined;
+    }
   });
 
   return {
@@ -25,7 +32,8 @@ define([
           options.collection ||
           (options.model && options.model.collection ?
             options.model.collection : entities.createCollection(options)
-          )
+          ),
+        params: options.params
       });
     }
   };

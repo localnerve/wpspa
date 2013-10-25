@@ -10,5 +10,5 @@
   },
   "_source": "git://github.com/jrburke/almond.git",
   "_target": "~0.2.6",
-  "_direct": true
+  "_originalSource": "almond"
 }

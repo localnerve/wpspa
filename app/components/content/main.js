@@ -34,7 +34,7 @@ define([
 
     // handle content:view requests
     app.reqres.setHandler("content:view", function(options) {
-      return getView(options, "view", contentViews);
+      return getView(options, "content", contentViews);
     });
 
     // handle content:transition requests
