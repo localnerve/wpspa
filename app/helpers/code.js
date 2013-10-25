@@ -6,6 +6,8 @@
 define(function() {
 
   // get the parameter names from a function
+  // BEWARE: this code can cause problems with minification
+  // If uglifyjs does not see you reference a parameter, the parameter will be removed from the list
   var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
   function getParamNames(func) {
       var fnStr = func.toString().replace(STRIP_COMMENTS, '');

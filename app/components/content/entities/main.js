@@ -1,21 +1,11 @@
 define([
-  "lodash",
   "helpers/contract",
   "helpers/code",
   "components/content/entities/model",
   "components/content/entities/collection",
-  "components/content/entities/recent",
-  "components/content/entities/category",
-  "components/content/entities/date"
+  "components/content/entities/specializations/main"
 ],
-// parameters preceeded with two underscores get considered as collection prototypes
-function(_, contract, code, PostModel, PostCollection, __recent, __category, __date) {
-
-  // create a parameter object of this factory's parameters by name, value
-  var params = _.object(
-    code.getParamNames(arguments.callee),
-    Array.prototype.slice.call(arguments)
-  );
+function(contract, code, PostModel, PostCollection, specializations) {
 
   function createModel(options) {
     contract(options, "object_id");
@@ -30,16 +20,13 @@ function(_, contract, code, PostModel, PostCollection, __recent, __category, __d
     // if this is a delimited object type, get the base type
     var type = options.object_type.split(":")[0];
 
-    // conform the type to a collection prototype specialization
-    type = "__"+type.toString();
-
     // if we have a specialized prototype, create it
-    if (params[type]) {
-      return new params[type](options);
+    if (specializations[type]) {
+      return new specializations[type](options);
     } else {
       // otherwise, this is a generic PostCollection
       return new PostCollection(
-        type === "__empty" ? { createdEmpty: true } : options
+        type === "empty" ? { createdEmpty: true } : options
       );
     }
   }

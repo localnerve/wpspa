@@ -12,7 +12,7 @@ define([
 
     // if this is a singular wordpress type, return the SingleView.
     // otherwise, its a MultiView by default.
-    // To override this behavior, specify a view factory.
+    // To override this behavior, specify a view factory to content/main.
     if (type === "post" || type === "page")
       return SingleView;
     else

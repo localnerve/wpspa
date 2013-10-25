@@ -38,18 +38,18 @@ require.config({
     "components/content/entities/model": {
       urlRoot: "/api/get_post"
     },
-    "components/content/entities/recent": {
-      endpoint: "/api/get_recent_posts"
-    },
-    "components/content/entities/category": {
-      urlRoot: "/api/get_category_posts/",
-      endpoint: "/api/get_category_posts/?slug=Uncategorized"
-    },
     "components/content/entities/collection": {
       urlRoot: "/api/get_posts",
       endpoint: "/api/get_posts/?post_type=any"
     },
-    "components/content/entities/date": {
+    "components/content/entities/specializations/recent": {
+      endpoint: "/api/get_recent_posts"
+    },
+    "components/content/entities/specializations/category": {
+      urlRoot: "/api/get_category_posts/",
+      endpoint: "/api/get_category_posts/?slug=Uncategorized"
+    },
+    "components/content/entities/specializations/date": {
       urlRoot: "/api/get_date_posts"
     },
     app: {
