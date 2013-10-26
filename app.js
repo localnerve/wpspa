@@ -35,7 +35,9 @@ var rewriteRules = [
 ];
 
 // requests are processed in this middleware stack order
-app.use(express.favicon());
+app.use(
+  express.favicon(path.join(config.staticBase, config.faviconFile), { maxAge: config.staticAge })
+);
 app.use(express.logger(config.loggerFormat));
 app.use(express.compress());
 app.use(proxy(config.proxy.host, config.proxy.port, config.proxy.pattern));
