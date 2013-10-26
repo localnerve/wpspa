@@ -15,6 +15,15 @@
     );
 }
 
-.vert-align {
-    vertical-align: middle;
+.grid-col-center {
+  @include grid-column(
+    $default-columns / 2,
+    $default-last-column,
+    true,
+    $default-offset,
+    $default-push,
+    $default-pull,
+    $default-collapse,
+    $default-float
+    );
 }

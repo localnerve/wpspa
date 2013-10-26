@@ -380,7 +380,7 @@ module.exports = function(grunt) {
     html_snapshots: {
       options: {
         selector: {
-          "/": "#content .multiple-posts",
+          "/": "#content .post-container",
           "__default": "#content .grid-row"
         },
         source: "robots.txt"

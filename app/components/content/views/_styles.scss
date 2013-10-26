@@ -1,3 +1,15 @@
+.page-header {
+  margin-top: -$content-margin-bottom;
+  background-color: #E8E5CE;
+}
+.page-title {
+  font: italic 300 30px "Source Sans Pro",Helvetica,sans-serif;
+  //margin: 0 auto;
+  //max-width: $row-width *.65;
+  padding: 30px 0;
+  //width: 100%;
+}
+
 .entry-header, .entry-content, .entry-meta, .entry-summary {
   margin: 0 auto;
   max-width: 604px;

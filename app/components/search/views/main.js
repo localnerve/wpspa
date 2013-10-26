@@ -1,6 +1,6 @@
 define([
   // Reuse multiview for our content view
-  "components/content/views/multiView",
+  "components/content/views/multi/layout",
   "components/search/views/empty/view",
   "components/search/views/error/view",
   "components/search/views/transition/view"

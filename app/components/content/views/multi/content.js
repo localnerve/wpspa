@@ -4,17 +4,19 @@
  */
 define([
   "backbone.marionette",
-  "components/content/views/item",
-  "components/content/entities/main"
-], function(Marionette, itemView, entities) {
+  "helpers/contract",
+  "components/content/entities/main",
+  "components/content/views/multi/contentItem"
+], function(Marionette, contract, entities, itemView) {
 
   var MultiPostView = Marionette.CollectionView.extend({
-    className: "multiple-posts",
+    className: "post-container",
     itemView: itemView,
 
     getEmptyView: function() {
       if (this.options.params) {
-        return this.options.params.emptyView();
+        contract(this.options.params, "empty.view");
+        return this.options.params.empty.view();
       }
       return undefined;
     }

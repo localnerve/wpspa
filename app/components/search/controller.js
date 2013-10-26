@@ -5,9 +5,10 @@
 define([
   "backbone.marionette",
   "app",
+  "resources/strings",
   "components/search/model",
   "components/search/views/main"
-], function(Marionette, app, model, views) {
+], function(Marionette, app, strings, model, views) {
 
   var thisModule = app.module("search", function(search) {
 
@@ -33,9 +34,19 @@ define([
             object_id: object_id
           },
           params: {
-            emptyView: function() {
-              views.Empty.prototype.query = query;
-              return views.Empty;
+            empty: {
+              view: function() {
+                views.Empty.prototype.query = query;
+                return views.Empty;
+              }
+            },
+            header: {
+              empty: strings.search.empty.heading,
+              view: {
+                query: query,
+                replacement: strings.search.view.heading.replacement,
+                message: strings.search.view.heading.message
+              }
             }
           },
           content: function() {

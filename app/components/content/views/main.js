@@ -1,7 +1,7 @@
 define([
   "helpers/contract",
-  "components/content/views/singleView",
-  "components/content/views/multiView"
+  "components/content/views/single/view",
+  "components/content/views/multi/layout"
 ], function(contract, SingleView, MultiView) {
 
   function getView(options) {

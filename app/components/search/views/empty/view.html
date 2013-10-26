@@ -1,3 +1,12 @@
-<div class="grid-col">
-  <h1><span class="vert-align">Sorry, nothing found for "<%= query %>"</span></h1>
+<div class="grid-col-center">
+  <p>    
+    <%= message %>
+  </p>
+  <form role="search" class="search-form">
+    <label>
+      <span class="screen-reader-text"><%= label %></span>
+      <input type="search" class="search-field" placeholder="Search …" value="<%= query %>" title="<%= label %>">
+    </label>
+    <input type="submit" class="search-submit" value="Search">
+  </form>  
 </div>
