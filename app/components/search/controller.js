@@ -41,11 +41,15 @@ define([
               }
             },
             header: {
-              empty: strings.search.empty.heading,
-              view: {
-                query: query,
-                replacement: strings.search.view.heading.replacement,
-                message: strings.search.view.heading.message
+              message: function(collectionLength) {
+                if (collectionLength > 0) {
+                  return strings.search.view.heading.message.replace(
+                    strings.search.view.heading.replacement,
+                    query
+                  );
+                } else {
+                  return strings.search.empty.heading;
+                }
               }
             }
           },

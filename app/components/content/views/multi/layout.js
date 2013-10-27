@@ -1,36 +1,34 @@
 define([
   "backbone.marionette",
-  "helpers/contract",
   "components/content/views/multi/header",
   "components/content/views/multi/content"
-], function(Marionette, contract, Header, Content) {
+], function(Marionette, Header, Content) {
 
   var MultiPostLayout = Marionette.Layout.extend({
     template: "components/content/views/multi/layout",
     className: "page-layout",
+
     ui : {
       header: ".page-header"
     },
+
     regions: {
       header: ".page-header",
       content: ".page-content"
     },
 
+    initialize: function(options) {
+      this.headerParams = options.params ? options.params.header : undefined;
+    },
+
     onRender: function() {
       var content = Content.create(this.options);
 
-      if (this.options.params && this.options.params.header) {
-        contract(this.options.params.header, "empty", "view.message", "view.replacement", "view.query");
-
-        var headerMessage = this.options.params.header.empty;
-        if (content.collection.length > 0) {
-          headerMessage = this.options.params.header.view.message.replace(
-            this.options.params.header.view.replacement,
-            this.options.params.header.view.query
-            );
-        }
+      if (this.headerParams) {
         this.ui.header.removeClass("hide");
-        this.header.show(Header.create({ headerMessage: headerMessage }));
+        this.header.show(Header.create({
+          headerMessage: this.headerParams.message(content.collection.length)
+        }));
       } else {
         this.ui.header.addClass("hide");
         this.header.close();
