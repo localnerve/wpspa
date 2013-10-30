@@ -1,11 +1,11 @@
 define([
   "helpers/contract",
-  "helpers/code",
+  "helpers/types",
   "components/content/entities/model",
   "components/content/entities/collection",
   "components/content/entities/specializations/main"
 ],
-function(contract, code, PostModel, PostCollection, specializations) {
+function(contract, types, PostModel, PostCollection, specializations) {
 
   function createModel(options) {
     contract(options, "object_id");
@@ -17,8 +17,7 @@ function(contract, code, PostModel, PostCollection, specializations) {
   function createCollection(options) {
     contract(options, "object_type");
 
-    // if this is a delimited object type, get the base type
-    var type = options.object_type.split(":")[0];
+    var type = types.baseObjectType(options.object_type);
 
     // if we have a specialized prototype, create it
     if (specializations[type]) {

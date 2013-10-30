@@ -2,32 +2,50 @@
  * content/main
  * The content message handler
  * Handles view and entity requests from the main content container.
- *
  */
 define([
   "lodash",
   "app",
   "helpers/contract",
+  "helpers/types",
   "components/content/views/main",
   "components/content/transitions/main",
   "components/content/errors/main",
   "components/content/entities/main"
-  ], function(_, app, contract, contentViews, transitionViews, errorViews, entities) {
+  ], function(_, app, contract, types, contentViews, transitionViews, errorViews, entities) {
 
     /**
      * Get a view type
-     * Use a custom factory if one was specified, otherwise use a default
+     * Use a custom view factory if one was specified or found in the app, otherwise use the default
+     *
+     * Caller can override the default view factory by one of the following ways (in order of preference):
+     * 1) Specify a custom view factory (a function) in the input options depending on the view type, this is either
+     *    options.content or options.transition or options.error. The custom view factory will receive the options
+     *    as input.
+     * 2) Register a view factory with the application via reqres.setHandler. The request will be
+     *    view:<content | transition | error>:<object_type>
+     *      Example Request: view:content:myCustomWordpressPostType
+     *
+     * Custom view factories should NOT "new" the views. Instead, return an object with a "create" method that does this.
      */
     function getView(options, viewType, defaultViewFactory) {
-      contract(options, "options");
+      contract(options, "options", "options.object_type");
 
       var view;
 
-      // if a custom view factory was specified, use that
-      if (options[viewType])
+      if (options[viewType]) {
         view = options[viewType](options.options);
-      else
-        view = defaultViewFactory.getView(options.options);
+      }
+      else {
+        var viewFactoryRequest = "view:"+viewType+":"+types.baseObjectType(options.options.object_type);
+
+        if (app.reqres.hasHandler(viewFactoryRequest)) {
+          view = app.request(viewFactoryRequest);
+        }
+        else {
+          view = defaultViewFactory.getView(options.options);
+        }
+      }
 
       return view;
     }
@@ -51,7 +69,13 @@ define([
     // entities are keyed by object_type
     var cache = {};
 
-    // handle content:entity requests
+    /**
+     * Handle entity requests
+     *
+     * Entities are retrieved from cache or created. If options.create is specified, it is a function
+     * that creates the entity. The create function is passed the input options.
+     * If a options.create is not specified, the default entity creator is used.
+     */
     app.reqres.setHandler("content:entity", function(options) {
       contract(options, "object_type");
 

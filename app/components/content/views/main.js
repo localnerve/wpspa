@@ -1,14 +1,14 @@
 define([
   "helpers/contract",
+  "helpers/types",
   "components/content/views/single/view",
   "components/content/views/multi/layout"
-], function(contract, SingleView, MultiView) {
+], function(contract, types, SingleView, MultiView) {
 
   function getView(options) {
     contract(options, "object_type");
-
-    // if this is a delimited object type, get the base type
-    var type = options.object_type.split(":")[0];
+    
+    var type = types.baseObjectType(options.object_type);
 
     // if this is a singular wordpress type, return the SingleView.
     // otherwise, its a MultiView by default.
