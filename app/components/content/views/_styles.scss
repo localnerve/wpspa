@@ -4,10 +4,19 @@
 }
 .page-title {
   font: italic 300 30px "Source Sans Pro",Helvetica,sans-serif;
-  //margin: 0 auto;
-  //max-width: $row-width *.65;
   padding: 30px 0;
-  //width: 100%;
+}
+.page-title-container {
+  @include grid-column(
+    $default-columns * 0.75,
+    $default-last-column,
+    true,
+    $default-offset,
+    $default-push,
+    $default-pull,
+    $default-collapse,
+    $default-float
+    );
 }
 
 .entry-header, .entry-content, .entry-meta, .entry-summary {
