@@ -44,8 +44,8 @@ module.exports = function(grunt) {
   // project configuration
   var projectConfig = {
     dist: {
-      debug: "dist/debug",
-      release: "dist/release"
+      debug: configDebug.staticBase,
+      release: configRelease.staticBase
     },
     app: "app",
     report: "report",
