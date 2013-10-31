@@ -29,6 +29,9 @@ require.config({
     "components/layout/header/navigation/item": {
       hideHome: true
     },
+    "components/layout/content/main": {
+      scrollTopDuration: 200
+    },
     "components/search/model": {
       urlRoot: "/api/get_search_results"
     },

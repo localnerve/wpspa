@@ -10,13 +10,15 @@
  *   WPSPA plugin in concert with your normal wordpress menu.
  */
 define([
+  "jquery",
   "backbone.marionette",
   "app",
   "helpers/contract",
   "components/layout/content/vendor-interface",
   "components/layout/content/prefetch",
-  "components/layout/content/connect"
-], function(Marionette, app, contract, vendor, prefetch, connect) {
+  "components/layout/content/connect",
+  "module"
+], function($, Marionette, app, contract, vendor, prefetch, connect, module) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -38,6 +40,21 @@ define([
       });
     },
 
+    // Ensure this region is at the top
+    ensureTop: function() {
+      var offset = $(this.el).offset();
+      var currentTop = $(document).scrollTop();
+      if (currentTop > offset.top) {
+        $("body").animate({
+            scrollTop: offset.top,
+            scrollLeft: offset.left
+          }, {
+            duration: module.config().scrollTopDuration
+          }
+        );
+      }
+    },
+
     // Swap out the content from the prefetch
     // See the prefetch to match up the handlers by signature to the events on the deferred promise
     contentStart: function(options) {
@@ -52,6 +69,9 @@ define([
 
       // Request the appropriate error view
       var error = app.request("content:error", options);
+
+      // make sure this region is at the top for viewing
+      this.ensureTop();
 
       var self = this;
       this._promises[subopts.object_type].then(
