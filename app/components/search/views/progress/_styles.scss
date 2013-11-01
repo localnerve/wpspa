@@ -1,0 +1,64 @@
+@import "compass/css3";
+
+// keyframes mixin requires another gem for the moment, so just doing it by hand
+
+// technique from http://lea.verou.me/2012/02/moving-an-element-along-a-circle/
+@-webkit-keyframes rot {
+  from {
+    -webkit-transform: rotate(0deg) translate(-20px) rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg) translate(-20px) rotate(-360deg);
+  }
+}
+@-moz-keyframes rot {
+  from {
+    -moz-transform: rotate(0deg) translate(-20px) rotate(0deg);
+  }
+  to { 
+    -moz-transform: rotate(360deg) translate(-20px) rotate(-360deg);
+  }
+}
+@-ms-keyframes rot {
+  from {
+    -ms-transform: rotate(0deg) translate(-20px) rotate(0deg);
+  }
+  to { 
+    -ms-transform: rotate(360deg) translate(-20px) rotate(-360deg);
+  }
+}
+@keyframes rot {
+  from {
+    transform: rotate(0deg) translate(-20px) rotate(0deg);
+  }
+  to { 
+    transform: rotate(360deg) translate(-20px) rotate(-360deg);
+  }
+}
+
+// animated and styled a magnifying glass originally from http://codepen.io/brbcoding/pen/Bufpc
+.magnifying-glass {
+  position: relative;
+  margin: 20px auto;
+  width: 5em;
+  height: 5em;
+  border-radius: 100%;
+  border: solid 0.4em black;
+  @include transition(0.5s);
+  @include background-image(radial-gradient(#e8e5ce, #e6402a 50%, #e8e5ce 50%, #ed6a31));
+  &:after {
+    position: absolute;
+    content: "";
+    top: 4.5em;
+    left: 3.5em;
+    width: 3em;
+    height: 0.7em;
+    background: black;
+    @include rotate(42deg);
+  }
+  -webkit-animation: rot 1.2s infinite linear;
+  -moz-animation: rot 1.2s infinite linear;
+  -ms-animation: rot 1.2s infinite linear;
+  animation: rot 1.2s infinite linear;
+}
+

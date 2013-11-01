@@ -81,12 +81,6 @@
 // application styles
 @import "globals";
 @import "genericons";
-@import "components/layout/header/styles";
-@import "components/layout/header/banner/styles";
-@import "components/layout/header/navigation/styles";
-@import "components/layout/footer/styles";
-@import "components/layout/footer/sidebarContainer/styles";
-@import "components/layout/footer/siteInfo/styles";
-@import "components/layout/content/styles";
-@import "components/content/views/styles";
-@import "components/search/views/styles";
+@import "components/layout/styles";
+@import "components/content/styles";
+@import "components/search/styles";
