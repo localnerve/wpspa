@@ -45,7 +45,7 @@ define([
       var offset = $(this.el).offset();
       var currentTop = $(document).scrollTop();
       if (currentTop > offset.top) {
-        $("body").animate({
+        $("html, body").animate({
             scrollTop: offset.top,
             scrollLeft: offset.left
           }, {
