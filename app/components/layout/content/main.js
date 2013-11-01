@@ -64,8 +64,8 @@ define([
       // Request the appropriate content view
       var content = app.request("content:view", options);
 
-      // Request the appropriate transition view
-      var transition = app.request("content:transition", options);
+      // Request the appropriate progress view
+      var progress = app.request("content:progress", options);
 
       // Request the appropriate error view
       var error = app.request("content:error", options);
@@ -93,7 +93,7 @@ define([
         // progress
         function() {
           if (this.state() === "pending") {
-            self.show(transition.create());
+            self.show(progress.create());
           }
         }
       );

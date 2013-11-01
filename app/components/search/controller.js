@@ -59,8 +59,8 @@ define([
           error: function() {
             return views.error;
           },
-          transition: function() {
-            return views.transition;
+          progress: function() {
+            return views.progress;
           }
         });
       }

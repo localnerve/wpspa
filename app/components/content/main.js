@@ -9,10 +9,10 @@ define([
   "helpers/contract",
   "helpers/types",
   "components/content/views/main",
-  "components/content/transitions/main",
+  "components/content/progress/main",
   "components/content/errors/main",
   "components/content/entities/main"
-  ], function(_, app, contract, types, contentViews, transitionViews, errorViews, entities) {
+  ], function(_, app, contract, types, contentViews, progressViews, errorViews, entities) {
 
     /**
      * Get a view type
@@ -20,10 +20,10 @@ define([
      *
      * Caller can override the default view factory by one of the following ways (in order of preference):
      * 1) Specify a custom view factory (a function) in the input options depending on the view type, this is either
-     *    options.content or options.transition or options.error. The custom view factory will receive the options
+     *    options.content or options.progress or options.error. The custom view factory will receive the options
      *    as input.
      * 2) Register a view factory with the application via reqres.setHandler. The request will be
-     *    view:<content | transition | error>:<object_type>
+     *    view:<content | progress | error>:<object_type>
      *      Example Request: view:content:myCustomWordpressPostType
      *
      * Custom view factories should NOT "new" the views. Instead, return an object with a "create" method that does this.
@@ -55,9 +55,9 @@ define([
       return getView(options, "content", contentViews);
     });
 
-    // handle content:transition requests
-    app.reqres.setHandler("content:transition", function(options) {
-      return getView(options, "transition", transitionViews);
+    // handle content:progress requests
+    app.reqres.setHandler("content:progress", function(options) {
+      return getView(options, "progress", progressViews);
     });
 
     // handle content:error requests

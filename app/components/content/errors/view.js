@@ -3,7 +3,7 @@ define([
 ], function(Marionette) {
   
   var ErrorView = Marionette.ItemView.extend({
-    template: "components/content/errors/errorView",
+    template: "components/content/errors/view",
     className: "grid-row"
   });
 

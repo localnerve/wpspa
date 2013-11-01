@@ -3,12 +3,12 @@ define([
   "components/content/views/multi/layout",
   "components/search/views/empty/view",
   "components/search/views/error/view",
-  "components/search/views/transition/view"
-], function(content, Empty, error, transition) {
+  "components/search/views/progress/view"
+], function(content, Empty, error, progress) {
   return {
     content: content,
     Empty: Empty,
     error: error,
-    transition: transition
+    progress: progress
   };
 });

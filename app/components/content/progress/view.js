@@ -3,8 +3,8 @@ define([
   "backbone.marionette"
 ], function($, Marionette) {
   
-  var TransitionView = Marionette.ItemView.extend({
-    template: "components/content/transitions/transitionView",
+  var ProgressView = Marionette.ItemView.extend({
+    template: "components/content/progress/view",
     className: "grid-row",
 
     onRender: function() {
@@ -18,7 +18,7 @@ define([
 
   return {
     create: function(options) {
-      return new TransitionView(options);
+      return new ProgressView(options);
     }
   };
 });
