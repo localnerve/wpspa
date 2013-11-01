@@ -21,6 +21,9 @@ var strings = {
     error: {
       heading: "Search Error",
       message: "An error has occurred processing your search request. Please try again later."
+    },
+    progress: {
+      heading: "Searching..."
     }
   },
   content: {
