@@ -18,6 +18,9 @@
     $default-float
     );
 }
+.page-content {
+  padding: 0 ($column-gutter / 2);
+}
 
 .entry-header, .entry-content, .entry-meta, .entry-summary {
   margin: 0 auto;

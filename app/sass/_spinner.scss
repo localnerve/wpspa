@@ -1,0 +1,49 @@
+//
+// Spinner classes
+//
+// Simple spinner inspired by http://codepen.io/Elbone/pen/sezjI
+//
+$page-spinner-size-px: 40;
+$item-spinner-size-px: 20;
+
+// Keyframes requires another gem, so just hand-coding for now
+@-webkit-keyframes simple-spinner-rot {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-moz-keyframes simple-spinner-rot {
+  to { -moz-transform: rotate(360deg); }
+}
+@-ms-keyframes simple-spinner-rot {
+  to { -ms-transform: rotate(360deg); }
+}
+@keyframes simple-spinner-rot {
+  to { transform: rotate(360deg); }
+}
+
+@mixin simple-spinner($vert-margin, $size-px, $light, $dark) {
+  position: relative;
+
+  margin: emCalc($vert-margin) auto;
+  width: emCalc($size-px);
+  height: emCalc($size-px);
+  border-radius: 50%;
+  background: transparent;
+  
+  border-top: emCalc($size-px/10) solid $light;
+  border-right: emCalc($size-px/10) solid $light;
+  border-bottom: emCalc($size-px/10) solid $dark;
+  border-left: emCalc($size-px/10) solid $dark;
+  
+  -webkit-animation: simple-spinner-rot 1.2s infinite linear;
+  -moz-animation: simple-spinner-rot 1.2s infinite linear;
+  -ms-animation: simple-spinner-rot 1.2s infinite linear;
+  animation: simple-spinner-rot 1.2s infinite linear;
+}
+
+.page-spinner {
+  @include simple-spinner($page-spinner-size-px, $page-spinner-size-px, #e8e5ce, #e6402a);
+}
+// not used yet
+//.item-spinner {
+//  @include simple-spinner($item-spinner-size-px, #e8e5ce, #e6402a);
+//}

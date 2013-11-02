@@ -18,7 +18,7 @@ define([
       serializeData: function() {
         // TODO: get these from a model
         return {
-          siteTitle: "jsonapi",
+          siteTitle: "WPSPA",
           siteDescription: "Just another WordPress site"
         };
       }

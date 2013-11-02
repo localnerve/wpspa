@@ -1,0 +1,85 @@
+@import "compass/css3/images";
+@import "compass/css3/box-shadow";
+//@import "compass/css3/text-shadow"
+
+//
+// The application startup splash screen
+//
+.splash-container {
+  height: 400px;
+}
+.no-js .splash {
+  display: none;
+}
+
+.js .splash {
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; 
+  width: 50%;
+  height: 50%;
+  min-width: 310px;
+  max-width: 310px;
+  @include background-image(linear-gradient(#F3F1DF, #E8E1CE 30%, #e8e5ce 70%, #978D43));
+  @include box-shadow(rgba(yellow, 0.4) 0 0 25px, rgba(#e6402a, 0.2) 0 0 3px 1px inset);
+}
+
+.splash-svg { 
+  position: absolute;
+  top: 0;
+  left: 0;
+  g {
+    font-size: 45px;
+    font-family: Arial;
+    font-weight: bold;
+    stroke: white;
+    fill: white;
+  }
+  &:nth-child(1) {
+    position: absolute;
+    top: 18%;
+    left: 10px;
+    polygon {            
+      fill: rgba(70, 130, 180, .8);
+    }
+  }
+  &:nth-child(2) {
+    position: absolute;
+    top: 21%;
+    left: 70px;
+    
+    polygon {
+      fill: rgba(85, 107, 47, .8);
+    }
+  }
+  &:nth-child(3) {
+    position: absolute;
+    top: 18%;
+    left: 130px;
+    
+    polygon {      
+      fill: rgba(138, 43, 226, .8);
+    }
+  }
+  &:nth-child(4) {
+    position: absolute;
+    top: 21%;
+    left: 190px;
+    
+    polygon {
+      fill: rgba(178, 99, 34, .8)
+    }
+  }
+  &:nth-child(5) {
+    position: absolute;
+    top: 18%;
+    left: 250px;
+    
+    polygon {
+      fill: rgba(178, 34, 34, .8)
+    }
+  }
+}

@@ -3,7 +3,7 @@
 // keyframes mixin requires another gem for the moment, so just doing it by hand
 
 // technique from http://lea.verou.me/2012/02/moving-an-element-along-a-circle/
-@-webkit-keyframes rot {
+@-webkit-keyframes magnifying-glass-rot {
   from {
     -webkit-transform: rotate(0deg) translate(-20px) rotate(0deg);
   }
@@ -11,7 +11,7 @@
     -webkit-transform: rotate(360deg) translate(-20px) rotate(-360deg);
   }
 }
-@-moz-keyframes rot {
+@-moz-keyframes magnifying-glass-rot {
   from {
     -moz-transform: rotate(0deg) translate(-20px) rotate(0deg);
   }
@@ -19,7 +19,7 @@
     -moz-transform: rotate(360deg) translate(-20px) rotate(-360deg);
   }
 }
-@-ms-keyframes rot {
+@-ms-keyframes magnifying-glass-rot {
   from {
     -ms-transform: rotate(0deg) translate(-20px) rotate(0deg);
   }
@@ -27,7 +27,7 @@
     -ms-transform: rotate(360deg) translate(-20px) rotate(-360deg);
   }
 }
-@keyframes rot {
+@keyframes magnifying-glass-rot {
   from {
     transform: rotate(0deg) translate(-20px) rotate(0deg);
   }
@@ -56,9 +56,9 @@
     background: black;
     @include rotate(42deg);
   }
-  -webkit-animation: rot 1.2s infinite linear;
-  -moz-animation: rot 1.2s infinite linear;
-  -ms-animation: rot 1.2s infinite linear;
-  animation: rot 1.2s infinite linear;
+  -webkit-animation: magnifying-glass-rot 1.2s infinite linear;
+  -moz-animation: magnifying-glass-rot 1.2s infinite linear;
+  -ms-animation: magnifying-glass-rot 1.2s infinite linear;
+  animation: magnifying-glass-rot 1.2s infinite linear;
 }
 

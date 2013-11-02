@@ -5,15 +5,7 @@ define([
   
   var ProgressView = Marionette.ItemView.extend({
     template: "components/content/progress/view",
-    className: "grid-row",
-
-    onRender: function() {
-      // TODO: implement
-    },
-
-    onBeforeClose: function() {
-      // TODO: implement
-    }
+    className: "grid-row"
   });
 
   return {
