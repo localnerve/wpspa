@@ -2,16 +2,23 @@
 @import "compass/css3/box-shadow";
 //@import "compass/css3/text-shadow"
 
+$splash-scale-factor: 2;
+
 //
 // The application startup splash screen
 //
 .splash-container {
   height: 400px;
+  
+  @media #{$small} {
+    height: 600px; // scale factor for height is too much
+  }  
 }
 .no-js .splash {
   display: none;
 }
 
+$splash-width: 310px;
 .js .splash {
   margin: auto;
   position: absolute;
@@ -21,65 +28,105 @@
   right: 0; 
   width: 50%;
   height: 50%;
-  min-width: 310px;
-  max-width: 310px;
+  min-width: $splash-width;
+  max-width: $splash-width;
   @include background-image(linear-gradient(#F3F1DF, #E8E1CE 30%, #e8e5ce 70%, #978D43));
   @include box-shadow(rgba(yellow, 0.4) 0 0 25px, rgba(#e6402a, 0.2) 0 0 3px 1px inset);
+
+  @media #{$small} {
+    min-width: $splash-width * $splash-scale-factor;
+    max-width: $splash-width * $splash-scale-factor;
+  }
 }
 
-.splash-svg { 
+$splash-text-size: 45;
+$splash-text-top-offset-px: -90px;
+$splash-text-1-left-offset-px: -6.5px;
+.splash-text {
+  font-weight: bold;
+  font-size: emCalc($splash-text-size);
+  font-family: arial;
+  color: white;
   position: absolute;
-  top: 0;
   left: 0;
-  g {
-    font-size: 45px;
-    font-family: Arial;
-    font-weight: bold;
-    stroke: white;
-    fill: white;
-  }
-  &:nth-child(1) {
-    position: absolute;
-    top: 18%;
+  top: $splash-text-top-offset-px;
+
+  @media #{$small} {
+    top: ($splash-text-top-offset-px * $splash-scale-factor);
     left: 10px;
-    polygon {            
-      fill: rgba(70, 130, 180, .8);
+    font-size: emCalc($splash-text-size * $splash-scale-factor);
+  }
+}
+.splash-text-1 {
+  left: $splash-text-1-left-offset-px;
+  @media #{$small} {
+    left: ($splash-text-1-left-offset-px / $splash-scale-factor);
+  }
+}
+
+$splash-polygon-width-px: 50px;
+$splash-polygon-height-px: 100px;
+$splash-polygon-taper-px: 10px;
+$splash-polygon-left-px: 10px;
+$splash-polygon-padding-px: 10px;
+
+.splash-polygon {
+  position: absolute;
+  height: 0;
+  width: $splash-polygon-width-px;
+  border-top-width: $splash-polygon-height-px;
+  border-top-style: solid;
+  border-left: $splash-polygon-taper-px solid transparent;
+  border-right: $splash-polygon-taper-px solid transparent;
+
+  @media #{$small} {
+    width: $splash-polygon-width-px * $splash-scale-factor;
+    border-top-width: $splash-polygon-height-px * $splash-scale-factor;
+  }
+
+  &:nth-child(1) {
+    top: 18%;    
+    border-top-color: rgba(70, 130, 180, .8);
+    
+    left: $splash-polygon-left-px;
+    @media #{$small} {
+      left: $splash-polygon-left-px * $splash-scale-factor;
     }
   }
   &:nth-child(2) {
-    position: absolute;
-    top: 21%;
-    left: 70px;
-    
-    polygon {
-      fill: rgba(85, 107, 47, .8);
+    top: 21%;    
+    border-top-color: rgba(85, 107, 47, .8);
+
+    left: $splash-polygon-left-px + ($splash-polygon-width-px * 1) + ($splash-polygon-padding-px * 1);
+    @media #{$small} {
+      left: ($splash-polygon-left-px + ($splash-polygon-width-px * 1) + ($splash-polygon-padding-px * 1)) * $splash-scale-factor;
     }
   }
   &:nth-child(3) {
-    position: absolute;
-    top: 18%;
-    left: 130px;
-    
-    polygon {      
-      fill: rgba(138, 43, 226, .8);
+    top: 18%;    
+    border-top-color: rgba(138, 43, 226, .8);
+
+    left: $splash-polygon-left-px + ($splash-polygon-width-px * 2) + ($splash-polygon-padding-px * 2);
+    @media #{$small} {
+      left: ($splash-polygon-left-px + ($splash-polygon-width-px * 2) + ($splash-polygon-padding-px * 2)) * $splash-scale-factor;
     }
   }
   &:nth-child(4) {
-    position: absolute;
-    top: 21%;
-    left: 190px;
-    
-    polygon {
-      fill: rgba(178, 99, 34, .8)
+    top: 21%;    
+    border-top-color: rgba(178, 99, 34, .8);
+
+    left: $splash-polygon-left-px + ($splash-polygon-width-px * 3) + ($splash-polygon-padding-px * 3);
+    @media #{$small} {
+      left: ($splash-polygon-left-px + ($splash-polygon-width-px * 3) + ($splash-polygon-padding-px * 3)) * $splash-scale-factor;
     }
   }
   &:nth-child(5) {
-    position: absolute;
-    top: 18%;
-    left: 250px;
-    
-    polygon {
-      fill: rgba(178, 34, 34, .8)
+    top: 18%;    
+    border-top-color: rgba(178, 34, 34, .8);
+
+    left: $splash-polygon-left-px + ($splash-polygon-width-px * 4) + ($splash-polygon-padding-px * 4);
+    @media #{$small} {
+      left: ($splash-polygon-left-px + ($splash-polygon-width-px * 4) + ($splash-polygon-padding-px * 4)) * $splash-scale-factor;
     }
   }
 }
