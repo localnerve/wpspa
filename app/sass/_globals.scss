@@ -17,7 +17,7 @@
 
 .grid-col-center {
   @include grid-column(
-    $default-columns / 2,
+    $default-columns * 0.80,
     $default-last-column,
     true,
     $default-offset,
@@ -25,5 +25,17 @@
     $default-pull,
     $default-collapse,
     $default-float
+  );  
+  @media #{$small} {
+    @include grid-column(
+        $default-columns / 2,
+        $default-last-column,
+        true,
+        $default-offset,
+        $default-push,
+        $default-pull,
+        $default-collapse,
+        $default-float
     );
+  }
 }
