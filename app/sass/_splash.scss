@@ -39,6 +39,9 @@ $splash-width: 310px;
   }
 }
 
+//
+// splash text style and positioning
+//
 $splash-text-size: 45;
 $splash-text-top-offset-px: -90px;
 $splash-text-1-left-offset-px: -6.5px;
@@ -57,13 +60,20 @@ $splash-text-1-left-offset-px: -6.5px;
     font-size: emCalc($splash-text-size * $splash-scale-factor);
   }
 }
-.splash-text-1 {
-  left: $splash-text-1-left-offset-px;
-  @media #{$small} {
-    left: ($splash-text-1-left-offset-px / $splash-scale-factor);
+.splash-polygon {
+  &:nth-child(1) {
+    .splash-text {
+      left: $splash-text-1-left-offset-px;
+      @media #{$small} {
+        left: ($splash-text-1-left-offset-px / $splash-scale-factor);
+      }
+    }
   }
 }
 
+//
+// splash polygon style and positioning
+//
 $splash-polygon-width-px: 50px;
 $splash-polygon-height-px: 100px;
 $splash-polygon-taper-px: 10px;
