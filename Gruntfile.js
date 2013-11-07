@@ -20,6 +20,9 @@ function nodeDeps(pkg) {
   return result;
 }
 
+// async helper
+var async = require("async");
+
 // middleware to mock /api for test
 var mockApi = require("./test/fixtures/mockApi");
 
@@ -747,8 +750,8 @@ module.exports = function(grunt) {
 
   // the standard development task, run watch and the development webserver in parallel
   // use this for interactive front-end development
-  grunt.registerTask("dev", "development task", function() {
-    grunt.util.async.parallel([
+  grunt.registerTask("devTasks", "parallel development tasks", function() {
+    async.parallel([
       function() {
         runTask(grunt, "watch");
       },
@@ -760,11 +763,12 @@ module.exports = function(grunt) {
       }
     ], this.async());
   });
+  grunt.registerTask("dev", ["ccss", "devTasks"]);
 
   // the test development task, run watch, mock api, and the development webserver in parallel
   // use this for interactive test suite development
   grunt.registerTask("devTest", "develop the test suite", function() {
-    grunt.util.async.parallel([
+    async.parallel([
       function() {
         runTask(grunt, "watch");
       },
@@ -784,7 +788,7 @@ module.exports = function(grunt) {
   // the test development task, run watch, mock api, and the development webserver in parallel
   // use this for interactive test suite development
   grunt.registerTask("demo", "run the demo webserver and backend", function() {
-    grunt.util.async.parallel([
+    async.parallel([
       function() {
         runTask(grunt, "connect:demo");
       },
