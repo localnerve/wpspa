@@ -1,5 +1,6 @@
+@import "multi/styles";
+
 .page-header {
-  margin-top: -$content-margin-bottom;
   background-color: #E8E5CE;
 }
 .page-title {
@@ -19,7 +20,7 @@
     );
 }
 .page-content {
-  padding: 0 ($column-gutter / 2);
+  padding: emCalc(30) ($column-gutter / 2);
 }
 
 .entry-header, .entry-content, .entry-meta, .entry-summary {

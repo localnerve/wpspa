@@ -1,5 +1,3 @@
-$content-margin-bottom: $topbar-margin-bottom;
 #content {
-  // make the vertical margins of this container the same as top-bar
-  margin-bottom: $content-margin-bottom;
+  overflow: hidden;  
 }

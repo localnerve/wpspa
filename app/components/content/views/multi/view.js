@@ -1,3 +1,8 @@
+/*
+ * multi view layout
+ *
+ * Multi views have an optional header region.
+ */
 define([
   "backbone.marionette",
   "components/content/views/multi/header",
@@ -5,7 +10,7 @@ define([
 ], function(Marionette, Header, Content) {
 
   var MultiPostLayout = Marionette.Layout.extend({
-    template: "components/content/views/multi/layout",
+    template: "components/content/views/multi/view",
     className: "page-layout",
 
     ui : {
@@ -34,6 +39,15 @@ define([
         this.header.close();
       }
       this.content.show(content);
+    },
+
+    onTransitionOpenBefore: function() {
+      this.$el.hide();
+      this.$el.addClass("multi-page-transition");
+    },
+    onTransitionOpenAfter: function(options) {
+      this.$el.addClass("multi-page-transition-"+(options.count % 2));
+      this.$el.show();
     }
   });
 

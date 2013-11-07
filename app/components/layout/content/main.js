@@ -32,6 +32,9 @@ define([
       // Create the connector on the app.vent and promises
       this._connect = connect.create(app.vent, this._promises);
 
+      // a counter to share with transitions
+      this.openCount = 0;
+
       // Handle content start
       // The handler itself is anonymous because of the testing implications
       var self = this;
@@ -97,6 +100,18 @@ define([
           }
         }
       );
+    },
+
+    // overriding the default open to allow for transitions
+    open: function(view) {
+      view.triggerMethod("transition:open:before", {
+        count: this.openCount
+      });
+      this.$el.empty().append(view.el);
+      view.triggerMethod("transition:open:after", {
+        count: this.openCount
+      });
+      this.openCount++;
     },
 
     // Called after the region contents render

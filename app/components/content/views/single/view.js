@@ -16,6 +16,13 @@ define([
         title: this.model.get("title"),
         content: this.model.get("content")
       };
+    },
+
+    onTransitionOpenBefore: function() {
+      this.$el.hide();
+    },
+    onTransitionOpenAfter: function() {
+      this.$el.fadeIn("fast");
     }
   });
 

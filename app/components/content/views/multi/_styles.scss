@@ -1,0 +1,63 @@
+//
+// styles just for multiview
+//
+
+//
+// multi view page transitions
+//
+
+// top to bottom
+@-webkit-keyframes multi-top-bot {
+  from { -webkit-transform: translateY(-100%); }
+  to { -webkit-transform: translateY(0%); }
+}
+@-moz-keyframes multi-top-bot {
+  from { -moz-transform: translateY(-100%); }
+  to { -moz-transform: translateY(0%); }
+}
+@-ms-keyframes multi-top-bot {
+  from { -ms-transform: translateY(-100%); }
+  to { -ms-transform: translateY(0%); }
+}
+@keyframes multi-top-bot {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0%); }
+}
+
+// bottom to top
+@-webkit-keyframes multi-bot-top {
+  from { -webkit-transform: translateY(100%); }
+  to { -webkit-transform: translateY(0%); }
+}
+@-moz-keyframes multi-bot-top {
+  from { -moz-transform: translateY(100%); }
+  to { -moz-transform: translateY(0%); }
+}
+@-ms-keyframes multi-bot-top {
+  from { -ms-transform: translateY(100%); }
+  to { -ms-transform: translateY(0%); }
+}
+@keyframes multi-bot-top {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0%); }
+}
+
+.multi-page-transition {
+  -webkit-animation-duration: 0.4s;
+  -moz-animation-duration: 0.4s;
+  -ms-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+}
+
+.multi-page-transition-0 {
+  -webkit-animation-name: multi-top-bot;
+  -moz-animation-name: multi-top-bot;
+  -ms-animation-name: multi-top-bot;
+  animation-name: multi-top-bot;
+}
+.multi-page-transition-1 {
+  -webkit-animation-name: multi-bot-top;
+  -moz-animation-name: multi-bot-top;
+  -ms-animation-name: multi-bot-top;
+  animation-name: multi-bot-top;
+}
