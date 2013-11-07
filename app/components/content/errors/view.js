@@ -1,10 +1,18 @@
 define([
-  "backbone.marionette"
-], function(Marionette) {
+  "backbone.marionette",
+  "resources/strings"
+], function(Marionette, strings) {
   
   var ErrorView = Marionette.ItemView.extend({
     template: "components/content/errors/view",
-    className: "grid-row"
+    className: "grid-row",
+
+    serializeData: function() {
+      return {
+        heading: this.options.heading || strings.content.error.heading,
+        message: this.options.message || strings.content.error.message
+      };
+    }
   });
 
   return {

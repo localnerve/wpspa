@@ -33,6 +33,10 @@ var strings = {
       Three: "Three",
       comment: "comment",
       commentPlural: "comments"
+    },
+    error: {
+      heading: "Whoops!",
+      message: "An error occurred processing your request. Please refresh your browser and try again."
     }
   }
 };
