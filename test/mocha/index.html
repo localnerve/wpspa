@@ -85,6 +85,7 @@
                         "helpers/backbone/sync",
                         "helpers/routes",
                         "helpers/urls",
+                        "helpers/content",
 
                         // load all the tests
                         "tests/environment",
@@ -94,16 +95,17 @@
                         "tests/router",
                         "tests/controller",
                         "tests/header.navigation",
-                        "tests/content",
+                        "tests/container.content",
                         "tests/prefetch",
                         "tests/sync",
                         "tests/routes",
                         "tests/urls",
-                        "tests/container"
+                        "tests/container",
+                        "tests/content"
                         // next test suite here
                     ], 
                     // receive the standalone modules we explicitly want to reference
-                    function(code, contract, prefetch, sync, routes, urls) {
+                    function(code, contract, prefetch, sync, routes, urls, content) {
                         var paramNames = code.getParamNames(arguments.callee);
                         var paramValues = Array.prototype.slice.call(arguments);
 
