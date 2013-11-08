@@ -43,18 +43,17 @@ define([
       });
     },
 
-    // Ensure this region is at the top
+    // Ensure this region is visible
     ensureTop: function() {
       var offset = $(this.el).offset();
-      var currentTop = $(document).scrollTop();
+      var doc = $(document);
+      var currentTop = doc.scrollTop();
+
       if (currentTop > offset.top) {
-        $("html, body").animate({
-            scrollTop: offset.top,
-            scrollLeft: offset.left
-          }, {
-            duration: module.config().scrollTopDuration
-          }
-        );
+        // overflow property android browser hack, https://code.google.com/p/android/issues/detail?id=19625
+        doc.css("overflow-y", "hidden");
+        doc.scrollTop(offset.top);
+        doc.css("overflow-y", "auto");
       }
     },
 
