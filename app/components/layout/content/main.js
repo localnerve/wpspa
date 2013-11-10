@@ -14,11 +14,12 @@ define([
   "backbone.marionette",
   "app",
   "helpers/contract",
+  "helpers/ui",
   "components/layout/content/vendor-interface",
   "components/layout/content/prefetch",
   "components/layout/content/connect",
   "module"
-], function($, Marionette, app, contract, vendor, prefetch, connect, module) {
+], function($, Marionette, app, contract, ui, vendor, prefetch, connect, module) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -42,19 +43,10 @@ define([
         self.contentStart(options);
       });
     },
-
-    // Ensure this region is visible
-    ensureTop: function() {
+    
+    ensureVisible: function() {
       var offset = $(this.el).offset();
-      var doc = $(document);
-      var currentTop = doc.scrollTop();
-
-      if (currentTop > offset.top) {
-        // overflow property android browser hack, https://code.google.com/p/android/issues/detail?id=19625
-        doc.css("overflow-y", "hidden");
-        doc.scrollTop(offset.top);
-        doc.css("overflow-y", "auto");
-      }
+      ui.scrollTopConditional(offset.top);
     },
 
     // Swap out the content from the prefetch
@@ -72,8 +64,7 @@ define([
       // Request the appropriate error view
       var error = app.request("content:error", options);
 
-      // make sure this region is at the top for viewing
-      this.ensureTop();
+      this.ensureVisible();
 
       var self = this;
       this._promises[subopts.object_type].then(
