@@ -1,0 +1,41 @@
+.post-navigation {
+  background-color: transparent;
+  color: #ca3c08;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 300;
+  //padding: emCalc(20) 0;
+}
+
+.post-navigation a {
+  color: #bc360a;
+}
+
+.post-navigation .nav-links {
+  @include block-grid(2, emCalc(10));
+  list-style-type: none;
+
+  @media #{$small} {
+    margin: 0 auto;
+    max-width: 1040px;
+  }
+}
+
+.post-navigation li:only-child {
+  width: 100%;
+}
+// previous
+.post-navigation li:nth-child(1) {
+  float: left;
+}
+// next
+.post-navigation li:nth-child(2) {
+  float: right;
+  .meta-nav {
+    float: right;
+  }
+  .nav-text {
+    float: right;
+    padding-right: emCalc(5);
+  }
+}

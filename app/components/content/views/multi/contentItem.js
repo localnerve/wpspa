@@ -11,14 +11,14 @@ define([
     className: "type-post",
 
     labelComment: function(length) {
-      return length < 2 ? strings.content.item.comment : strings.content.item.commentPlural;
+      return length < 2 ? strings.content.labels.comment : strings.content.labels.commentPlural;
     },
 
     labelNumber: function(number) {
       switch (number) {
-        case 1: return strings.content.item.One;
-        case 2: return strings.content.item.Two;
-        case 3: return strings.content.item.Three;
+        case 1: return strings.content.numbers.One;
+        case 2: return strings.content.numbers.Two;
+        case 3: return strings.content.numbers.Three;
         default: return number.toString();
       }
     },

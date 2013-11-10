@@ -1,4 +1,11 @@
+%center-content {
+  margin: 0 auto;
+  max-width: 604px;
+  width: 100%;  
+}
+
 @import "multi/styles";
+@import "single/styles";
 
 .page-header {
   background-color: #E8E5CE;
@@ -24,9 +31,7 @@
 }
 
 .entry-header, .entry-content, .entry-meta, .entry-summary {
-  margin: 0 auto;
-  max-width: 604px;
-  width: 100%;
+  @extend %center-content;
 }
 
 .entry-title a:hover {
@@ -90,7 +95,7 @@
   top: -1px;
 }
 
-.date a:before, .categories-links a:first-child:before, .comments-link a:before, {
+.date a:before, .categories-links a:first-child:before, .comments-link a:before, .comment-reply-link {
   -webkit-font-smoothing: antialiased;
   display: inline-block;
   font: normal 16px/1 Genericons;

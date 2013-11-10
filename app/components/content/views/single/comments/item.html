@@ -1,0 +1,27 @@
+<article class="comment-body">
+  <footer class="comment-meta">
+    <div class="comment-author vcard">
+      <div class="main-generic-gravitar avatar"></div>
+      <b class="fn">
+        <a href="<%= model.get('url') %>" rel="external nofollow" class="url">
+          <%= model.get('name') %>
+        </a>
+      </b>
+    </div>
+    <div class="comment-metadata">
+      <a data-bypass href="#comment-<%= model.get('id') %>">
+        <time datetime="<%= model.get('datetime') %>">
+          <%= model.get('date') %>
+        </time>
+      </a>
+    </div>
+  </footer>
+  <div class="comment-content">
+    <%= model.get('content') %>
+  </div>
+  <div class="reply">
+    <a data-bypass class="comment-reply-link">
+      Reply
+    </a>        
+  </div>
+</article>

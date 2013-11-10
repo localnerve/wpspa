@@ -1,0 +1,134 @@
+.comment-body {
+  padding: emCalc(24) 0;
+  position: relative;
+  @include clearfix();
+}
+
+.comment-list {
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+.comment-metadata, .comment-awaiting-moderation, .comment-content, .comment-list .reply {
+  float: right;
+  width: 79%;
+  width: -webkit-calc(100% - 124px);
+  width: calc(100% - 124px);
+  word-wrap: break-word;
+}
+
+.comment-meta, .comment-meta a {
+  color: #a2a2a2;
+  font-size: emCalc(13);
+}
+
+.comment-author {
+  float: left;
+  max-width: 96px;
+}
+
+.comment-metadata {
+  margin-bottom: emCalc(20);
+}
+
+.comment-respond {
+  background-color: #f7f5e7;
+  padding: emCalc(30) 0;
+}
+
+.comment-author .fn, .comment-author .url, .comment-reply-link, .comment-reply-login {
+  color: #bc360a;
+  font-style: normal;
+  font-weight: normal;
+}
+.comment-author .fn {
+  word-wrap: break-word;
+}
+
+.comment-reply-link:before, .comment-reply-login:before {
+  content: "\f412";
+  margin-right: 3px;
+}
+
+.comments-title {
+  font: 300 italic 28px "Source Sans Pro", Helvetica, sans-serif;
+}
+
+.comments-title,
+.comment-list,
+.comment-reply-title,
+.comment-respond .comment-form {
+  @extend %center-content;
+}
+
+.comment-author .avatar {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.comment-form .comment-notes {
+  margin-bottom: emCalc(15);
+}
+
+.comment-form .comment-form-author, 
+.comment-form .comment-form-email, 
+.comment-form .comment-form-url {
+  margin-bottom: emCalc(8);
+  @include clearfix();
+}
+
+.comment-form [for="author"], 
+.comment-form [for="email"], 
+.comment-form [for="url"], 
+.comment-form [for="comment"] {
+  float: left;
+  padding: 5px 0;
+  width: 120px;
+}
+
+%comment-input {
+  border: 2px solid #d4d0ba;
+  font-family: inherit;
+  padding: 5px;
+}
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form input[type="url"] {
+  max-width: 270px;
+  width: 60%;
+  @extend %comment-input;
+}
+.comment-form textarea {
+  width: 100%;
+  @extend %comment-input;
+}
+
+.comment-form .required {
+  color: #ed331c;
+}
+
+.form-allowed-tags, .form-allowed-tags code {
+  color: #686758;
+  font-size: 12px;
+}
+
+.form-allowed-tags code {
+  font-size: 10px;
+  margin-left: 3px;
+}
+
+.comment-form input[type=submit] {
+  @include background(linear-gradient(180deg, #e05d22 0%, #d94412 100%));
+  border: none;
+  border-bottom: 3px solid #b93207;
+  border-radius: 2px;
+  color: #fff;
+  display: inline-block;
+  padding: 11px 24px 10px;
+  text-decoration: none;
+}
+
+.comment-reply-title {
+  font: 300 italic 28px "Source Sans Pro", Helvetica, sans-serif;
+  margin-bottom: 22px;
+}

@@ -3,19 +3,30 @@
  * A view of a single Wordpress post type
  */
 define([
+  "lodash",
   "backbone.marionette",
+  "components/content/views/single/content/view",
+  "components/content/views/single/navigation/view",
+  "components/content/views/single/comments/view",
   "components/content/entities/main"
-], function(Marionette, entities) {
+], function(_, Marionette, content, navigation, comments, entities) {
 
-  var PostView = Marionette.ItemView.extend({
+  var SingleLayout = Marionette.Layout.extend({
     template: "components/content/views/single/view",
-    className: "grid-row",
+    className: "post-container",
 
-    serializeData: function() {
-      return {
-        title: this.model.get("title"),
-        content: this.model.get("content")
-      };
+    regions: {
+      content: "#post-content",
+      navigation: "#post-navigation",
+      comments: "#post-comments"
+    },
+
+    onRender: function() {
+      this.content.show(content.create(this.options));
+      if (this.model.get("type") === "post") {
+        this.navigation.show(navigation.create(this.options));
+      }
+      this.comments.show(comments.create(this.options));
     },
 
     onTransitionOpenBefore: function() {
@@ -30,10 +41,9 @@ define([
     create: function(options) {
       options = options || {};
 
-      // If options.model exists, then make the view from that
-      return new PostView({
-        model: options.model || entities.createPostModel(options)
-      });
+      return new SingleLayout(_.extend(options, {
+        model: options.model || entities.createModel(options)
+      }));
     }
   };
 });

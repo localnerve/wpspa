@@ -27,12 +27,41 @@ var strings = {
     }
   },
   content: {
-    item: {
+    numbers: {
       One: "One",
       Two: "Two",
-      Three: "Three",
+      Three: "Three"
+    },
+    labels: {
       comment: "comment",
-      commentPlural: "comments"
+      Comment: "Comment",
+      commentPlural: "comments",
+      thought: "thought",
+      thoughtPlural: "thoughts",
+      Name: "Name",
+      Email: "Email",
+      Website: "Website",
+      requiredMessage: "Required fields are marked",
+      requiredSymbol: "*"
+    },
+    single: {
+      navigation: {
+        title: "Post navigation",
+        previousEntity: "&larr;",
+        nextEntity: "&rarr;"
+      },
+      comments: {
+        title: {
+          replacement: "%s",
+          message: "Thoughts on %s"
+        },
+        respond: {
+          title: "Leave a Reply",
+          cancelText: "Cancel reply",
+          commentNote: "Your email address will not be published.",
+          tagsMessage: "You may use these <abbr title='HyperText Markup Language'>HTML</abbr> tags and attributes:"
+        }
+      }
     },
     error: {
       heading: "Whoops!",

@@ -1,0 +1,55 @@
+<div id="comments" class="page-content">
+  <h2 class="comments-title">
+    <%= comments.title.message.replace(comments.title.replacement, title) %>
+  </h2>
+  <ol class="comment-list">
+  </ol>
+</div>
+<div id="respond" class="comment-respond page-content">
+  <h3 id="reply-title" class="comment-reply-title">
+    <%= comments.respond.title %>
+    <small>
+      <a data-bypass rel="nofollow" id="cancel-comment-reply-link" href="#" style="display:none;">
+        <%= comments.respond.cancelText %>
+      </a>
+    </small>
+  </h3>
+  <form id="commentform" class="comment-form">
+    <p class="comment-notes">
+      <%= comments.respond.commentNote %> <%= labels.requiredMessage %> <span class="required"><%= labels.requiredSymbol %></span>
+    </p>
+    <p class="comment-form-author">
+      <label for="author">
+        <%= labels.Name %><span class="required"><%= labels.requiredSymbol %></span>
+      </label>
+      <input id="author" name="author" type="text" value="" size="30" aria-required="true" required="true" />
+    </p>
+    <p class="comment-form-email">
+      <label for="email">
+        <%= labels.Email %><span class="required"><%= labels.requiredSymbol %></span>
+      </label>
+      <input id="email" name="email" type="email" value="" size="30" aria-required="true" required="true" />
+    </p>
+    <p class="comment-form-url">
+      <label for="url">
+        <%= labels.Website %>
+      </label>
+      <input id="url" name="url" type="url" value="" size="30" />
+    </p>
+    <p class="comment-form-comment">
+      <label for="comment"><%= labels.Comment %></label>
+      <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+    </p>
+    <p class="form-allowed-tags">
+      <%= comments.respond.tagsMessage %>
+      <code>
+        &lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;strike&gt; &lt;strong&gt;
+      </code>
+    </p>
+    <p class="form-submit">
+      <input name="submit" type="submit" id="submit" value="Post Comment">
+      <input type="hidden" name="comment_post_ID" value="1" id="comment_post_ID">
+      <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+    </p>
+  </form>
+</div>
