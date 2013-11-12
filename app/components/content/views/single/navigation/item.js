@@ -9,15 +9,6 @@ define([
     initialize: function() {
       this.strings = strings.content.single.navigation;
     },
-    styleItemView: function() {
-      var title = this.model.get("title");
-      if (!title) { // this should not be required... TODO: fix
-        this.$el.css("display", "none");
-      }
-    },
-    onRender: function() {
-      this.styleItemView();
-    },
     textRel: function() {
       return this.options.next ? "next" : "prev";
     },
