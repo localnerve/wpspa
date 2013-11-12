@@ -19,7 +19,7 @@ define([
 
     urlRoot: module.config().urlRoot,
 
-    initialize: function(options) {
+    initialize: function(models, options) {
       options = options || {};
       // preserve any options specified to constructor
       this.options = _.extend(this.options || {}, options);

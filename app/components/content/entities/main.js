@@ -24,7 +24,7 @@ function(contract, types, PostModel, PostCollection, specializations) {
       return new specializations[type](options);
     } else {
       // otherwise, this is a generic PostCollection
-      return new PostCollection(
+      return new PostCollection(null,
         type === "empty" ? { createdEmpty: true } : options
       );
     }
