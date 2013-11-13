@@ -1,6 +1,30 @@
 //
 // styles just for multiview
 //
+.page-header {
+  background-color: #E8E5CE;
+}
+$page-title-vert-padding: 30px;
+.page-title {
+  font: italic 300 30px "Source Sans Pro",Helvetica,sans-serif;
+  padding: $page-title-vert-padding 0;
+}
+.title-meta {
+  margin-top: -($page-title-vert-padding/2);
+  padding: 0 0 11px;
+}
+.page-title-container {
+  @include grid-column(
+    $default-columns * 0.75,
+    $default-last-column,
+    true,
+    $default-offset,
+    $default-push,
+    $default-pull,
+    $default-collapse,
+    $default-float
+    );
+}
 
 //
 // multi view page transitions

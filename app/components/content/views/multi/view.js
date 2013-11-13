@@ -1,7 +1,7 @@
 /*
  * multi view layout
  *
- * Multi views have an optional header region.
+ * Multi views show many posts and have an optional header region.
  */
 define([
   "backbone.marionette",
@@ -16,21 +16,17 @@ define([
       header: ".page-header",
       content: ".page-content"
     },
-
     initialize: function(options) {
       this.headerParams = options.params ? options.params.header : undefined;
     },
-
     onRender: function() {
-      var content = Content.create(this.options);
-
       if (this.headerParams) {
         this.header.show(Header.create({
-          headerMessage: this.headerParams.message(content.collection.length),
-          archiveMeta: this.headerParams.archiveMeta
+          headerMessage: this.headerParams.message(this.model),
+          headerMeta: this.model.get("description")
         }));
       }
-      this.content.show(content);
+      this.content.show(Content.create(this.options));
     },
 
     onTransitionOpenBefore: function() {

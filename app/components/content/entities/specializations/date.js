@@ -1,45 +1,34 @@
 /*
  * date
- * A collection of date posts
- *
+ * A collection of posts by date
  */
 define([
-  "lodash",
-  "backbone",
+  "helpers/contract",
   "helpers/urls",
+  "module",
   "components/content/entities/parser",
-  "module"
-], function(_, Backbone, urls, parser, module) {
+  "components/content/entities/specializations/onetomany"
+], function(contract, urls, module, parser, OneToMany) {
 
-  // definition of a date model
-  var DateModel = Backbone.Model.extend({
+  // Definition of a date model
+  var DateModel = OneToMany.extend({
 
     urlRoot: module.config().urlRoot,
 
     url: function() {
       var items = this.get("items");
-      if (items && items.length > 0) {
-        var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
-        // api allows one date get
-        return urlRoot + "?date="+items[0].object_id;
-      }
-    },
+      contract(items, "0");
 
-    // Since we're really just a directory for date posts,
-    // Return this directory if appropriate.
-    get: function(attr) {
-      if (_.isObject(attr)) {
-        return this;
-      }
-      return this.attributes[attr];
+      // api allows one date get
+      return urls.normalizeUrlRoot(this.urlRoot) + "?date="+items[0].object_id;
     },
 
     parse: function(data) {
-      // we can do this because this is not part of a real collection
-      this.collection = new Backbone.Collection(parser(data));
+      OneToMany.prototype.createCollection.call(this, parser(data));
+      var id = this.get("items")[0].object_id;
       return {
-        // TODO: change this
-        id: this.get("items")[0].object_id
+        id: id,
+        title: id
       };
     }
   });

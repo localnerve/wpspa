@@ -5,8 +5,9 @@ define([
   "app",
   "helpers/contract",
   "helpers/routes",
-  "helpers/content"
-], function(_, $, app, contract, routesLib, contentLib) {
+  "helpers/content",
+  "resources/strings"
+], function(_, $, app, contract, routesLib, contentLib, strings) {
 
   // update the category content
   function updateCategories(content) {
@@ -35,6 +36,16 @@ define([
     routes.push({
       name: slug,
       route: routesLib.hrefToRoute(path),
+      params: {
+        header: {
+          message: function(model) {
+            return strings.content.multi.header.monthlyArchives +
+              model.get("title").replace(/(\d+)\/(\d+)/, function(m, m1, m2) {
+                return strings.content.months[parseInt(m2, 10)] + " " +m1;
+              });
+          }
+        }
+      },
       options: {
         object_type: type+":"+slug,
         object_id: id

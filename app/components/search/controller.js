@@ -41,8 +41,8 @@ define([
               }
             },
             header: {
-              message: function(collectionLength) {
-                if (collectionLength > 0) {
+              message: function(model) {
+                if (model.collection.length > 0) {
                   return strings.search.view.heading.message.replace(
                     strings.search.view.heading.replacement,
                     query

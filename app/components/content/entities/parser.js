@@ -5,8 +5,9 @@ define([
   "lodash",
   "helpers/contract",
   "helpers/routes",
+  "resources/strings",
   "app"
-], function(_, contract, routes, app) {
+], function(_, contract, routes, strings, app) {
 
   // Parse the categories of a post
   function parseCategories(post) {
@@ -32,6 +33,13 @@ define([
       app.vent.trigger("wpspa:router:addRoute", {
         name: category.slug,
         route: category.route,
+        params: {
+          header: {
+            message: function(model) {
+              return strings.content.multi.header.categoryArchives + model.get("title");
+            }
+          }
+        },
         options: {
           object_type: object_type,
           object_id: category.id

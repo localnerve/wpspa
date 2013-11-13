@@ -6,17 +6,17 @@ define([
     template: "components/content/views/multi/header/view",
     className: "grid-row",
     ui: {
-      archiveMeta: ".archive-meta"
+      headerMeta: ".title-meta"
     },
-    onBeforeRender: function() {
-      if (!this.options.archiveMeta) {
-        this.ui.archiveMeta.addClass("hide");
+    onRender: function() {
+      if (!this.options.headerMeta) {
+        this.ui.headerMeta.addClass("hide");
       }
     },
     serializeData: function() {
       return {
         headerMessage: this.options.headerMessage,
-        archiveMeta: this.options.archiveMeta || ""
+        headerMeta: this.options.headerMeta || ""
       };
     }
   });
