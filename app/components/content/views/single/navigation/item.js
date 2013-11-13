@@ -9,6 +9,13 @@ define([
     initialize: function() {
       this.strings = strings.content.single.navigation;
     },
+    onBeforeRender: function() {
+      if (this.options.next) {
+        this.$el.addClass("next");
+      } else {
+        this.$el.addClass("previous");
+      }
+    },
     textRel: function() {
       return this.options.next ? "next" : "prev";
     },

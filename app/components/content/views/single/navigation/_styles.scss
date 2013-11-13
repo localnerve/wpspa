@@ -24,12 +24,12 @@
 .post-navigation li:only-child {
   width: 100%;
 }
-// previous
-.post-navigation li:nth-child(1) {
+
+.post-navigation li.previous {
   float: left;
 }
-// next
-.post-navigation li:nth-child(2) {
+
+%next {
   float: right;
   .meta-nav {
     float: right;
@@ -37,5 +37,8 @@
   .nav-text {
     float: right;
     padding-right: emCalc(5);
-  }
+  }  
+}
+.post-navigation li.next {
+  @extend %next;
 }
