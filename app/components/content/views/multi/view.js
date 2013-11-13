@@ -5,18 +5,13 @@
  */
 define([
   "backbone.marionette",
-  "components/content/views/multi/header",
-  "components/content/views/multi/content"
+  "components/content/views/multi/header/view",
+  "components/content/views/multi/content/view"
 ], function(Marionette, Header, Content) {
 
   var MultiPostLayout = Marionette.Layout.extend({
     template: "components/content/views/multi/view",
     className: "page-layout",
-
-    ui : {
-      header: ".page-header"
-    },
-
     regions: {
       header: ".page-header",
       content: ".page-content"
@@ -30,13 +25,10 @@ define([
       var content = Content.create(this.options);
 
       if (this.headerParams) {
-        this.ui.header.removeClass("hide");
         this.header.show(Header.create({
-          headerMessage: this.headerParams.message(content.collection.length)
+          headerMessage: this.headerParams.message(content.collection.length),
+          archiveMeta: this.headerParams.archiveMeta
         }));
-      } else {
-        this.ui.header.addClass("hide");
-        this.header.close();
       }
       this.content.show(content);
     },
