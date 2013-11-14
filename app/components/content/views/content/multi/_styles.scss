@@ -6,8 +6,11 @@
 }
 $page-title-vert-padding: 30px;
 .page-title {
-  font: italic 300 30px "Source Sans Pro",Helvetica,sans-serif;
+  font: italic 300 24px "Source Sans Pro",Helvetica,sans-serif;
   padding: $page-title-vert-padding 0;
+  @media #{$small} {
+    font-size: 30px;
+  }
 }
 .title-meta {
   margin-top: -($page-title-vert-padding/2);
@@ -15,7 +18,7 @@ $page-title-vert-padding: 30px;
 }
 .page-title-container {
   @include grid-column(
-    $default-columns * 0.75,
+    $default-columns * 0.90,
     $default-last-column,
     true,
     $default-offset,
@@ -24,6 +27,18 @@ $page-title-vert-padding: 30px;
     $default-collapse,
     $default-float
     );
+  @media #{$small} {
+    @include grid-column(
+      $default-columns * 0.75,
+      $default-last-column,
+      true,
+      $default-offset,
+      $default-push,
+      $default-pull,
+      $default-collapse,
+      $default-float
+      );
+  }
 }
 
 //
