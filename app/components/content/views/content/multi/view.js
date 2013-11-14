@@ -28,14 +28,8 @@ define([
       }
       this.content.show(Content.create(this.options));
     },
-
-    onTransitionOpenBefore: function() {
-      this.$el.hide();
-      this.$el.addClass("multi-page-transition");
-    },
     onTransitionOpenAfter: function(options) {
       this.$el.addClass("multi-page-transition-"+(options.count % 2));
-      this.$el.show();
     }
   });
 

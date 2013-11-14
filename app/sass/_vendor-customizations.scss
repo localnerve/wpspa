@@ -17,13 +17,14 @@
 // fix the top-bar name unitless font-size bug
 .top-bar {
   .name {
-    font-size: emCalc($em-base) !important
+    font-size: emCalc($em-base) !important;
   }
 }
 
 // enforce the hover backgrounds 
 .top-bar-section {
   ul {
+    font-size: emCalc($em-base) !important; // font-size bug
     li {
       &> a:hover {
         background-color: #220e10;

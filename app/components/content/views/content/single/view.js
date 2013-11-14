@@ -29,11 +29,13 @@ define([
       this.comments.show(comments.create(this.options));
     },
 
-    onTransitionOpenBefore: function() {
-      this.$el.hide();
-    },
-    onTransitionOpenAfter: function() {
-      this.$el.fadeIn("fast");
+    onTransitionOpenAfter: function(options) {
+      var transitionClass = "single-page-fade-in";
+      if (options.view.transition) {
+        transitionClass = options.view.transition;
+        options.view.transition = null;
+      }
+      this.$el.addClass(transitionClass);
     }
   });
 
