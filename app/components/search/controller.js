@@ -53,9 +53,6 @@ define([
               }
             }
           },
-          content: function() {
-            return views.content;
-          },
           error: function() {
             return views.error;
           },
