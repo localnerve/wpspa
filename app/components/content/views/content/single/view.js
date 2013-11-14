@@ -29,6 +29,9 @@ define([
       this.comments.show(comments.create(this.options));
     },
 
+    onTransitionOpenBefore: function() {
+      this.$el.hide();
+    },
     onTransitionOpenAfter: function(options) {
       var transitionClass = "single-page-fade-in";
       if (options.view.transition) {
@@ -36,6 +39,7 @@ define([
         options.view.transition = null;
       }
       this.$el.addClass(transitionClass);
+      this.$el.show();
     }
   });
 
