@@ -5,12 +5,12 @@
  */
 define([
   "backbone.marionette",
-  "components/content/views/multi/header/view",
-  "components/content/views/multi/content/view"
+  "components/content/views/content/multi/header/view",
+  "components/content/views/content/multi/content/view"
 ], function(Marionette, Header, Content) {
 
   var MultiPostLayout = Marionette.Layout.extend({
-    template: "components/content/views/multi/view",
+    template: "components/content/views/content/multi/view",
     className: "page-layout",
     regions: {
       header: ".page-header",

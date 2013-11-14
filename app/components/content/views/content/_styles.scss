@@ -1,0 +1,84 @@
+%center-content {
+  margin: 0 auto;
+  max-width: 604px;
+  width: 100%;  
+}
+
+@import "multi/styles";
+@import "single/styles";
+
+.page-content {
+  padding: emCalc(30) ($column-gutter / 2);
+}
+
+.entry-header, .entry-content, .entry-meta, .entry-summary {
+  @extend %center-content;
+}
+
+.entry-title a:hover {
+  color: #ea9629;
+  text-decoration: underline;
+}
+
+.entry-title {
+  margin-bottom: 0; // line height is making this enough for here
+}
+
+.entry-meta-list {
+  list-style-type: none;
+}
+
+.entry-header .entry-meta-list {  
+  @media #{$small} {
+    @include block-grid(2);
+  }
+}
+
+.entry-header .entry-meta-list > li {
+  @media #{$small} {
+    width: auto !important;
+  }
+}
+
+.entry-footer .entry-meta-list {
+  @include block-grid(1);
+}
+
+.entry-meta a {
+  color: #bc360a;
+}
+
+.entry-meta .date a:before {
+  content: "\f303";
+}
+
+.entry-meta .entry-meta-list > li.author {
+  display: none;
+}
+
+.categories-links a:first-child:before {
+  content: "\f301";
+}
+
+
+.categories-links a:after {
+  content: ",";
+}
+
+.categories-links a:only-child:after, .categories-links a:last-child:after {
+  content: "";
+}
+
+.comments-link a:before {
+  content: "\f300";
+  margin-right: 2px;
+  position: relative;
+  top: -1px;
+}
+
+.date a:before, .categories-links a:first-child:before, .comments-link a:before, .comment-reply-link {
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font: normal 16px/1 Genericons;
+  vertical-align: text-bottom;
+}

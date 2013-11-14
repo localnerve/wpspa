@@ -7,7 +7,7 @@ define([
 ], function(Marionette) {
 
   var ContentView = Marionette.ItemView.extend({
-    template: "components/content/views/single/content/view",
+    template: "components/content/views/content/single/content/view",
     tagName: "article",
 
     serializeData: function() {

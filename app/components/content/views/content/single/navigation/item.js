@@ -4,7 +4,7 @@ define([
 ], function(Marionette, strings) {
 
   var NavigationItemView = Marionette.ItemView.extend({
-    template: "components/content/views/single/navigation/item",
+    template: "components/content/views/content/single/navigation/item",
     tagName: "li",
     initialize: function() {
       this.strings = strings.content.single.navigation;

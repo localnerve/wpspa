@@ -4,7 +4,7 @@ define([
 ], function($, Marionette) {
   
   var ProgressView = Marionette.ItemView.extend({
-    template: "components/content/progress/view",
+    template: "components/content/views/progress/view",
     className: "grid-row"
   });
 

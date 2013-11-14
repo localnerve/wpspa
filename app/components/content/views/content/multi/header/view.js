@@ -3,7 +3,7 @@ define([
 ], function(Marionette) {
 
   var MultiPostHeader = Marionette.ItemView.extend({
-    template: "components/content/views/multi/header/view",
+    template: "components/content/views/content/multi/header/view",
     className: "grid-row",
     ui: {
       headerMeta: ".title-meta"

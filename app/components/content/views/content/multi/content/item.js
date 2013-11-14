@@ -4,9 +4,15 @@ define([
   "resources/strings"
 ], function(Marionette, app, strings) {
 
+  var lessThanFour = {
+    1: strings.content.numbers.One,
+    2: strings.content.numbers.Two,
+    3: strings.content.numbers.Three
+  };
+
   // The view definition of each post item
   var PostItemView = Marionette.ItemView.extend({
-    template: "components/content/views/multi/content/item",
+    template: "components/content/views/content/multi/content/item",
     tagName: "article",
     className: "type-post",
 
@@ -15,12 +21,7 @@ define([
     },
 
     labelNumber: function(number) {
-      switch (number) {
-        case 1: return strings.content.numbers.One;
-        case 2: return strings.content.numbers.Two;
-        case 3: return strings.content.numbers.Three;
-        default: return number.toString();
-      }
+      return lessThanFour[parseInt(number, 10)] || number.toString();
     },
 
     serializeData: function() {

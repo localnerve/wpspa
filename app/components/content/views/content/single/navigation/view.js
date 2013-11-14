@@ -6,11 +6,11 @@ define([
   "backbone.marionette",
   "helpers/contract",
   "resources/strings",
-  "components/content/views/single/navigation/item"
+  "components/content/views/content/single/navigation/item"
 ], function(Marionette, contract, strings, navItem) {
 
   var NavigationView = Marionette.CompositeView.extend({
-    template: "components/content/views/single/navigation/view",
+    template: "components/content/views/content/single/navigation/view",
     tagName: "nav",
     className: "post-navigation",
     attributes: {

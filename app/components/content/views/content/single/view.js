@@ -5,14 +5,14 @@
 define([
   "lodash",
   "backbone.marionette",
-  "components/content/views/single/content/view",
-  "components/content/views/single/navigation/view",
-  "components/content/views/single/comments/view",
+  "components/content/views/content/single/content/view",
+  "components/content/views/content/single/navigation/view",
+  "components/content/views/content/single/comments/view",
   "components/content/entities/main"
 ], function(_, Marionette, content, navigation, comments, entities) {
 
   var SingleLayout = Marionette.Layout.extend({
-    template: "components/content/views/single/view",
+    template: "components/content/views/content/single/view",
     className: "post-container",
 
     regions: {

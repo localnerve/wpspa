@@ -6,7 +6,7 @@ define([
   "backbone.marionette",
   "helpers/contract",
   "components/content/entities/main",
-  "components/content/views/multi/content/item"
+  "components/content/views/content/multi/content/item"
 ], function(Marionette, contract, entities, itemView) {
 
   var MultiPostView = Marionette.CollectionView.extend({

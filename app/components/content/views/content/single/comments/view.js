@@ -8,11 +8,11 @@ define([
   "helpers/contract",
   "helpers/ui",
   "resources/strings",
-  "components/content/views/single/comments/item"
+  "components/content/views/content/single/comments/item"
 ], function(_, Marionette, contract, ui, strings, commentItem) {
 
   var CommentsView = Marionette.CompositeView.extend({
-    template: "components/content/views/single/comments/view",
+    template: "components/content/views/content/single/comments/view",
     id: "comments",
     className: "comments-area",
     itemViewContainer: ".comment-list",

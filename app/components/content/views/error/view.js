@@ -4,7 +4,7 @@ define([
 ], function(Marionette, strings) {
   
   var ErrorView = Marionette.ItemView.extend({
-    template: "components/content/errors/view",
+    template: "components/content/views/error/view",
     className: "grid-row",
 
     serializeData: function() {

@@ -4,7 +4,7 @@ define([
 ], function(Marionette, strings) {
 
   var CommentItemView = Marionette.ItemView.extend({
-    template: "components/content/views/single/comments/item",
+    template: "components/content/views/content/single/comments/item",
     tagName: "li",
     initialize: function() {
       this.$el.prop("id", "comment-"+this.model.get("id"));

@@ -1,5 +1,5 @@
 define([
-  "components/content/progress/view"
+  "components/content/views/progress/view"
 ], function(progressView) {
 
   // right now, we only have one default progress view for all types.
