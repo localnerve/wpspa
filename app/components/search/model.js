@@ -1,35 +1,25 @@
 define([
-  "lodash",
-  "backbone",
   "helpers/urls",
   "helpers/contract",
+  "module",
   // Reuse the main content parser
   "components/content/entities/parser",
-  "module"
-], function(_, Backbone, urls, contract, parser, module) {
+  // Reuse the one to many type
+  "components/content/entities/specializations/onetomany"
+], function(urls, contract, module, parser, OneToMany) {
 
   // definition of the search model
-  var SearchModel = Backbone.Model.extend({
+  var SearchModel = OneToMany.extend({
     
     urlRoot: module.config().urlRoot,
 
     url: function() {
-      // api allows one search retrieval
+      // api allows just one search result
       return urls.normalizeUrlRoot(this.urlRoot) + "?search="+this.get("id");
     },
 
-    // Since we're really just a directory for search results,
-    // Return this directory if appropriate.
-    get: function(attr) {
-      if (_.isObject(attr)) {
-        return this;
-      }
-      return this.attributes[attr];
-    },
-
     parse: function(data) {
-      // we can do this because this is not part of a real collection
-      this.collection = new Backbone.Collection(parser(data));
+      OneToMany.prototype.createCollection.call(this, parser(data));
       return {
         id: this.get("id")
       };
