@@ -31,7 +31,7 @@ var rewriteRules = [
   // if request is for snapshot, TODO: fix
   '^(.*)\\?_escaped_fragment_=.*$ /snapshots/$1 [NC L]',
   // if a static resource is not being requested, its an in-app route
-  '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$)) /index.html [NC L]'
+  '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$|ttf$|eot$|svg$|woff$)) /index.html [NC L]'
 ];
 
 // requests are processed in this middleware stack order
