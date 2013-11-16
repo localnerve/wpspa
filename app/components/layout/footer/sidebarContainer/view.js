@@ -1,11 +1,10 @@
 define([
   "lodash",
-  "jquery",
-  "backbone",
   "backbone.marionette",
+  "app",
   "components/layout/footer/sidebarContainer/item",
   "components/layout/footer/sidebarContainer/entities"
-  ], function(_, $, Backbone, Marionette, itemView, entities) {
+  ], function(_, Marionette, app, itemView, entities) {
 
   // The definition of the SideBarContainerView
   var SideBarContainerView = Marionette.CollectionView.extend({
@@ -17,12 +16,7 @@ define([
     },
 
     search: function(event) {
-      var searchField = $(event.currentTarget).find("input.search-field");
-      var query = searchField.prop("value");
-      if (query && query.length > 0) {
-        Backbone.history.navigate("search/"+query, true);
-        return false;
-      }
+      return app.search.formSubmit(event);
     }
   });
 

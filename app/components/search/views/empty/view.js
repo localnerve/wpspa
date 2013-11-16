@@ -5,8 +5,9 @@
  */
 define([
   "backbone.marionette",
+  "app",
   "resources/strings"
-], function(Marionette, strings) {
+], function(Marionette, app, strings) {
 
   var EmptyView = Marionette.ItemView.extend({
     template: "components/search/views/empty/view",
@@ -17,12 +18,7 @@ define([
     },
 
     search: function(event) {
-      var searchField = $(event.currentTarget).find("input.search-field");
-      var query = searchField.prop("value");
-      if (query && query.length > 0) {
-        Backbone.history.navigate("search/"+query, true);
-        return false;
-      }
+      return app.search.formSubmit(event);
     },
 
     serializeData: function() {
