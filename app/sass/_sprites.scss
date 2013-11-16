@@ -4,5 +4,6 @@
 // produce the main sprite
 $main-sprite-dimensions: true;
 $main-spacing: 10px;
+$main-search-icon-spacing: 15px;
 @import "main/*.png"; 
 @include all-main-sprites;

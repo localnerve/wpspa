@@ -1,5 +1,57 @@
-// this was moved to vendor-customizations
-//.top-bar-section ul li > a:hover {
-//  background-color: #220e10;
-//  color: #fff;
-//}
+@import "compass/css3";
+
+$search-icon-width: 24px;
+$search-width: 200px;
+$search-transition-duration: 0.4s;
+
+.top-bar .search {
+  float: left;
+  max-width: $search-width;
+  min-width: $search-icon-width + 10;
+  position: relative;
+  z-index: 1;
+  margin-left: 30px;
+  @media #{$topbar-media-query} {
+    float: right;
+    margin-left: 0;
+  }
+}
+
+.top-bar .search-form {
+  position: absolute;
+  right: 20px;
+  top: 1px;
+}
+
+.top-bar .main-search-icon {
+  background-position: 5px -554px;
+}
+
+.top-bar .search-field {
+  top: 0;
+  height: 2em;
+  line-height: 2em;  
+  font-size: inherit;
+
+  border: none;
+  cursor: pointer;
+  padding: 0 0 0 ($search-icon-width + 10);
+  position: relative;
+
+  @include transition(width $search-transition-duration, background $search-transition-duration, right $search-transition-duration);
+  right: 0;
+  background-color: transparent;
+  width: 0;
+}
+
+.top-bar .search-field:focus {
+  border: 2px solid #c3c0ab;
+  cursor: text;
+  outline: 0;
+  right: -$search-width;
+  @media #{$topbar-media-query} {
+    right: 0;
+  }
+  background-color: #fff;
+  width: $search-width;
+}

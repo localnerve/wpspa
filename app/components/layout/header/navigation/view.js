@@ -16,6 +16,9 @@ define([
     tagName: "nav",
     className: "top-bar",
     itemViewContainer: ".wpspa-nav",
+    events: {
+      "submit .search-form": "search"
+    },
 
     initialize: function() {
       var self = this;
@@ -60,6 +63,10 @@ define([
 
         this.updateDropdowns();
       }
+    },
+
+    search: function(event) {
+      return app.search.formSubmit(event);
     },
 
     // update navigation dropdowns, if required
