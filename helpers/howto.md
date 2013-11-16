@@ -13,6 +13,7 @@ Reference: [node-inspector](https://github.com/node-inspector/node-inspector)
 
 ##How to debug html/css/js on stock android browser
 Reference: [Weinre](http://people.apache.org/~pmuellr/weinre/docs/latest/)
+
 Reference2: [Running Weinre](http://people.apache.org/~pmuellr/weinre/docs/latest/Running.html)
 
 1. Clone and build weinre or get from npm
@@ -21,7 +22,7 @@ Reference2: [Running Weinre](http://people.apache.org/~pmuellr/weinre/docs/lates
 4. Click "debug client user interface", open in new window
 5. Navigate phone to `desktop_external_ip:8000`
   * Copy the injection script textarea to clipboard
-6. Navigate phone to the target app to debug \(http://enigmatic-refuge-9006.herokuapp.com\)
+6. Navigate phone to the target app to debug \(http://enigmatic-refuge-9006.herokuapp.com \)
   * Paste the injection script into the address bar, click enter
 7. Goto \(on desktop\) the "debug client user interface" window, confirm the connected target device and page
 8. Use elements/timeline/resources/network/console to debug the app
