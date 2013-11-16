@@ -1,4 +1,5 @@
-#A Collection of Development HowTo's Until I Get More Organized
+#A Collection of Development HowTo's
+> ...Until I Get More Organized
 
 ##How to debug the server side code or Gruntfile
 Reference: [node-inspector](https://github.com/node-inspector/node-inspector)
