@@ -1,57 +1,89 @@
 @import "compass/css3";
 
 $search-icon-width: 24px;
+$search-icon-height: 24px;
+$search-icon-padding: 10px;
 $search-width: 200px;
+$search-width-collapsed: $search-icon-width + $search-icon-padding;
+$search-gutter: $topbar-height / 3;
+$search-gutter-small: $search-gutter / 2;
 $search-transition-duration: 0.4s;
 
+// where to position search (mobile-first)
+$search-direction: left !default; // or right
+$search-opposite-direction: right !default;
+@if $search-direction == right {
+  $search-opposite-direction: left;
+}
+
 .top-bar .search {
-  float: left;
-  max-width: $search-width;
-  min-width: $search-icon-width + 10;
+  float: $search-direction;
   position: relative;
   z-index: 1;
-  margin-left: 30px;
+
+  max-width: $search-width;
+  width: 100%; //$search-width-collapsed;
+  height: $topbar-height;
+  
   @media #{$topbar-media-query} {
-    float: right;
-    margin-left: 0;
+    float: $search-opposite-direction;
   }
+  @include clearfix();
 }
 
 .top-bar .search-form {
   position: absolute;
-  right: 20px;
+  #{$search-direction}: $search-gutter-small;
   top: 1px;
+
+  @media #{$topbar-media-query} {
+    #{$search-direction}: auto;
+    #{$search-opposite-direction}: $search-gutter;
+  }
 }
 
 .top-bar .main-search-icon {
-  background-position: 5px -554px;
+  background-position: 5px -558px; //-554px;
 }
 
 .top-bar .search-field {
-  top: 0;
-  height: 2em;
-  line-height: 2em;  
-  font-size: inherit;
+  // override the vendor form input styles
+  @media #{$topbar-media-query} {
+    top: 0;
+  }
+  font-size: 1em;
 
-  border: none;
-  cursor: pointer;
-  padding: 0 0 0 ($search-icon-width + 10);
   position: relative;
+  padding: 0 0 0 $search-width-collapsed;
 
-  @include transition(width $search-transition-duration, background $search-transition-duration, right $search-transition-duration);
-  right: 0;
+  // override the vendor form input styles
+  height: $search-icon-height;
+  line-height: $search-icon-height;
+
+  @include transition(width $search-transition-duration, background-color $search-transition-duration); // background
+  border: 2px solid transparent; //none;
+  cursor: pointer;
   background-color: transparent;
-  width: 0;
+
+  // stock android browser hacks
+  //   Should just be width: 0, and no other styles here
+  //   Unfortunately, this means the placeholder text has to go too. :-(
+  width: $search-icon-width;
+  @media #{$topbar-media-query} {
+    margin-#{$search-opposite-direction}: -$search-icon-width;
+  }
 }
 
 .top-bar .search-field:focus {
   border: 2px solid #c3c0ab;
   cursor: text;
   outline: 0;
-  right: -$search-width;
-  @media #{$topbar-media-query} {
-    right: 0;
-  }
   background-color: #fff;
   width: $search-width;
+
+  // stock android browser hacks
+  //   Should be no styles here
+  @media #{$topbar-media-query} {
+    margin-#{$search-opposite-direction}: 0;
+  }  
 }
