@@ -787,7 +787,7 @@ module.exports = function(grunt) {
 
   // the test development task, run watch, mock api, and the development webserver in parallel
   // use this for interactive test suite development
-  grunt.registerTask("demo", "run the demo webserver and backend", function() {
+  grunt.registerTask("demoTasks", "parallel demo tasks", function() {
     async.parallel([
       function() {
         runTask(grunt, "connect:demo");
@@ -800,6 +800,7 @@ module.exports = function(grunt) {
       }
     ], this.async());
   });
+  grunt.registerTask("demo", ["ccss", "demoTasks"]);
 
   // build tasks: debug, release
 
