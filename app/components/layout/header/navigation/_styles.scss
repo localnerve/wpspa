@@ -69,6 +69,7 @@ $search-opposite-direction: right !default;
   //   Should just be width: 0, and no other styles here
   //   Unfortunately, this means the placeholder text has to go too. :-(
   width: $search-icon-width;
+  color: transparent;
   @media #{$topbar-media-query} {
     margin-#{$search-opposite-direction}: -$search-icon-width;
   }
@@ -83,6 +84,7 @@ $search-opposite-direction: right !default;
 
   // stock android browser hacks
   //   Should be no styles here
+  color: $header-font-color;
   @media #{$topbar-media-query} {
     margin-#{$search-opposite-direction}: 0;
   }  
