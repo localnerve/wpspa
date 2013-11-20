@@ -12,8 +12,7 @@ require.config({
     server: "../server",
     vendor: "../vendor",
     foundation: "../vendor/bower/foundation/js/foundation",
-    "backbone.marionette": "../vendor/bower/backbone.marionette/lib/core/amd/backbone.marionette",
-    "requirejs-text": "../vendor/bower/requirejs-text/text"
+    "backbone.marionette": "../vendor/bower/backbone.marionette/lib/core/amd/backbone.marionette"
   },
   config: {
     "loaders/jst": {
