@@ -89,3 +89,10 @@ $search-opposite-direction: right !default;
     margin-#{$search-opposite-direction}: 0;
   }  
 }
+
+// this also should not exist, except for the stock android browser bug
+//  ff does some wierd thing with required input boxshadow, even when the field is not in focus
+//  it looks insane, so defeating it is best
+.top-bar .search-field:not(:focus) {
+  box-shadow: none !important;
+}
