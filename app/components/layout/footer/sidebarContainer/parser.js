@@ -70,6 +70,11 @@ define([
       var $el = $(el);
       $el.removeAttr("method");
       $el.removeAttr("action");
+      
+      // add required to search input
+      var $search = $el.find(".search-field");
+      $search.prop("required", true);
+      $search.attr("aria-required", true);
     });
   }
 
