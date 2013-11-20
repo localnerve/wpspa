@@ -29,6 +29,7 @@ define([
 
         // start the content
         app.vent.trigger("content:start", {
+          route: "search/"+query,
           options: {
             object_type: object_type,
             object_id: object_id
