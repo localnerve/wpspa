@@ -42,7 +42,7 @@ app.use(express.logger(config.loggerFormat));
 app.use(express.compress());
 app.use(proxy(config.proxy.host, config.proxy.port, config.proxy.pattern));
 app.use(rewrite(rewriteRules));
-// requests continue after rewrites except redirects, gones, foribiddens, and proxies
+// requests continue after rewrites except redirects, gones, forbiddens, and proxies
 app.use(path.join("/", config.scriptsDir),
   express.static(path.resolve(path.join(config.staticBase, config.scriptsDir)), { maxAge: config.staticAge })
 );
