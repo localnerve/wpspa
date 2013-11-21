@@ -13,12 +13,12 @@ define([
   //   Returns the aggregate modified content result
   function alterContent(content, selector, callback) {
     if (callback) {
-      var tmp = $("<div id='_alter-content'>"+content+"</div>").appendTo("body");
-      $("#_alter-content "+selector).each(function(i ,el) {
+      var tmp = $("<div>"+content+"</div>");
+      tmp.find(selector).each(function(i ,el) {
         callback(el);
       });
       content = tmp.html();
-      tmp.remove();
+      tmp.empty();
     }
     return content;
   }
