@@ -3,6 +3,7 @@
  * Handles notfound events and dynamically added routes.
  */
 define([
+  "jquery",
   "backbone.marionette",
   "app",
   "helpers/contract",
@@ -12,7 +13,7 @@ define([
   "components/content/main",
   // Load the search component
   "components/search/main"
-], function(Marionette, app, contract) {
+], function($, Marionette, app, contract) {
 
   // The definition of the application level controller
   var AppController = Marionette.Controller.extend({
@@ -33,7 +34,8 @@ define([
       // It will always delegate to the proper handler for the object type.
       // For now, it will always be a content event: See contentRegion.
       this[options.name] = function() {
-        app.vent.trigger("content:start", options);
+        // don't trigger content:start until domReady
+        $(function() { app.vent.trigger("content:start", options); });
       };
     }
   });
