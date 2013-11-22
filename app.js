@@ -51,7 +51,7 @@ app.use(path.join("/", config.imagesDir),
   express.static(path.resolve(path.join(config.staticBase, config.imagesDir)), { maxAge: config.staticAge })
 );
 // what's left are all the no-cache statics
-app.use(cacheControl.noCache());
+app.use(cacheControl.allow304());
 app.use(express.static(path.resolve(config.staticBase)));
 
 app.use(notfound.four04);
