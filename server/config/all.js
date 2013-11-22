@@ -14,9 +14,6 @@ Config.prototype = {
   // the default static max-age of static files (in milliseconds)
   staticAge: 0,
 
-  // the default static max-age of static files NOT intended for far-future expiry (in milliseconds)
-  staticAgeShort: 0,
-
   // the logger format
   loggerFormat: "dev",
 

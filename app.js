@@ -7,11 +7,11 @@ var express = require("express");
 var http = require("http");
 var path = require("path");
 var rewrite = require("connect-modrewrite");
-var CacheControl = require("express-cache-control");
 
 var rewriteHelper = require("./server/helpers/rewrites");
 var proxy = require("./server/middleware/proxy");
 var notfound = require("./server/middleware/notfound");
+var cacheControl = require("./server/middleware/cachecontrol");
 
 var config = require("./server/config").create(process.env.NODE_ENV);
 
@@ -50,9 +50,8 @@ app.use(path.join("/", config.scriptsDir),
 app.use(path.join("/", config.imagesDir),
   express.static(path.resolve(path.join(config.staticBase, config.imagesDir)), { maxAge: config.staticAge })
 );
-// What is left are all the short term statics
-var cache = new CacheControl().middleware;
-app.use(cache("seconds", config.staticAgeShort / 1000));
+// what's left are all the no-cache statics
+app.use(cacheControl.noCache());
 app.use(express.static(path.resolve(config.staticBase)));
 
 app.use(notfound.four04);
