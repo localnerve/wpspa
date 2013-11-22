@@ -12,6 +12,7 @@ $default-pull: false;
 $default-collapse: false;
 $default-float: left;
 
-// block-grid defaults
-//$include-block-grid-classes: false;
-//$default-per-row: 
+// more media queries
+$tiny-screen: 320px;
+
+$tiny-portrait: "only screen and (orientation: portrait) and (max-width: #{$tiny-screen})";
