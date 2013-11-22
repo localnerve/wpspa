@@ -21,7 +21,7 @@ define([
 
       // forward the add event
       header.listenTo(header.navigation.collection, "add", function(model) {
-        app.vent.trigger("wpspa:router:addRoute", {
+        app.vent.trigger("app:router:addRoute", {
           name: model.get("name"),
           route: model.get("route"),
           options: {

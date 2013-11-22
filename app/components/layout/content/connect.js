@@ -40,7 +40,7 @@ define([
       entity.add(post);
 
       // add the route, ignores duplicates
-      app.vent.trigger("wpspa:router:addRoute", {
+      app.vent.trigger("app:router:addRoute", {
         name: post.slug,
         route: post.route,
         options: {

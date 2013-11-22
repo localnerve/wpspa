@@ -53,8 +53,10 @@ describe("Router", function() {
   });
 
   describe("addRoute", function() {
+    
+    var eventName = "app:router:addRoute";
+
     it("should fail if it doesn't get route and name", function() {
-      var eventName = "wpspa:router:addRoute";
       expect(function() {
         app.vent.trigger(eventName, {});
       }).to.
@@ -82,7 +84,7 @@ describe("Router", function() {
       route_stub = sandbox.stub(Backbone.Router.prototype, "route");
 
       appController[name] = function() {};
-      app.vent.trigger("wpspa:router:addRoute", {
+      app.vent.trigger(eventName, {
         route: route,
         name: name
       });

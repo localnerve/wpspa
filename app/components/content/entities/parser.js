@@ -30,7 +30,7 @@ define([
       }]);
 
       // Setup to route this category
-      app.vent.trigger("wpspa:router:addRoute", {
+      app.vent.trigger("app:router:addRoute", {
         name: category.slug,
         route: category.route,
         params: {
@@ -57,7 +57,7 @@ define([
     // Add a route to handle comments for this post.
     // Since the content will be served by type/id, send in a parameter
     // to tell the presentation that it will need to prepare for comments.
-    app.vent.trigger("wpspa:router:addRoute", {
+    app.vent.trigger("app:router:addRoute", {
       name: post.slug+"-comment",
       route: routes.hrefToRoute(post.comments.commentUrl),
       params: {
@@ -72,7 +72,7 @@ define([
     // Add a route to handle responses for this post.
     // Since the content will be served by type/id, send in a parameter
     // to tell the presentation that it will need to prepare for responses.
-    app.vent.trigger("wpspa:router:addRoute", {
+    app.vent.trigger("app:router:addRoute", {
       name: post.slug+"-respond",
       route: routes.hrefToRoute(post.comments.respondUrl),
       params: {

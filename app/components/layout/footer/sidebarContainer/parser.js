@@ -60,7 +60,7 @@ define([
     }));
     // add the routes
     _.each(routes, function(route) {
-      app.vent.trigger("wpspa:router:addRoute", route);
+      app.vent.trigger("app:router:addRoute", route);
     });
   }
 
