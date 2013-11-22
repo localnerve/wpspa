@@ -17,14 +17,6 @@ define([
   // The definition of the application level controller
   var AppController = Marionette.Controller.extend({
 
-    initialize: function() {
-      var self = this;
-      // Create the handler to dynamically add a route handler
-      app.vent.on("wpspa:controller:createHandler", function(options) {
-        self.createHandler(options);
-      });
-    },
-
     // Always handle the notfound route
     notfound: function(path) {
       // signal that the application should exit

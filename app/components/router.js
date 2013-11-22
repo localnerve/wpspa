@@ -32,7 +32,7 @@ define([
       contract(options, "route", "name");
       if (!this.appRoutes[options.route]) {
 
-        app.vent.trigger("wpspa:controller:createHandler", options);
+        app.controller.createHandler(options);
 
         // the next line should be un-necessary, come on Marionette.
         this.appRoutes[options.route] = options.name;

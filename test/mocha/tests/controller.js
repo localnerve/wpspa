@@ -39,41 +39,25 @@ describe("Controller", function() {
 
   describe("createHandler", function() {
 
-    it("should get called in response to the createHandler event", function() {
-      var name = "dummy1",
-        object_type = "obbie",
-        createHandler_stub = sandbox.stub(appController, "createHandler");
-
-      app.vent.trigger("wpspa:controller:createHandler", {
-        name: name,
-        options: {
-          object_type: object_type
-        }
-      });
-
-      assert(createHandler_stub.calledOnce, "createHandler should have been called once");
-    });
-
     it("should fail if createHandler event does not get the correct options", function() {
-      var eventName = "wpspa:controller:createHandler";
       expect(function() {
-        app.vent.trigger(eventName, {});
+        app.controller.createHandler({});
       }).to.
       throw (Error);
       expect(function() {
-        app.vent.trigger(eventName, {
+        app.controller.createHandler({
           name: "name"
         });
       }).to.
       throw (Error);
       expect(function() {
-        app.vent.trigger(eventName, {
+        app.controller.createHandler({
           options: {}
         });
       }).to.
       throw (Error);
       expect(function() {
-        app.vent.trigger(eventName, {
+        app.controller.createHandler({
           options: {
             object_type: "blah"
           }
@@ -86,7 +70,7 @@ describe("Controller", function() {
       var name = "dummy1",
         object_type = "obbie";
 
-      app.vent.trigger("wpspa:controller:createHandler", {
+      app.controller.createHandler({
         name: name,
         options: {
           object_type: object_type
