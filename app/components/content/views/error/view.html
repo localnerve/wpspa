@@ -1,8 +1,11 @@
 <div class="grid-col-center">
-  <h1>
-    <%= heading %>
-  </h1>
-  <p class="error-message">
+  <div class="page-content">
+    <h1>
+      <%= heading %>
+    </h1>  
+    <p class="error-message">
       <%= message %>
-  </p>
+    </p>
+    <a data-bypass href="#" class="<%= retryClass %>"><%= retryButtonText %></a>
+  </div>
 </div>

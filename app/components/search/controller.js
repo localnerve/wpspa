@@ -41,6 +41,10 @@ define([
                 return views.Empty;
               }
             },
+            error: {
+              heading: strings.search.error.heading,
+              message: strings.search.error.message
+            },
             header: {
               message: function(model) {
                 if (model.collection.length > 0) {
@@ -53,9 +57,6 @@ define([
                 }
               }
             }
-          },
-          error: function() {
-            return views.error;
           },
           progress: function() {
             return views.progress;

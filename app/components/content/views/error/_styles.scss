@@ -1,0 +1,13 @@
+.retry-button {
+  @extend %submit-button;
+}
+ .retry-button:hover, .retry-button:focus {
+  background-color: #b74320;
+}
+.retry-button:hover, .retry-button:focus {
+  color: white;
+}
+
+.error-message {
+  margin-top: emCalc(20);
+}

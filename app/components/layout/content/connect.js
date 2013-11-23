@@ -11,16 +11,26 @@ define([
   "app"
 ], function(_, $, contract, app) {
 
-  function connect(eventAggregator, promises) {
-
+  // Construct a Connect object on the given eventAggregator and promises
+  function Connect(eventAggregator, promises) {
     var self = this;
+
+    this.promises = promises;
+
+    // Handle content:connect
     eventAggregator.on("content:connect", function(post) {
       self._connect(post);
     });
+  }
+
+  //
+  // Connect methods
+  //
+  _.extend(Connect.prototype, {
 
     // Connect a post to the app content dispatch, if it needs it
     // Posts sent into connect have already been fetched, so they just need to be connected.
-    this._connect = function(post) {
+    _connect: function(post) {
       contract(post, "type", "id", "slug", "route");
 
       // get a new or existing entity
@@ -33,7 +43,7 @@ define([
       if (entity.options.createdEmpty) {
         var dfd = $.Deferred();
         dfd.resolve(entity);
-        promises[post.type] = dfd.promise();
+        this.promises[post.type] = dfd.promise();
       }
 
       // Add the post to the new or existing entity, ignores duplicates.
@@ -48,13 +58,13 @@ define([
           object_id: post.id
         }
       });
-    };
-  }
+    }
+  });
 
   return {
     // Create and return a new connect object
     create: function(eventAggregator, promises) {
-      return new connect(eventAggregator, promises);
+      return new Connect(eventAggregator, promises);
     }
   };
 });

@@ -28,5 +28,4 @@ define([
     app.reqres.setHandler("content:entity", function(options) {
       return entityCache.getEntity(options);
     });
-
   });

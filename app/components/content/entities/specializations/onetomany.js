@@ -1,10 +1,10 @@
 /*
  * onetomany
- * A OneToMany model has attributes and a collection, but is itself not part of the collection.
- * OneToMany models are really kind of "directories" for collections of post types.
+ * A OneToMany model has attributes and a collection, but is itself not part of a collection.
+ * OneToMany models are standalone "directories" for collections of post types.
  * This takes advantage of the fact that Backbone models always have a collection
  * property that points back to the collection they belong to, but OneToMany models
- * don't really belong to the underlying collection.
+ * can't belong to any collection.
  */
 define([
   "lodash",
@@ -26,6 +26,13 @@ define([
     createCollection: function(models) {
       // we can do this because this is not part of a real collection
       this.collection = new Backbone.Collection(models);
+    },
+
+    destroyCollection: function() {
+      if (this.collection) {
+        this.collection.remove(this.collection.models);
+        delete this.collection;
+      }
     }
   });
 

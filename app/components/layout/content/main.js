@@ -52,6 +52,7 @@ define([
       });
     },
     
+    // Make sure this area is visible
     ensureVisible: function() {
       var offset = $(this.el).offset();
       if (offset) {
@@ -64,6 +65,7 @@ define([
     contentStart: function(options) {
       contract(options, "options.object_id", "options.object_type");
       var subopts = options.options;
+      var self = this;
 
       // Request the appropriate content view
       var content = app.request("content:view", options);
@@ -75,8 +77,7 @@ define([
       var error = app.request("content:error", options);
 
       this.ensureVisible();
-
-      var self = this;
+      
       this._promises[subopts.object_type].then(
         // success
         function(collection) {
@@ -90,8 +91,8 @@ define([
           );
         },
         // fail
-        function(response, options) {
-          self.show(error.create());
+        function(items) {
+          self.show(error.create({ items: items, startOpts : options }));
         },
         // progress
         function() {

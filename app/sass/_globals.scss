@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 .grid-row {
   @include grid-row($default-row-behavior);
 }
@@ -38,4 +40,16 @@
         $default-float
     );
   }
+}
+
+%submit-button {
+  @include background(linear-gradient(180deg, #e05d22 0%, #d94412 100%));
+  border: none;
+  border-bottom: 3px solid #b93207;
+  border-radius: 2px;
+  color: #fff;
+  padding: 11px 24px 10px;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
 }

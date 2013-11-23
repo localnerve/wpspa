@@ -47,7 +47,24 @@ define([
     return entity;
   }
 
+  // if options.destroy is specified, it destroys the entity.
+  function removeEntity(options) {
+    contract(options, "object_type");
+
+    // get the cached entity
+    var entity = cache[options.object_type];
+
+    // if there is an entity, evict it and destroy it.
+    if (entity) {
+      delete cache[options.object_type];
+      entities.destroyEntity(entity, options);
+    }
+
+    return !!entity;
+  }
+
   return {
-    getEntity: getEntity
+    getEntity: getEntity,
+    removeEntity: removeEntity
   };
 });

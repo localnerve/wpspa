@@ -20,7 +20,7 @@ var strings = {
     },
     error: {
       heading: "Search Error",
-      message: "An error has occurred processing your search request. Please try again later."
+      message: "An error has occurred processing your search request."
     },
     progress: {
       heading: "Searching..."
@@ -85,7 +85,8 @@ var strings = {
     },
     error: {
       heading: "Whoops!",
-      message: "An error occurred processing your request. Please refresh your browser and try again."
+      message: "An error occurred processing your request.",
+      retryButtonText: "Retry"
     }
   }
 };

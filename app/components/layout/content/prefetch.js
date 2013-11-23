@@ -9,74 +9,90 @@
 define([
   "lodash",
   "jquery",
-  "helpers/contract",
   "app"
-], function(_, $, contract, app) {
+], function(_, $, app) {
 
-  // Construct a prefetch for the given event aggregator
-  function prefetch(eventAggregator) {
+  // Construct a prefetch object on the given event aggregator
+  function Prefetch(eventAggregator) {
+    var self = this;
 
-    // The collection of promises
+    // The collection of promises, keyed by object_type
     this.promises = {};
 
-    // Catch the prefetch event
-    var self = this;
+    // Handle content:prefetch
     eventAggregator.on("content:prefetch", function(items) {
       self._fetch(items);
     });
+  }
+
+  //
+  // Prefetch methods
+  //
+  _.extend(Prefetch.prototype, {
 
     // Method that performs the fetching
-    this._fetch = function(items) {
-      if (!_.isArray(items))
-        items = [items];
+    _fetch: function(items) {
+      var self = this;
+      if (!_.isArray(items)) items = [items];
 
       // Prefetch unique entity types
       _.each(items, function(item) {
-        // if not already fetched
-        if (!self.promises[item.object_type]) {
+        var promise = self.promises[item.object_type];
+
+        // If not already fetched or has previously failed
+        if (!promise || promise.state() === "rejected") {
           var dfd = $.Deferred();
 
-          // setup unique object_type
+          // Get a unqiue set by object_type, items might not be homogenous
+          var typedItems = _.where(items, { object_type: item.object_type });
+
+          // Get the first custom entity creator for the set, if any
+          var entityFactory = _.find(typedItems, function(i) { return !!item.create; });
+
+          // Create or retrieve the entity
           var entity = app.request("content:entity", {
             object_type: item.object_type,
-            items: _.where(items, { object_type: item.object_type }),
-            create: item.create
+            items: typedItems,
+            create: entityFactory ? entityFactory.create : undefined
           });
+
+          // Listen to the request event and notify the promise holder
           entity.once("request", function() {
             if (dfd.state() === "pending") {
-              // progress notification
+              // Progress notification
               dfd.notify();
             }
           });
+
+          // Keep this promise, blow away a failed promise
           self.promises[item.object_type] = dfd.promise();
 
-          // fetch the object_type
+          // Fetch the object_type
           entity.fetch({
-            // Forward the "success" event
-            success: function(collection, response, options) {
-              // success notification
+            // Forward the "success" event to the promise holder
+            success: function(collection) {
+              // Success notification
               dfd.resolve(collection);
             },
-            // Forward the "fail" event
-            error: function(collection, response, options) {
-              // fail notification
-              dfd.reject(response, options);
+            // Forward the "fail" event to the promise holder
+            error: function() {
+              // Fail notification
+              dfd.reject(typedItems);
             }
           });
         }
       });
-    };
-  }
+    }
+  });
 
   return {
-    // Create and return a new prefetch object
+    // Create and return a new Prefetch object
     _create: function(eventAggregator) {
-      return new prefetch(eventAggregator);
+      return new Prefetch(eventAggregator);
     },
-    // Create a new prefetch and get the promises
-    // promises can be retrieved by object_type
+    // Get a promises collection on a new Prefetch
     promises: function(eventAggregator) {
-      return (new prefetch(eventAggregator)).promises;
+      return (new Prefetch(eventAggregator)).promises;
     }
   };
 

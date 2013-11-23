@@ -69,12 +69,11 @@ describe("prefetch", function() {
     pf.promises[object_type]
     .then(
       success_fn,
-      function(response, options) {
-        expect(response).to.exist;
-        expect(options).to.exist;
+      function(items) {
+        expect(items).to.exist;
         expect(success_fn.callCount).to.equal(0);
         assert(progress_fn.calledOnce, "progress should have been called once");
-        // fail was called so we're good:
+        // fail was called with items, so we're good:
         done();
       },
       progress_fn

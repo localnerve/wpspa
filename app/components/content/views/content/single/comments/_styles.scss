@@ -118,14 +118,7 @@
 }
 
 .comment-form input[type=submit] {
-  @include background(linear-gradient(180deg, #e05d22 0%, #d94412 100%));
-  border: none;
-  border-bottom: 3px solid #b93207;
-  border-radius: 2px;
-  color: #fff;
-  display: inline-block;
-  padding: 11px 24px 10px;
-  text-decoration: none;
+  @extend %submit-button; 
 }
 
 .comment-reply-title {
