@@ -7,11 +7,11 @@ define([
   // parse a single wpspa nav_menu_item post to a model
   function parsePost(post) {
     contract(post, "id",
-      "custom_fields._menu_item_wpspa_menu_text",
-      "custom_fields._menu_item_wpspa_route",
-      "custom_fields._menu_item_wpspa_post_type",
-      "custom_fields._menu_item_wpspa_object_id",
-      "custom_fields._menu_item_menu_item_parent"
+      "custom_fields._menu_item_wpspa_menu_text.0",
+      "custom_fields._menu_item_wpspa_route.0",
+      "custom_fields._menu_item_wpspa_post_type.0",
+      "custom_fields._menu_item_wpspa_object_id.0",
+      "custom_fields._menu_item_menu_item_parent.0"
     );
     var model = {
       name: post.custom_fields._menu_item_wpspa_menu_text[0],

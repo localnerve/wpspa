@@ -9,15 +9,19 @@
 define([
   "lodash",
   "jquery",
-  "app"
-], function(_, $, app) {
+  "app",
+  "module"
+], function(_, $, app, module) {
 
   // Construct a prefetch object on the given event aggregator
-  function Prefetch(eventAggregator) {
+  function Prefetch(eventAggregator, timeout) {
     var self = this;
 
     // The collection of promises, keyed by object_type
     this.promises = {};
+
+    // The request timeout for this Prefetch instance
+    this.timeout = timeout || module.config().timeout;
 
     // Handle content:prefetch
     eventAggregator.on("content:prefetch", function(items) {
@@ -69,6 +73,9 @@ define([
 
           // Fetch the object_type
           entity.fetch({
+            // Request timeout
+            timeout: self.timeout,
+
             // Forward the "success" event to the promise holder
             success: function(collection) {
               // Success notification

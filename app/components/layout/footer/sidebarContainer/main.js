@@ -4,8 +4,9 @@
  */
 define([
   "app",
+  "module",
   "components/layout/footer/sidebarContainer/view"
-], function(app, sidebarView) {
+], function(app, module, sidebarView) {
 
   // Create a partial definition for container.footer module
   var thisModule = app.module("container.footer", function(footer) {
@@ -13,6 +14,7 @@ define([
     // add another footer module initializer
     footer.addInitializer(function(options) {
       this.sidebarContainer = sidebarView.create(options);
+      this.timeout = module.config().timeout;
     });
 
     footer.addFinalizer(function() {
@@ -21,6 +23,8 @@ define([
 
     app.on("initialize:after", function() {
       footer.sidebarContainer.collection.fetch({
+        timeout: footer.timeout,
+        
         success: function(collection) {
           // footer successfully loaded, tell container
           app.vent.trigger("container:complete");

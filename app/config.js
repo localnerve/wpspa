@@ -22,14 +22,20 @@ require.config({
     "components/layout/main": {
       containerCompletions: 3
     },
+    "components/layout/content/prefetch": {
+      timeout: 15000
+    },
+    "components/layout/header/navigation/main": {
+      timeout: 30000
+    },
     "components/layout/header/navigation/entities": {
       endpoint: "/api/get_posts/?post_type=nav_menu_item&order=ASC&orderby=menu_order&custom_fields=_menu_item_menu_item_parent,_menu_item_wpspa_route,_menu_item_wpspa_menu_text,_menu_item_wpspa_post_type,_menu_item_wpspa_object_id"
     },
     "components/layout/header/navigation/item": {
       hideHome: true
     },
-    "components/search/model": {
-      urlRoot: "/api/get_search_results"
+    "components/layout/footer/sidebarContainer/main": {
+      timeout: 30000
     },
     "components/layout/footer/sidebarContainer/entities": {
       endpoint: "/api/widgets/get_sidebar/?sidebar_id=sidebar-1"
@@ -50,6 +56,9 @@ require.config({
     },
     "components/content/entities/specializations/date": {
       urlRoot: "/api/get_date_posts"
+    },
+    "components/search/model": {
+      urlRoot: "/api/get_search_results"
     },
     app: {
       root: "/",
