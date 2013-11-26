@@ -11,7 +11,7 @@
  *   params.error.message (optional) to override the default message
  *   params.error.retryButtonText (optional) to override the retry button text
  * Other options:
- *   items (optional) to refer to a failed object_type set that was fetched
+ *   items (optional) to refer to a failed object_type set that was fetched. This options enables retry.
  *   startOpts (required if options.items was specified) to refer to the content:start options for replay
  */
 define([
