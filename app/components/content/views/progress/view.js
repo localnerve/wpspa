@@ -1,7 +1,6 @@
 define([
-  "jquery",
   "backbone.marionette"
-], function($, Marionette) {
+], function(Marionette) {
   
   var ProgressView = Marionette.ItemView.extend({
     template: "components/content/views/progress/view",
