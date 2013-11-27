@@ -16,6 +16,10 @@ define([
     tagName: "nav",
     className: "top-bar",
     itemViewContainer: ".wpspa-nav",
+    attributes: {
+      role: "navigation",
+      "aria-label": "Site Navigation"
+    },
     events: {
       "submit .search-form": "search"
     },

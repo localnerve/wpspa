@@ -14,6 +14,9 @@ define([
     var BannerView = Marionette.ItemView.extend({
       template: "components/layout/header/banner/template",
       className: "main-circle",
+      attributes: {
+        role: "banner"
+      },
 
       serializeData: function() {
         // TODO: get these from a model
