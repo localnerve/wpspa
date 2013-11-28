@@ -14,7 +14,7 @@
       </a>
     </small>
   </h3>
-  <form id="commentform" class="comment-form">
+  <form role="form" id="commentform" class="comment-form">
     <p class="comment-notes">
       <%= comments.respond.commentNote %> <%= labels.requiredMessage %> <span class="required"><%= labels.requiredSymbol %></span>
     </p>
@@ -37,8 +37,10 @@
       <input id="url" name="url" type="url" value="" size="30" />
     </p>
     <p class="comment-form-comment">
-      <label for="comment"><%= labels.Comment %></label>
-      <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+      <label for="comment">
+        <%= labels.Comment %><span class="required"><%= labels.requiredSymbol %></span>
+      </label>
+      <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true" required="true"></textarea>
     </p>
     <p class="form-allowed-tags">
       <%= comments.respond.tagsMessage %>
@@ -47,9 +49,11 @@
       </code>
     </p>
     <p class="form-submit">
-      <input name="submit" type="submit" id="submit" value="Post Comment">
-      <input type="hidden" name="comment_post_ID" value="1" id="comment_post_ID">
-      <input type="hidden" name="comment_parent" id="comment_parent" value="0">
+      <input type="submit" id="comment-submit-input" value="<%= comments.respond.submitText %>">
+    </p>
+    <p class="comment-form-status">
+      <div id="comment-progress" class="hide"></div>
+      <div class="hide comment-result"></div>
     </p>
   </form>
 </div>

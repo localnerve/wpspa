@@ -43,7 +43,3 @@ $item-spinner-size-px: 20;
 .page-spinner {
   @include simple-spinner($page-spinner-size-px, $page-spinner-size-px, #e8e5ce, #e6402a);
 }
-// not used yet
-//.item-spinner {
-//  @include simple-spinner($item-spinner-size-px, #e8e5ce, #e6402a);
-//}

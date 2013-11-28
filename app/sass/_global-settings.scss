@@ -12,9 +12,12 @@ $default-pull: false;
 $default-collapse: false;
 $default-float: left;
 
+$default-radius: 2px;
+
 // we only use semantic mixins
 $include-html-grid-classes: false;
 $include-html-visibility-classes: false;
+$include-html-alert-classes: false;
 
 // more media queries
 $tiny-screen: 320px;

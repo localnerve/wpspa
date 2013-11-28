@@ -45,6 +45,10 @@
   word-wrap: break-word;
 }
 
+.comment-reply-link {
+  @extend %genericons;
+  vertical-align: text-bottom;
+}
 .comment-reply-link:before, .comment-reply-login:before {
   content: "\f412";
   margin-right: 3px;
@@ -124,4 +128,36 @@
 .comment-reply-title {
   font: 300 italic 28px "Source Sans Pro", Helvetica, sans-serif;
   margin-bottom: 22px;
+}
+
+.comment-reply-title small a {
+  color: #131310;
+  display: none; //inline-block;
+  float: right;
+  height: 16px;
+  overflow: hidden;
+  width: 16px;
+}
+.comment-reply-title small a:before {
+  @extend %genericons;
+  content: "\f406";
+  vertical-align: top;
+}
+.comment-reply-title small a:hover {
+  color: #ed331c;
+  text-decoration: none;
+}
+
+.comment-reply-spinner {
+  @include simple-spinner(0, $item-spinner-size-px, #e8e5ce, #e6402a);
+}
+
+.comment-result.hide {
+  display: none;
+}
+.comment-result.success {
+  @include alert($success-color, $default-radius);
+}
+.comment-result.failure {
+  @include alert(#db572f, $default-radius);
 }

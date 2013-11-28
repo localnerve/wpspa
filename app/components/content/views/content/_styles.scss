@@ -76,9 +76,7 @@
   top: -1px;
 }
 
-.date a:before, .categories-links a:first-child:before, .comments-link a:before, .comment-reply-link {
-  -webkit-font-smoothing: antialiased;
-  display: inline-block;
-  font: normal 16px/1 Genericons;
+.date a:before, .categories-links a:first-child:before, .comments-link a:before {
+  @extend %genericons;
   vertical-align: text-bottom;
 }

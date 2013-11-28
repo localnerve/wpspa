@@ -57,6 +57,12 @@ require.config({
     "components/content/entities/specializations/date": {
       urlRoot: "/api/get_date_posts"
     },
+    "components/content/entities/specializations/respond": {
+      urlRoot: "/api/respond/submit_comment"
+    },
+    "components/content/views/content/single/comments/view": {
+      timeout: 15000
+    },
     "components/search/model": {
       urlRoot: "/api/get_search_results"
     },

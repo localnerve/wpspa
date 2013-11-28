@@ -155,3 +155,10 @@
 .genericon-rightarrow:before {     content: '\f501'; }
 .genericon-downarrow:before {      content: '\f502'; }
 .genericon-leftarrow:before {      content: '\f503'; }
+
+// my add on
+%genericons {
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font: normal 16px/1 Genericons;
+}

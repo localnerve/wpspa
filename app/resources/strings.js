@@ -75,11 +75,17 @@ var strings = {
           replacement: "%s",
           message: "Thoughts on %s"
         },
+        Reply: "Reply",
         respond: {
           title: "Leave a Reply",
           cancelText: "Cancel reply",
           commentNote: "Your email address will not be published.",
-          tagsMessage: "You may use these <abbr title='HyperText Markup Language'>HTML</abbr> tags and attributes:"
+          tagsMessage: "You may use these <abbr title='HyperText Markup Language'>HTML</abbr> tags and attributes:",
+          submitText: "Post Comment",
+          resultFail: "The comment service is temporarily unavailable.",
+          resultServerError: "The server encountered an error processing your response.",
+          resultModeration: "Your comment is awaiting moderation.",
+          resultComment: "You comment was posted successfully."
         }
       }
     },
