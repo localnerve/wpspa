@@ -51,11 +51,11 @@ define([
       };
     },
     scrollToRespond: function() {
-      _.defer(function(self) { ui.scrollTop(self.ui.respond.offset().top); }, this);
+      _.defer(function(self) { ui.scrollTop(self.ui.respond.offset()); }, this);
     },
     processParams: function(params) {
       if (params.action === "comment") {
-        _.defer(function(self) { ui.scrollTop(self.ui.comments.offset().top); }, this);
+        _.defer(function(self) { ui.scrollTop(self.ui.comments.offset()); }, this);
       } else if (params.action === "respond") {
         this.scrollToRespond();
       }
@@ -112,10 +112,12 @@ define([
     responseFail: function() {
       this.setResultText(this.strings.respond.resultFail, false);
     },
-    responseProgress: function(stop) {
-      this.ui.submitButton.prop("disabled", stop ? false : true);
-      this.ui.progress.removeClass("hide comment-reply-spinner")
-        .addClass(stop ? "hide" : "comment-reply-spinner");
+    responseProgress: function(done) {
+      this.ui.progress.removeClass("hide");
+      if (done) {
+        this.ui.progress.addClass("hide");
+        _.defer(function(self) { ui.scrollTopConditional(self.ui.content.offset()); }, this);
+      }
     },
     performRespond: _.debounce(
       function(self) {
@@ -147,7 +149,6 @@ define([
             self.stopListening(model);
             self.responseProgress(true);
           });
-
       }, 500, true // discard invocations within leading edge time (ms)
     ),
     respond: function() {

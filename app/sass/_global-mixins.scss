@@ -1,0 +1,10 @@
+
+// absolute horz and vert centering of a block in a relatively positioned container
+@mixin absolute-center-within-container($width:50%, $height:50%, $overflow:hidden) {
+  width: $width;
+  height: $height;
+  overflow: $overflow;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0  
+}

@@ -6,6 +6,9 @@
   </ol>
 </div>
 <div id="respond" class="comment-respond page-content">
+  <div id="comment-progress" class="hide">
+    <div class="spinner"></div>
+  </div>
   <h3 id="reply-title" class="comment-reply-title">
     <%= comments.respond.title %>
     <small>
@@ -14,7 +17,7 @@
       </a>
     </small>
   </h3>
-  <form role="form" id="commentform" class="comment-form">
+  <form role="form" id="commentform" class="comment-form">    
     <p class="comment-notes">
       <%= comments.respond.commentNote %> <%= labels.requiredMessage %> <span class="required"><%= labels.requiredSymbol %></span>
     </p>
@@ -51,8 +54,7 @@
     <p class="form-submit">
       <input type="submit" id="comment-submit-input" value="<%= comments.respond.submitText %>">
     </p>
-    <p class="comment-form-status">
-      <div id="comment-progress" class="hide"></div>
+    <p class="comment-form-status">      
       <div class="hide comment-result"></div>
     </p>
   </form>

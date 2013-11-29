@@ -54,10 +54,7 @@ define([
     
     // Make sure this area is visible
     ensureVisible: function() {
-      var offset = $(this.el).offset();
-      if (offset) {
-        ui.scrollTopConditional(offset.top);
-      }
+      ui.scrollTopConditional($(this.el).offset());
     },
 
     // Swap out the content from the prefetch

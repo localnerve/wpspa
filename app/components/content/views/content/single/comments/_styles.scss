@@ -32,6 +32,7 @@
 }
 
 .comment-respond {
+  position: relative;
   background-color: #f7f5e7;
   padding: emCalc(30) 0;
 }
@@ -148,8 +149,16 @@
   text-decoration: none;
 }
 
-.comment-reply-spinner {
-  @include simple-spinner(0, $item-spinner-size-px, #e8e5ce, #e6402a);
+$comment-spinner-size-px: 60px;
+$comment-spinner-vert-px: 350px;
+#comment-progress {
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  @include absolute-center-within-container(100%, 100%);
+}
+#comment-progress .spinner {
+  z-index: 11;
+  @include simple-spinner($comment-spinner-vert-px, $comment-spinner-size-px, #e8e5ce, #e6402a);
 }
 
 .comment-result.hide {
