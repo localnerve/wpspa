@@ -116,8 +116,8 @@ define([
       this.ui.progress.removeClass("hide");
       if (done) {
         this.ui.progress.addClass("hide");
-        _.defer(function(self) { ui.scrollTopConditional(self.ui.content.offset()); }, this);
       }
+      ui.scrollTopConditional(this.ui.content.offset());
     },
     performRespond: _.debounce(
       function(self) {
@@ -133,6 +133,7 @@ define([
           self.responseProgress(false);
         });
 
+        self.setResultText();
         model.fetch({ timeout: module.config().timeout })
           .done(function(data) {
             var method = CommentsView.prototype["responseSuccess_"+data.status];
@@ -149,10 +150,9 @@ define([
             self.stopListening(model);
             self.responseProgress(true);
           });
-      }, 500, true // discard invocations within leading edge time (ms)
+      }, 1000, true // discard invocations within leading edge time (ms)
     ),
     respond: function() {
-      this.setResultText();
       this.performRespond(this);
       return false;
     }
