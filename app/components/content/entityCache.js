@@ -4,9 +4,10 @@
  * Contains the entity cache and method(s) for retreival
  */
 define([
+  "lodash",
   "helpers/contract",
   "components/content/entities/main"
-], function(contract, entities) {
+], function(_, contract, entities) {
 
   // The entity cache. Entities are keyed by object_type.
   var cache = {};
@@ -21,7 +22,7 @@ define([
   // Create and cache a new custom entity
   function createCustomEntity(options) {
     var entity;
-    if (options.create) {
+    if (_.isFunction(options.create)) {
       entity = options.create(options);
     }
     return entity;
@@ -47,7 +48,7 @@ define([
     return entity;
   }
 
-  // if options.destroy is specified, it destroys the entity.
+  // remove an entity from the cache
   function removeEntity(options) {
     contract(options, "object_type");
 
@@ -57,10 +58,9 @@ define([
     // if there is an entity, evict it and destroy it.
     if (entity) {
       delete cache[options.object_type];
-      entities.destroyEntity(entity, options);
     }
 
-    return !!entity;
+    return entity;
   }
 
   return {

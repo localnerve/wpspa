@@ -28,4 +28,9 @@ define([
     app.reqres.setHandler("content:entity", function(options) {
       return entityCache.getEntity(options);
     });
+
+    // handle content:entity:remove requests. Returns the removed entity.
+    app.reqres.setHandler("content:entity:remove", function(options) {
+      return entityCache.removeEntity(options);
+    });
   });

@@ -15,11 +15,12 @@
  *   Instead, return an object with a "create" method that does this.
  */
 define([
+  "lodash",
   "helpers/contract",
   "helpers/types",
   "app",
   "components/content/views/main"
-], function(contract, types, app, viewTypes) {
+], function(_, contract, types, app, viewTypes) {
 
   function getDefaultViewFactory(options, viewType) {
     var defaultViewFactory = viewTypes[viewType];
@@ -47,7 +48,7 @@ define([
   function getInputViewFactory(options, viewType) {
     var viewFactory;
 
-    if (options[viewType]) {
+    if (_.isFunction(options[viewType])) {
       viewFactory = options[viewType](options.options);
     }
 

@@ -32,24 +32,9 @@ function(contract, types, PostModel, PostCollection, specializations) {
     }
   }
 
-  // This is not meant to destroy persistent model(s) on the server.
-  // This is just for garbage collection.
-  function destroyEntity(entity) {
-    if (entity.destroyCollection) {
-      entity.destroyCollection();
-    }
-    if (entity.models) {
-      entity.remove(entity.models);
-    }
-    if (entity.clear) {
-      entity.clear();
-    }
-  }
-
   return {
     createModel: createModel,
-    createCollection: createCollection,
-    destroyEntity: destroyEntity
+    createCollection: createCollection
   };
 
 });
