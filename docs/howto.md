@@ -1,7 +1,7 @@
-#A Collection of Development HowTo's
+# A Collection of Development HowTo's
 > ...Until I Get More Organized
 
-##How to debug the server side code or Gruntfile
+## How to debug the server side code or Gruntfile
 Reference: [node-inspector](https://github.com/node-inspector/node-inspector)
 
 1. Install node-inspector globally \(if you haven't\)
@@ -12,7 +12,7 @@ Reference: [node-inspector](https://github.com/node-inspector/node-inspector)
 6. Set a breakpoint in wpspa/app.js or in wpspa/Gruntfile.js
 7. F8 to the breakpoint
 
-##How to debug html/css/js on stock android browser
+## How to debug html/css/js on stock android browser
 Reference: [Weinre](http://people.apache.org/~pmuellr/weinre/docs/latest/)
 
 Reference2: [Running Weinre](http://people.apache.org/~pmuellr/weinre/docs/latest/Running.html)
