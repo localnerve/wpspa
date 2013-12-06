@@ -48,7 +48,7 @@ require.config({
       endpoint: "/api/get_posts/?post_type=any"
     },
     "components/content/entities/specializations/recent": {
-      endpoint: "/api/get_recent_posts"
+      endpoint: "/api/get_recent_posts/?custom_fields=_wpspa_meta_description,_wpspa_page_title"
     },
     "components/content/entities/specializations/category": {
       urlRoot: "/api/get_category_posts/",

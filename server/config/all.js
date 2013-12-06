@@ -64,7 +64,7 @@ Object.defineProperties(Config.prototype, {
 
   // endpoint for home content (requires JSON API)
   recentPath: {
-    value: "/api/get_recent_posts",
+    value: "/api/get_recent_posts/?custom_fields=_wpspa_meta_description,_wpspa_page_title",
     enumerable: true
   }
 });
