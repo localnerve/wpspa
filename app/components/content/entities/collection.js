@@ -31,7 +31,7 @@ define([
         var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
         var object_type = types.baseObjectType(this.options.object_type);
         var object_ids = _.pluck(this.options.items, "object_id");
-        return urlRoot + "?post_type="+object_type+"&post__in("+object_ids.join(",")+")";
+        return urlRoot + "?post_type="+object_type+"&post__in("+object_ids.join(",")+")"+"&custom_fields=_wpspa_meta_description,_wpspa_page_title";
       } else {
         return module.config().endpoint;
       }
