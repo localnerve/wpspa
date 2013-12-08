@@ -51,7 +51,7 @@ define([
           var typedItems = _.where(items, { object_type: item.object_type });
 
           // Get the first custom entity creator for the set, if any
-          var entityFactory = _.find(typedItems, function(i) { return !!item.create; });
+          var entityFactory = _.find(typedItems, function(i) { return !!i.create; });
 
           // Create or retrieve the entity
           var entity = app.request("content:entity", {
