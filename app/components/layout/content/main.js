@@ -1,7 +1,8 @@
 /*
  * The main content region
  * This is a fixed region that represents the main content area of the app.
- * It holds a reference to all the prefetched content data from the cms.
+ * It holds a reference to all the content data from the cms.
+ *
  * The main content dispatcher
  * When it receives a content:start event from the app, it 
  *   creates the appropriate content view for the content by type and id.
@@ -18,8 +19,9 @@ define([
   "components/layout/content/vendor-interface",
   "components/layout/content/prefetch",
   "components/layout/content/connect",
+  "components/layout/content/page",
   "module"
-], function($, Marionette, app, contract, ui, vendor, prefetch, connect, module) {
+], function($, Marionette, app, contract, ui, vendor, prefetch, connect, page, module) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -32,6 +34,9 @@ define([
 
       // Create the connector on the app.vent and promises
       this._connect = connect.create(app.vent, this._promises);
+
+      // Create the page updater on this event source
+      this._page = page.create(this);
 
       // transition options
       this.transition = {
@@ -78,11 +83,15 @@ define([
       this._promises[subopts.object_type].then(
         // success
         function(collection) {
+          var model = collection.get({
+            id: subopts.object_id
+          });
+          self.trigger("content:start:success", {
+            model: model
+          });
           self.show(
             content.create({
-              model: collection.get({
-                id: subopts.object_id
-              }),
+              model: model,
               params: options.params
             })
           );

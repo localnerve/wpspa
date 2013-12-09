@@ -7,8 +7,12 @@ define([
   "jquery"
 ], function($) {
 
+  var doc = document;
   var $doc = $(document);
 
+  /**
+   * Scroll to the top of the offset
+   */
   function scrollTop(offset) {
     if (offset) {
       // overflow property android browser hack, https://code.google.com/p/android/issues/detail?id=19625
@@ -18,7 +22,9 @@ define([
     }
   }
 
-  // If the top is currently not visible, scroll to it
+  /**
+   * If the top is currently not visible, scroll to it
+   */
   function scrollTopConditional(offset) {
     if (offset) {
       var currentTop = $doc.scrollTop();
@@ -28,8 +34,17 @@ define([
     }
   }
 
+  /**
+   * Update the title and description of the page
+   */
+  function updateTitleDescription(title, description) {
+    doc.title = title;
+    $("meta[name=description]").attr("content", description);
+  }
+
   return {
     scrollTop: scrollTop,
-    scrollTopConditional: scrollTopConditional
+    scrollTopConditional: scrollTopConditional,
+    updateTitleDescription: updateTitleDescription
   };
 });

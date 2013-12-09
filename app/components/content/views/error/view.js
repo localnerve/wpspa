@@ -18,8 +18,9 @@ define([
   "lodash",
   "backbone.marionette",
   "app",
-  "resources/strings"
-], function(_, Marionette, app, strings) {
+  "resources/strings",
+  "helpers/ui"
+], function(_, Marionette, app, strings, ui) {
   
   var ErrorView = Marionette.ItemView.extend({
     template: "components/content/views/error/view",
@@ -37,10 +38,16 @@ define([
       this.params.error = this.params.error || {};
 
       _.defaults(this.params.error, {
+        title: strings.content.error.title,
+        description: strings.content.error.description,
         heading: strings.content.error.heading,
         message: strings.content.error.message,
         retryButtonText: strings.content.error.retryButtonText
       });
+    },
+
+    onRender: function() {
+      ui.updateTitleDescription(this.params.error.title, this.params.error.description);
     },
 
     serializeData: function() {

@@ -27,6 +27,10 @@ var strings = {
     }
   },
   content: {
+    page: {
+      _wpspa_page_title: "WPSPA Application",
+      _wpspa_meta_description: "A demonstration single page application that takes Wordpress optimization to a whole new level"
+    },
     numbers: {
       One: "One",
       Two: "Two",
@@ -90,6 +94,8 @@ var strings = {
       }
     },
     error: {
+      title: "Error",
+      description: "An error occurred processing your request",
       heading: "Whoops!",
       message: "An error occurred processing your request.",
       retryButtonText: "Retry"

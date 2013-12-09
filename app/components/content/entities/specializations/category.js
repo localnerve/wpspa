@@ -22,7 +22,7 @@ define([
       if (items && items.length > 0) {
         var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
         // for the model, we just do one category at a time
-        return urlRoot + "?id=" + items[0].object_id;
+        return urlRoot + "?id=" + items[0].object_id + "&custom_fields=_wpspa_meta_description,_wpspa_page_title";
       } else {
         return module.config().endpoint;
       }

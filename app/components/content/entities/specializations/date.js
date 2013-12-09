@@ -20,7 +20,7 @@ define([
       contract(items, "0");
 
       // api allows one date get
-      return urls.normalizeUrlRoot(this.urlRoot) + "?date="+items[0].object_id;
+      return urls.normalizeUrlRoot(this.urlRoot) + "?date="+items[0].object_id+"&custom_fields=_wpspa_meta_description,_wpspa_page_title";
     },
 
     parse: function(data) {

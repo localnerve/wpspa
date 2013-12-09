@@ -21,7 +21,7 @@ define([
     // make a jsonapi url
     url: function() {
       var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
-      return urlRoot + "?id=" + this.id;
+      return urlRoot + "?id=" + this.id + "&custom_fields=_wpspa_meta_description,_wpspa_page_title";
     },
 
     // delegate response parsing to the given parser
