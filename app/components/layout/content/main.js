@@ -11,7 +11,6 @@
  *   WPSPA plugin in concert with your normal wordpress menu.
  */
 define([
-  "jquery",
   "backbone.marionette",
   "app",
   "helpers/contract",
@@ -21,7 +20,7 @@ define([
   "components/layout/content/connect",
   "components/layout/content/page",
   "module"
-], function($, Marionette, app, contract, ui, vendor, prefetch, connect, page, module) {
+], function(Marionette, app, contract, ui, vendor, prefetch, connect, page, module) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -57,11 +56,6 @@ define([
       });
     },
     
-    // Make sure this area is visible
-    ensureVisible: function() {
-      ui.scrollTopConditional($(this.el).offset());
-    },
-
     // Swap out the content from the prefetch
     // See the prefetch to match up the handlers by signature to the events on the deferred promise
     contentStart: function(options) {
@@ -77,8 +71,6 @@ define([
 
       // Request the appropriate error view
       var error = app.request("content:error", options);
-
-      this.ensureVisible();
       
       this._promises[subopts.object_type].then(
         // success
@@ -111,6 +103,9 @@ define([
 
     // overriding the default open to allow for transitions
     open: function(view) {
+      // Make sure this area is visible
+      ui.scrollTopConditional(this.$el.offset());
+
       view.triggerMethod("transition:open:before", this.transition);
       this.$el.empty().append(view.el);
       view.triggerMethod("transition:open:after", this.transition);
