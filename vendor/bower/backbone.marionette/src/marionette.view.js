@@ -8,8 +8,16 @@ Marionette.View = Backbone.View.extend({
     _.bindAll(this, "render");
 
     var args = Array.prototype.slice.apply(arguments);
+
+    // this exposes view options to the view initializer
+    // this is a backfill since backbone removed the assignment
+    // of this.options
+    // at some point however this may be removed
+    this.options = _.extend({}, this.options, options);
+
+    // parses out the @ui DSL for events
+    this.events = this.normalizeUIKeys(_.result(this, 'events'));
     Backbone.View.prototype.constructor.apply(this, args);
-    this.options = options;
 
     Marionette.MonitorDOMRefresh(this);
     this.listenTo(this, "show", this.onShowCalled, this);
@@ -41,6 +49,25 @@ Marionette.View = Backbone.View.extend({
     return _.extend(target, templateHelpers);
   },
 
+  // allows for the use of the @ui. syntax within
+  // a given key for triggers and events
+  // swaps the @ui with the associated selector
+  normalizeUIKeys: function(hash) {
+    if (typeof(hash) === "undefined") {
+      return;
+    }
+
+    _.each(_.keys(hash), function(v) {
+      var split = v.split("@ui.");
+      if (split.length === 2) {
+        hash[split[0]+this.ui[split[1]]] = hash[v];
+        delete hash[v];
+      }
+    }, this);
+
+    return hash;
+  },
+
   // Configure `triggers` to forward DOM events to view
   // events. `triggers: {"click .foo": "do:foo"}`
   configureTriggers: function(){
@@ -49,7 +76,7 @@ Marionette.View = Backbone.View.extend({
     var triggerEvents = {};
 
     // Allow `triggers` to be configured as a function
-    var triggers = _.result(this, "triggers");
+    var triggers = this.normalizeUIKeys(_.result(this, "triggers"));
 
     // Configure the triggers, prevent default
     // action and stop propagation of DOM events
@@ -69,8 +96,8 @@ Marionette.View = Backbone.View.extend({
           var shouldPrevent = hasOptions ? value.preventDefault : prevent;
           var shouldStop = hasOptions ? value.stopPropagation : stop;
 
-          if (shouldPrevent && prevent) { prevent(); }
-          if (shouldStop && stop) { stop(); }
+          if (shouldPrevent && prevent) { prevent.apply(e); }
+          if (shouldStop && stop) { stop.apply(e); }
         }
 
         // build the args for the event
