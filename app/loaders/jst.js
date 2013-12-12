@@ -59,8 +59,9 @@ define([
           if (_.isString(root) && template.substring(0, root.length - 1) != root) {
             template = root + template;
           }
-          // For development, its ok to block, you won't notice it.
-          $.ajax(template, {
+          // For development, its ok to block, you won't notice it - much.
+          $.ajax({
+            url: template,
             async: false
           })
             .done(function(data, textStatus, jqXHR) {
