@@ -4,7 +4,7 @@ require.config({
     "main"
   ],
   paths: {
-    zepto: "../vendor/bower/zeptojs/dist/zepto",
+    zepto: "../vendor/bower/zeptojs/build/zepto",
     lodash: "../vendor/bower/lodash/dist/lodash.underscore",
     backbone: "../vendor/bower/backbone/backbone",
     "backbone.wreqr": "../vendor/bower/backbone.marionette/public/javascripts/backbone.wreqr",

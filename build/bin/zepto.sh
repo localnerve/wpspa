@@ -1,12 +1,18 @@
 #!/bin/bash
 #
-# Build zepto for this project
+# Custom Zepto build for this project
 #   Requires coffee to be installed globally
 #
 # Foundation Support
 #   Added "selector" module and outer/inner height/width support
-# 
+#
+
+# this is the relative path to the zepto package from this script
 zepto=../../vendor/bower/zeptojs
+# this is the directory in zepto we expose to app and source control. It will not allow dist.
+# since I don't want to make coffee a dependency, this build can be done once, and only if the zepto requirements change.
+buildDir=build
+
 cd $zepto
 npm install
 echo "starting zepto build"
@@ -68,4 +74,6 @@ if (this.Zepto) {
 }
 EOF
 echo "done concatenating addons to zepto.js"
+mkdir -p $buildDir
+cp -f dist/zepto.js $buildDir
 cd -
