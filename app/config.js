@@ -4,7 +4,7 @@ require.config({
     "main"
   ],
   paths: {
-    jquery: "../vendor/bower/jquery/jquery",
+    zepto: "../vendor/bower/zeptojs/dist/zepto",
     lodash: "../vendor/bower/lodash/dist/lodash.underscore",
     backbone: "../vendor/bower/backbone/backbone",
     "backbone.wreqr": "../vendor/bower/backbone.marionette/public/javascripts/backbone.wreqr",
@@ -73,12 +73,13 @@ require.config({
   },
   map: {
     "*": {
-      underscore: "lodash"
+      underscore: "lodash",
+      jquery: "zepto"
     }
   },
   shim: {
-    jquery: {
-      exports: "jQuery"
+    zepto: {
+      exports: "Zepto"
     },
     lodash: {
       exports: "_"

@@ -4,11 +4,13 @@
  * A module of method to assist ui manipulation
  */
 define([
-  "jquery"
+  "jquery",
+  "helpers/zepto"
 ], function($) {
 
   var doc = document;
   var $doc = $(document);
+  var $body = $("body");
 
   /**
    * Scroll to the top of the offset
@@ -16,9 +18,9 @@ define([
   function scrollTop(offset) {
     if (offset) {
       // overflow property android browser hack, https://code.google.com/p/android/issues/detail?id=19625
-      $doc.css("overflow-y", "hidden");
+      $body.css("overflow-y", "hidden");
       $doc.scrollTop(offset.top);
-      $doc.css("overflow-y", "auto");
+      $body.css("overflow-y", "auto");
     }
   }
 
