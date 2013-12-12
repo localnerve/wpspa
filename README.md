@@ -6,7 +6,7 @@
 
 The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, the first load is much faster than any optimized Wordpress site. This design features data-driven, asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
 
-> latest [free-tier performance results](http://www.webpagetest.org/result/131021_6S_45Z/) over a 3G network.
+> latest [free-tier performance results](http://www.webpagetest.org/result/131212_KF_TGB/) over a 3G network.
 
 By adding an SPA front-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
@@ -44,6 +44,10 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 + Demonstrates WP structures that play well with an SPA architecture
   * WPSPA Wordpress plugin extends menu admin interface for SPA route mapping
 + Targeting one second response for Mobile user (ATF 1st response).
+
+#### Performance prior to Zepto
++ Here is the old 3G [performance](http://www.webpagetest.org/result/131021_6S_45Z/) prior to converting to Zepto (~20% network performance improvement)
++ Note there was a 64K size difference in the app bundle, which equates to a parse time savings of ~64ms at 1k=1ms.
 
 #### Demonstrated Learning
 + Demonstrate optimized build procedure for development and SEO
