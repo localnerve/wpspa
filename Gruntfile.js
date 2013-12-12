@@ -125,7 +125,7 @@ module.exports = function(grunt) {
         options: {
           exclude: [
             // these are not compiled/referenced
-            "chai", "underscore", "mocha", "sinon", "webshim", "almond", "requirejs",
+            "chai", "underscore", "mocha", "sinon", "almond", "requirejs",
             // these are custom (deviate from package main)
             "lodash", "backbone.marionette"
           ]
