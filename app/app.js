@@ -14,8 +14,12 @@ define([
   "server/helpers/rewrites",
   "module"
 ], function(_, Backbone, Marionette, loader, anchor, contract, rewrites, module) {
-  // Denote global reference
+  // Denote global references
   var $w = window;
+
+  // Does nothing but break the bfcache. Do not remove.
+  // https://github.com/localnerve/wpspa/issues/33
+  $(window).unload(function(){});
 
   // Override the render method to work with a loader
   Marionette.Renderer.render = function(template, data) {
