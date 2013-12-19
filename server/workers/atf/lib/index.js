@@ -34,7 +34,7 @@ function update(target, success, environment) {
   // start the atf content requests in parallel
   async.parallel({
     navigation: request(config.proxy.host, config.proxy.port, config.navigationPath),
-    // banner: request(config.proxy.host, config.proxy.port, config.bannerPath),
+    siteInfo: request(config.proxy.host, config.proxy.port, config.siteInfoPath),
     footer: request(config.proxy.host, config.proxy.port, config.footerPath),
     recent: request(config.proxy.host, config.proxy.port, config.recentPath)
   },
