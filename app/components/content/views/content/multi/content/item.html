@@ -30,20 +30,18 @@
   <%= model.get('excerpt') %>
 </div>
 <footer class="entry-meta">
-  <ul class="entry-meta-list">
-    <% if (model.get('comment_status') === "open") { %>
-      <li class="comments-link">
-        <% var comments = model.get('comments'); %>    
-        <% if (comments.length > 0) { %>
-          <a href="<%= comments.commentUrl %>" title="Comment on <%= model.get('title') %>">
-            <span><%= labelNumber(comments.length) %> <%= labelComment(comments.length) %> so far</span>
-          </a>
-        <% } else { %>
-          <a href="<%= comments.respondUrl %>" title="Comment on <%= model.get('title') %>">
-            <span class="leave-reply">Leave a comment</span>
-          </a>
-        <% } %>
-      </li>
-    <% } %>
+  <ul class="entry-meta-list">    
+    <li class="comments-link">
+      <% var comments = model.get('comments'); %>    
+      <% if (comments.length > 0) { %>
+        <a href="<%= comments.commentUrl %>" title="Comment on <%= model.get('title') %>">
+          <span><%= labelNumber(comments.length) %> <%= labelComment(comments.length) %> so far</span>
+        </a>
+      <% } else if (model.get('comment_status') === "open") { %>
+        <a href="<%= comments.respondUrl %>" title="Comment on <%= model.get('title') %>">
+          <span class="leave-reply">Leave a comment</span>
+        </a>
+      <% } %>
+    </li>    
   </ul>
 </footer>
