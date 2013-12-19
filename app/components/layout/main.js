@@ -50,6 +50,9 @@ define([
         container.startRouting();
         container.stopListening();
       }));
+
+      this.header.trigger("container:ready");
+      this.footer.trigger("container:ready");
     });
 
     container.addFinalizer(function() {

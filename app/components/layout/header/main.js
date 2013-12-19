@@ -5,9 +5,10 @@
 define([
   "backbone.marionette",
   "app",
+  "module",
   "components/layout/header/navigation/main",
   "components/layout/header/banner/main"
-], function(Marionette, app) {
+], function(Marionette, app, module) {
 
   // Create a partial definition for container.header module
   var thisModule = app.module("container.header", function(header) {
@@ -33,6 +34,7 @@ define([
 
     header.addInitializer(function(options) {
       this.layout = new HeaderLayout(options);
+      this.timeout = module.config().timeout;
     });
 
     header.addFinalizer(function() {

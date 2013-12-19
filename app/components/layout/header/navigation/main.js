@@ -1,8 +1,7 @@
 define([
   "app",
-  "module",
   "components/layout/header/navigation/view"
-], function(app, module, navigationView) {
+], function(app, navigationView) {
 
   // Create a partial definition for container.header module
   var thisModule = app.module("container.header", function(header) {
@@ -10,7 +9,6 @@ define([
     // add another header module initializer
     header.addInitializer(function(options) {
       this.navigation = navigationView.create(options);
-      this.timeout = module.config().timeout;
     });
 
     // add a finalizer to the container.header module 

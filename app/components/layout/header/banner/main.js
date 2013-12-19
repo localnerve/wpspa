@@ -4,36 +4,39 @@
  */
 define([
   "backbone.marionette",
-  "app"
-], function(Marionette, app) {
+  "app",
+  "components/layout/header/banner/view"
+], function(Marionette, app, bannerView) {
 
   // Create a partial definition for container.header module
   var thisModule = app.module("container.header", function(header) {
 
-    // The definition of the banner view
-    var BannerView = Marionette.ItemView.extend({
-      template: "components/layout/header/banner/template",
-      className: "main-circle",
-      attributes: {
-        role: "banner"
-      },
-
-      serializeData: function() {
-        // TODO: get these from a model
-        return {
-          siteTitle: "WPSPA",
-          siteDescription: "Just another WordPress site"
-        };
-      }
-    });
-
     // add another header module initializer
     header.addInitializer(function(options) {
-      this.banner = new BannerView(options);
+      this.banner = bannerView.create(options);
     });
 
     header.addFinalizer(function() {
       delete this.banner;
+    });
+
+    header.on("container:ready", function() {
+      header.banner.model.fetch({
+        timeout: header.timeout,
+
+        success: function() {
+          // banner successfully loaded, tell the container
+          app.vent.trigger("container:complete");
+        },
+        error: function(collection, response, options) {
+          // banner failed to load, tell the app
+          app.vent.trigger("app:error", {
+            collection: collection,
+            response: response,
+            options: options
+          });
+        }
+      });
     });
 
   });

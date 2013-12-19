@@ -21,7 +21,7 @@ define([
       delete this.sidebarContainer;
     });
 
-    app.on("initialize:after", function() {
+    footer.on("container:ready", function() {
       footer.sidebarContainer.collection.fetch({
         timeout: footer.timeout,
         
