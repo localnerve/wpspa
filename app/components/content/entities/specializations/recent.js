@@ -5,22 +5,33 @@
  * If recent posts have been bootstrapped, then uses those to hydrate the collection.
  */
 define([
-  "backbone",
   "helpers/backbone/sync",
+  "helpers/contract",
+  "module",
   "components/content/entities/parser",
-  "module"
-], function(Backbone, sync, parser, module) {
+  "components/content/entities/specializations/onetomany"
+], function(sync, contract, module, parser, OneToMany) {
   var $w = window;
 
-  // definition of a recent posts collection
-  var RecentPostsCollection = Backbone.Collection.extend({
+  // Definition of a recent posts collection
+  var RecentPostsCollection = OneToMany.extend({
+
+    initialize: function() {
+      // Make sure this was created as expected
+      contract(this.get("items"), "0.object_id", "0.object_type");
+    },
 
     url: module.config().endpoint,
 
     sync: sync($w.wpspa ? $w.wpspa.recent : null),
 
     parse: function(data) {
-      return parser(data);
+      OneToMany.prototype.createCollection.call(this, parser(data));
+      var item = this.get("items")[0];
+      return {
+        id: item.object_id,
+        title: item.object_type
+      };
     }
   });
 
