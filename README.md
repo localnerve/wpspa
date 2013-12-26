@@ -10,7 +10,7 @@ The purpose of this project is to demonstrate a faster, mobile friendly Wordpres
 
 By adding an SPA front-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
-The only changes required on your Wordpress site are that you install the [jsonapi](http://wordpress.org/plugins/json-api/) plugin and the WPSPA plugin. The WPSPA plugin simply extends an existing WP menu to add custom fields for SPA routes. The WPSPA plugin is not public yet.
+The only changes required on your Wordpress site are that you install the [jsonapi](http://wordpress.org/plugins/json-api/) plugin and the [WPSPA plugin](https://github.com/localnerve/wpspa-plugin). The WPSPA plugin extends the jsonapi plugin and various post types to assist SPAs.
 
 ## Featured Technologies
 + Client-side
@@ -47,7 +47,7 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 
 #### Performance prior to Zepto
 + Here is the old 3G [performance](http://www.webpagetest.org/result/131021_6S_45Z/) prior to converting to Zepto (~20% network performance improvement)
-+ Note there was a 64K size difference in the app bundle, which equates to a parse time savings of ~64ms at 1k=1ms.
++ Note there was a 64K size difference in the app bundle, which equates to a parse-time savings of ~64ms at 1k=1ms.
 
 #### Demonstrated Learning
 + Demonstrate optimized build procedure for development and SEO
