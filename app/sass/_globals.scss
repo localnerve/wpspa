@@ -17,6 +17,23 @@
     );
 }
 
+.grid-col-outer {
+  @include grid-column(
+    $default-columns,
+    $default-last-column,
+    $default-center,
+    $default-offset,
+    $default-push,
+    $default-pull,
+    true,
+    $default-float    
+    );
+  @media #{$small} {
+    padding-left: $column-gutter / 2;
+    padding-right: $column-gutter / 2;    
+  }
+}
+
 .grid-col-center {
   @include grid-column(
     $default-columns * 0.80,
@@ -27,7 +44,7 @@
     $default-pull,
     $default-collapse,
     $default-float
-  );  
+    );
   @media #{$small} {
     @include grid-column(
         $default-columns / 2,
