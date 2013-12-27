@@ -1,3 +1,10 @@
+//
+// Footer styles
+//
+
+//
+// Footer Global Styles
+//
 .site-footer {
   background-color: #e8e5ce;
   color: #686758;
@@ -8,3 +15,6 @@
 .site-footer a {
   color: #686758;
 }
+
+@import "sidebarContainer/styles";
+@import "siteInfo/styles";
