@@ -6,7 +6,9 @@
 
 The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, the first load is much faster than any optimized Wordpress site. This design features data-driven, asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
 
-> latest [free-tier performance results](http://www.webpagetest.org/result/131212_KF_TGB/) over a 3G network.
+> latest [performance results](http://www.webpagetest.org/result/131212_KF_TGB/) over a 300ms RTT 3G network.
+> latest [pagespeed results](http://github.com/localnerve/wpspa/blob/master/docs/images/pagespeed.jpg)
+> latest [yslow results](http://github.com/localnerve/wpspa/blob/master/docs/images/yslow.jpg)
 
 By adding an SPA front-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
@@ -23,7 +25,7 @@ The only changes required on your Wordpress site are that you install the [jsona
   * ExpressJS
 
 ## Demo
-To run the demo, you first must have Node installed (to run the front-end and back-end servers). The demo can be executed by cloning this project, exectuing "grunt demo", and navigating to localhost:9001. The demo task runs the front-end server and mocks the back-end api locally. For now, the demo only runs the development website, so it does not demonstrate the performance aspect.
+To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be executed by cloning this project, executing "grunt demo", and navigating to localhost:9001. The demo task runs the front-end server and mocks the back-end api locally. For now, the demo only runs the development website, so it does not demonstrate the performance aspect.
 
 ## Development Notes
 
