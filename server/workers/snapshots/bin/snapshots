@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+var path = require("path");
+var snapshots = require("../lib");
+
+// Take snapshots driven from robots.txt.
+// process.env.NODE_ENV and process.env.PORT must be defined
+var appRoot = "../../../../";
+var result = snapshots.robots(path.join(__dirname, appRoot),
+  function(nonError) {
+    if (!nonError && result) {
+      console.log("succesfully created snapshots");
+    } else {
+      console.error("failed to create snapshots");
+    }
+  }
+);

@@ -19,18 +19,18 @@ var config = require("./server/config").create(process.env.NODE_ENV);
 var app = express();
 
 // set the port
-app.set("port", config.appPort || process.env.PORT);
+app.set('port', config.appPort || process.env.PORT);
 
 // define rewrite rules
 var rewriteRules = [
   // if application marked request notfound
-  "^" + rewriteHelper.notfound('(.+)', {
+  '^' + rewriteHelper.notfound('(.+)', {
     regex: true
-  }) + "$ /"+config.four04File+" [NC L]",
+  }) + '$ /'+config.four04File+' [NC L]',
   // if request is forbidden
   config.rewriteForbidden,
   // if request is for snapshot
-  '^(.*)\\?_escaped_fragment_=.*$ /snapshots/$1 [NC L]',
+  '^(.*)\\?_escaped_fragment_=.*$ '+path.join(path.join('/', config.snapshotsDir), '/')+'$1 [NC L]',
   // if a static resource is not being requested, its an in-app route
   '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$|ttf$|eot$|svg$|woff$)) /index.html [NC L]'
 ];
@@ -44,10 +44,10 @@ app.use(express.compress());
 app.use(proxy(config.proxy.host, config.proxy.port, config.proxy.pattern));
 app.use(rewrite(rewriteRules));
 // requests continue after rewrites except redirects, gones, forbiddens, and proxies
-app.use(path.join("/", config.scriptsDir),
+app.use(path.join('/', config.scriptsDir),
   express.static(path.resolve(path.join(config.staticBase, config.scriptsDir)), { maxAge: config.staticAge })
 );
-app.use(path.join("/", config.imagesDir),
+app.use(path.join('/', config.imagesDir),
   express.static(path.resolve(path.join(config.staticBase, config.imagesDir)), { maxAge: config.staticAge })
 );
 // what's left are all the no-cache statics

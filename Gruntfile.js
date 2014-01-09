@@ -15,7 +15,10 @@ function runTask(grunt, task, stdoutData) {
 function nodeDeps(pkg) {
   var prefix = "node_modules/", suffix = "/**", result = [];
   for (var dep in pkg.dependencies) {
-    result.push(prefix+dep+suffix);
+    // we need this to npm install because of phantomjs
+    if (dep !== "html-snapshots") {
+      result.push(prefix+dep+suffix);
+    }
   }
   return result;
 }

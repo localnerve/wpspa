@@ -4,6 +4,7 @@
 /node_modules/grunt-mocha
 /node_modules/grunt-contrib-imagemin
 /node_modules/grunt-html-snapshots
+/node_modules/html-snapshots
 app/styles
 libpeerconnection.log
 wpspa.sublime-workspace

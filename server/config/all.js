@@ -40,6 +40,11 @@ Object.defineProperties(Config.prototype, {
     enumerable: true
   },
 
+  snapshotsDir: {
+    value: "snapshots",
+    enumerable: true
+  },
+
   four04File: {
     value: "404.html",
     enumerable: true

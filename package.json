@@ -51,6 +51,7 @@
     "http-proxy": "~0.10.3",
     "connect-modrewrite": "~0.5.4",
     "express": "~3.3.5",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "html-snapshots": "~0.2.1"
   }
 }
