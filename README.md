@@ -25,6 +25,8 @@ The only changes required on your Wordpress site are that you install the [jsona
 
 + Server-side
   * ExpressJS
+  * Redis
+  * Scheduled Workers
 
 ## Demo
 To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be executed by cloning this project, executing "grunt demo", and navigating to localhost:9001. The demo task runs the front-end server and mocks the back-end api locally. For now, the demo only runs the development website, so it does not demonstrate the performance aspect.
@@ -75,6 +77,9 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 + Npm
 + Grunt-cli
 + Bower
+
+##### Workers
++ Redis
 
 #### Unmanaged Vendor packages
 + Modernizr, still manually building it with their website. Waiting on grunt-modernizr/Moderizr 3
