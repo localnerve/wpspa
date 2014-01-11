@@ -19,7 +19,7 @@ var config = require("./server/config").create(process.env.NODE_ENV);
 var app = express();
 
 // set the port
-app.set('port', config.appPort || process.env.PORT);
+app.set('port', config.app.port || process.env.PORT);
 
 // define rewrite rules
 var rewriteRules = [
@@ -41,7 +41,7 @@ app.use(
 );
 app.use(express.logger(config.loggerFormat));
 app.use(express.compress());
-app.use(proxy(config.proxy.host, config.proxy.port, config.proxy.pattern));
+app.use(proxy(config.proxy.hostname, config.proxy.port, config.proxy.pattern));
 app.use(rewrite(rewriteRules));
 // requests continue after rewrites except redirects, gones, forbiddens, and proxies
 app.use(path.join('/', config.scriptsDir),

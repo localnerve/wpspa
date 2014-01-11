@@ -63,14 +63,14 @@ module.exports = function(grunt) {
     test: "test/mocha",
     vendor: "vendor",
     mock: {
-      host: configTest.proxy.host,
+      host: configTest.proxy.hostname,
       port: configTest.proxy.port
     },
     port: {
-      test: configTest.appPort,
-      dev: configDev.appPort,
-      debug: configDebug.appPort,
-      release: configRelease.appPort
+      test: configTest.app.port,
+      dev: configDev.app.port,
+      debug: configDebug.app.port,
+      release: configRelease.app.port
     },
     pkg: grunt.file.readJSON("package.json")
   };
@@ -219,7 +219,7 @@ module.exports = function(grunt) {
     // connect webserver provided by grunt-contrib-connect
     connect: {
       options: {
-        hostname: "<%= project.mock.host %>",
+        hostname: "<%= project.mock.hostname %>",
         port: "<%= project.mock.port %>",
         middleware: function(connect) {
           return [
@@ -322,6 +322,9 @@ module.exports = function(grunt) {
     // This makes an entirely encapsulated build into
     // each directory.
     copy: {
+      options: {
+        mode: true
+      },
       debug: {
         files: [
           // this is handled by cssmin for release
@@ -519,7 +522,7 @@ module.exports = function(grunt) {
     plato: {
       client: {
         options: {
-          exclude: /config\.js|server\/helpers\/redisClient\.js|server\/middleware\/inject\.js/
+          exclude: /config\.js|server\/middleware\/inject\.js/
         },
         files: [{
           dest: "<%= project.report %>",

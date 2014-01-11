@@ -9,12 +9,15 @@ var All = require("./all");
 function Config() {}
 util.inherits(Config, All);
 
-// The main application port that browsers use
-Config.prototype.appPort = 9002;
+// The application info
+Config.prototype.app = {
+  hostname: "localhost",
+  port: 9002
+};
 
 // Use a proxy
 Config.prototype.proxy = {
-  host: "jsonapi.local",
+  hostname: "jsonapi.local",
   port: 80,
   pattern: '^\/api\/'
 };

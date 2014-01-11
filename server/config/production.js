@@ -9,9 +9,12 @@ var All = require("./all");
 function Config() {}
 util.inherits(Config, All);
 
-// The main application port that browsers use
-// This is left for the host to define
-//Config.prototype.appPort = 80;
+// Define the app host as the name for the cloud env router
+// The application info
+Config.prototype.app = {
+  hostname: "enigmatic-refuge-9006.herokuapp.com"
+  //port: undefined, let the env define
+};
 
 // Reduce production logging to minimal
 Config.prototype.loggerFormat = "tiny";
@@ -21,7 +24,7 @@ Config.prototype.staticAge = 31556926000; // one year
 
 // Use a proxy
 Config.prototype.proxy = {
-  host: "wpspa.localnerve.com",
+  hostname: "wpspa.localnerve.com",
   port: 80,
   pattern: '^\/api\/'
 };

@@ -9,12 +9,15 @@ var All = require("./all");
 function Config() {}
 util.inherits(Config, All);
 
-// The main application port that browsers use
-Config.prototype.appPort = 9000;
+// The application info
+Config.prototype.app = {
+  hostname: "localhost",
+  port: 9000
+};
 
 // Proxy to the the test server
 Config.prototype.proxy = {
-  host: "localhost",
+  hostname: "localhost",
   port: 9010,
   pattern: '^\/api\/'
 };

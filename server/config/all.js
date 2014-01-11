@@ -55,6 +55,12 @@ Object.defineProperties(Config.prototype, {
     enumerable: true
   },
 
+  // the hash for html snapshots
+  htmlSnapshotsHash: {
+    value: "html-snapshots",
+    enumerable: true
+  },
+
   // endpoint for navigation (requires JSON API + WPSPA plugin)
   navigationPath: {
     value: "/api/wpspa/menu",
