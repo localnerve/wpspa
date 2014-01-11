@@ -52,6 +52,7 @@
     "connect-modrewrite": "~0.5.4",
     "express": "~3.3.5",
     "async": "~0.2.9",
-    "html-snapshots": "~0.2.1"
+    "html-snapshots": "~0.2.1",
+    "redis": "~0.10.0"
   }
 }
