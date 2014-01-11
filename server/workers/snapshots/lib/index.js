@@ -16,12 +16,14 @@ var selectors = {
 
 /**
  * Create the html snapshots from the robots.txt file
+ * If config.app.port is undefined, then it is production, so we must use the cloud routing
  */
 function robots(appRoot, callback, environment) {
   var config = configLib.create(environment || process.env.NODE_ENV);
 
   return htmlSnapshots.run({
-    port: config.appPort || process.env.PORT,
+    hostname: config.app.hostname,
+    port: config.app.port || 80,
     source: path.join(appRoot, "robots.txt"),
     outputDir: path.join(appRoot, config.snapshotsDir),
     outputDirClean: true,

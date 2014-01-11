@@ -1,17 +1,66 @@
 #!/usr/bin/env node
 
+/**
+ * The html snapshots worker process.
+ * This takes the html snapshots and updates the snapshots hash in redis.
+ *   process.env.NODE_ENV must be defined
+ */
 var path = require("path");
+var fs = require("fs");
+var configLib = require("../../../config");
+var redis = require("../../../helpers/redis");
 var snapshots = require("../lib");
 
-// Take snapshots driven from robots.txt.
-// process.env.NODE_ENV and process.env.PORT must be defined
-var appRoot = "../../../../";
-var result = snapshots.robots(path.join(__dirname, appRoot),
-  function(nonError) {
-    if (!nonError && result) {
-      console.log("succesfully created snapshots");
+// Get the configuration
+var config = configLib.create(process.env.NODE_ENV);
+
+// Get the normalized path to the app root
+var appRoot = path.join(__dirname, "../../../../");
+
+// Actions to perform on error
+function errorAction(message) {
+  // TODO: add SENDGRID or other email notification here
+}
+
+// Take snapshots driven from robots.txt and put into redis
+var result = snapshots.robots(appRoot,
+  function(nonError, completedSnapshots) {
+    var message;
+    if (typeof nonError === "undefined" && result) {
+
+      if (completedSnapshots.length > 0) {
+        console.log("succesfully created snapshots");
+
+        // Make the snapshots hash.
+        // The key is the app-relative path: "/snapshots/index.html"
+        // The value is the html snapshot contents
+        var hash = {};
+        for (var i = 0; i < completedSnapshots.length; i++) {
+          hash[completedSnapshots[i].replace(appRoot, "/")] =
+            fs.readFileSync(completedSnapshots[i], { encoding: "utf8" });
+        }
+
+        // Update the htmlSnapshotsHash in Redis
+        var redisClient = redis.client();
+        redisClient.hmset(config.htmlSnapshotsHash, hash, function(err, res) {
+          if (err) {
+            message = "Redis hash update of "+config.htmlSnapshotsHash+" failed";
+            console.error(message);
+            errorAction(message);
+          } else {
+            console.log("Redis hash update of "+config.htmlSnapshotsHash+" succeeded");
+          }
+          redisClient.quit();
+        });
+      } else {
+        message = "Html snapshots took no snapshots";
+        console.error(message);
+        errorAction(message);
+      }
     } else {
-      console.error("failed to create snapshots");
+      message = "Html Snapshots failed";
+      console.error(message);
+      errorAction(message);
     }
   }
 );

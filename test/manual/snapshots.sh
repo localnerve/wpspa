@@ -7,7 +7,7 @@
 # change this if you move this file
 relativeAppRoot=../..
 
-# path to the worker from appRoot
+# path to the worker from appRoot, this is what is in the production scheduler
 worker=server/workers/snapshots/bin/snapshots
 
 cd "$(dirname "$0")"
@@ -20,8 +20,8 @@ if [ -x $worker ]; then
   testProcs=$!
   sleep 6
 
-  # run the job in production
-  env NODE_ENV=production PORT=9000 $worker
+  # run the job
+  env NODE_ENV=test $worker
 
   # kill the test processes
   pkill -TERM -P $testProcs
