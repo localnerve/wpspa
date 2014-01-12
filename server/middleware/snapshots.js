@@ -3,6 +3,7 @@
  *
  * Snapshotting middlewares
  */
+var path = require("path");
 var redis = require("../helpers/redis");
 var configLib = require("../config");
 
@@ -10,10 +11,12 @@ var config = require("../config").create(process.env.NODE_ENV || "development");
 
 /**
  * Middleware to respond with an html snapshot from redis if it's an escaped fragment request.
+ * Snapshot is assumed to be stored with snapshots worker process using the html-snapshots lib.
  */
 function htmlSnapshot(req, res, next) {
   var result = /^(.*)\?_escaped_fragment_=.*$/.exec(req.url);
 
+  // serve the data or record failure
   function handleData(hash, key, data) {
     if (data) {
       console.log("Redis retrieved '"+key+"' from '"+hash+"'");
@@ -28,11 +31,18 @@ function htmlSnapshot(req, res, next) {
     next();
   } else {
     var hash = config.htmlSnapshotsHash;
-    var key = result[1];
-    if (key.charAt(key.length-1) === '/')
-      key += "index.html";
-
     var redisClient = redis.client();
+
+    // normalize the key so that it always ends in '/index.html' per html-snapshots
+    var key = result[1].replace(/(?:\/)?([^\/]*)$/, function(match, last) {
+      var result = match;
+      if (last !== "index.html") {
+        result = path.join(match, "/index.html");
+      }
+      return result;
+    });
+    
+    // get the data from redis
     redisClient.hget(hash, key, function(err, data) {
       if (err) {
         next("Redis error when retrieving '"+key+"' from '"+hash+"'");
