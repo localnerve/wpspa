@@ -12,7 +12,7 @@ var rewriteHelper = require("./server/helpers/rewrites");
 var proxy = require("./server/middleware/proxy");
 var notfound = require("./server/middleware/notfound");
 var cacheControl = require("./server/middleware/cachecontrol");
-var redis = require("./server/middleware/redis");
+var snapshots = require("./server/middleware/snapshots");
 
 var config = require("./server/config").create(process.env.NODE_ENV);
 
@@ -41,7 +41,7 @@ app.use(
 app.use(express.logger(config.loggerFormat));
 app.use(express.compress());
 app.use(proxy(config.proxy.hostname, config.proxy.port, config.proxy.pattern));
-app.use(redis.htmlSnapshot);
+app.use(snapshots.htmlSnapshot);
 app.use(rewrite(rewriteRules));
 // requests continue after rewrites except redirects, gones, forbiddens, and proxies
 

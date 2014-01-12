@@ -1,13 +1,16 @@
 /**
- * htmlSnapshot
+ * snapshots
  *
- * Middleware to respond with html snapshot from redis if it's an escaped fragment request.
+ * Snapshotting middlewares
  */
 var redis = require("../helpers/redis");
 var configLib = require("../config");
 
 var config = require("../config").create(process.env.NODE_ENV || "development");
 
+/**
+ * Middleware to respond with an html snapshot from redis if it's an escaped fragment request.
+ */
 function htmlSnapshot(req, res, next) {
   var result = /^(.*)\?_escaped_fragment_=.*$/.exec(req.url);
 
