@@ -12,14 +12,12 @@ var rewriteHelper = require("./server/helpers/rewrites");
 var proxy = require("./server/middleware/proxy");
 var notfound = require("./server/middleware/notfound");
 var cacheControl = require("./server/middleware/cachecontrol");
+var redis = require("./server/middleware/redis");
 
 var config = require("./server/config").create(process.env.NODE_ENV);
 
 // create the app
 var app = express();
-
-// set the port
-app.set('port', config.app.port || process.env.PORT);
 
 // define rewrite rules
 var rewriteRules = [
@@ -29,11 +27,12 @@ var rewriteRules = [
   }) + '$ /'+config.four04File+' [NC L]',
   // if request is forbidden
   config.rewriteForbidden,
-  // if request is for snapshot
-  '^(.*)\\?_escaped_fragment_=.*$ '+path.join(path.join('/', config.snapshotsDir), '/')+'$1 [NC L]',
   // if a static resource is not being requested, its an in-app route
   '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$|ttf$|eot$|svg$|woff$)) /index.html [NC L]'
 ];
+
+// set the port
+app.set('port', config.app.port || process.env.PORT);
 
 // requests are processed in this middleware stack order
 app.use(
@@ -42,8 +41,10 @@ app.use(
 app.use(express.logger(config.loggerFormat));
 app.use(express.compress());
 app.use(proxy(config.proxy.hostname, config.proxy.port, config.proxy.pattern));
+app.use(redis.htmlSnapshot);
 app.use(rewrite(rewriteRules));
 // requests continue after rewrites except redirects, gones, forbiddens, and proxies
+
 app.use(path.join('/', config.scriptsDir),
   express.static(path.resolve(path.join(config.staticBase, config.scriptsDir)), { maxAge: config.staticAge })
 );

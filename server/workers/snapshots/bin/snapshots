@@ -19,24 +19,29 @@ var appRoot = path.join(__dirname, "../../../../");
 
 // Actions to perform on error
 function errorAction(message) {
+  console.error(message);
   // TODO: add SENDGRID or other email notification here
 }
 
 // Take snapshots driven from robots.txt and put into redis
 var result = snapshots.robots(appRoot,
   function(nonError, completedSnapshots) {
-    var message;
     if (typeof nonError === "undefined" && result) {
 
       if (completedSnapshots.length > 0) {
         console.log("succesfully created snapshots");
+
+        // Make the reducer to form the key
+        // Removes the appRoot and snapshotsDir from the path so the key
+        //   is just the request url.
+        var reducer = path.join(appRoot, config.snapshotsDir);
 
         // Make the snapshots hash.
         // The key is the app-relative path: "/snapshots/index.html"
         // The value is the html snapshot contents
         var hash = {};
         for (var i = 0; i < completedSnapshots.length; i++) {
-          hash[completedSnapshots[i].replace(appRoot, "/")] =
+          hash[completedSnapshots[i].replace(reducer, "")] =
             fs.readFileSync(completedSnapshots[i], { encoding: "utf8" });
         }
 
@@ -44,23 +49,17 @@ var result = snapshots.robots(appRoot,
         var redisClient = redis.client();
         redisClient.hmset(config.htmlSnapshotsHash, hash, function(err, res) {
           if (err) {
-            message = "Redis hash update of "+config.htmlSnapshotsHash+" failed";
-            console.error(message);
-            errorAction(message);
+            errorAction("Redis hash update of "+config.htmlSnapshotsHash+" failed");
           } else {
             console.log("Redis hash update of "+config.htmlSnapshotsHash+" succeeded");
           }
           redisClient.quit();
         });
       } else {
-        message = "Html snapshots took no snapshots";
-        console.error(message);
-        errorAction(message);
+        errorAction("Html snapshots took no snapshots");
       }
     } else {
-      message = "Html Snapshots failed";
-      console.error(message);
-      errorAction(message);
+      errorAction("Html Snapshots failed");
     }
   }
 );

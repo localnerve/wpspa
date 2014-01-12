@@ -2,6 +2,7 @@
 #
 # Verify the production functionality of the snapshots worker process
 # Run the snapshots worker like it would in the production scheduler
+# Requires that you have redis installed locally
 #
 
 # change this if you move this file
