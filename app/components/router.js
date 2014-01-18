@@ -9,6 +9,8 @@ define([
   "app",
   "components/controller"
 ], function(_, Marionette, contract, app) {
+  // denote a global reference to window
+  var $w = window;
 
   // The definition for the dynamic application level router
   var AppRouter = Marionette.AppRouter.extend({
@@ -31,10 +33,9 @@ define([
     addRoute: function(options) {
       contract(options, "route", "name");
       if (!this.appRoutes[options.route]) {
-
+        
         app.controller.createHandler(options);
 
-        // the next line should be un-necessary, come on Marionette.
         this.appRoutes[options.route] = options.name;
         this.appRoute(options.route, options.name);
       }
@@ -47,6 +48,10 @@ define([
     app.router = new AppRouter(_.extend({
       controller: app.controller
     }, options));
+
+    // Expose the dynamic route array to the global namespace
+    ($w.wpspa = $w.wpspa || {}).appRoutes = app.router.appRoutes;
+
     // Signal that its ok to add other routers.
     // Since this handles a default route, it needs to be first, so that it's last to be evaluated by Backbone.Router
     app.vent.trigger("app:router:initialize");
