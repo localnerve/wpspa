@@ -1,6 +1,7 @@
 .sass-cache
 /dist
 /report
+/snapshots
 /node_modules/grunt-mocha
 /node_modules/grunt-contrib-imagemin
 /node_modules/grunt-html-snapshots
