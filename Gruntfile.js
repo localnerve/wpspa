@@ -14,9 +14,15 @@ function runTask(grunt, task, stdoutData) {
 // helper function to get an array of node dependencies
 function nodeDeps(pkg) {
   var prefix = "node_modules/", suffix = "/**", result = [];
+  // exclude any deps with binaries, these install w/package.json
+  var exclude = {
+    "html-snapshots": true,
+    "phantomjs": true,
+    "hiredis": true,
+    "node-phantom": true
+  };
   for (var dep in pkg.dependencies) {
-    // we need this to npm install because of phantomjs
-    if (dep !== "html-snapshots") {
+    if (!exclude[dep]) {
       result.push(prefix+dep+suffix);
     }
   }
@@ -336,7 +342,7 @@ module.exports = function(grunt) {
           {
             src: [
               // files in root besides index.html
-              "package.json", "app.js", "Procfile", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
+              "package.json", "app.js", "Procfile", "404.html", "favicon.ico", "robots.txt", "google24e9e21ce1f6df19.html",
               // other directories
               "<%= project.server %>/**", "<%= project.images %>/*.png", "<%= project.fonts %>/**",
               // vendor stuff
@@ -353,7 +359,7 @@ module.exports = function(grunt) {
           {
             src: [
               // static files in root besides index.html
-              "package.json", "app.js", "Procfile", "404.html", "favicon.ico", "robots.txt", "sitemap.xml", "google24e9e21ce1f6df19.html",
+              "package.json", "app.js", "Procfile", "404.html", "favicon.ico", "robots.txt", "google24e9e21ce1f6df19.html",
               // other directories
               "<%= project.server %>/**",
               // this is covered by imagemin for release builds
@@ -381,30 +387,6 @@ module.exports = function(grunt) {
           src: ["<%= project.app %>/styles/index.css"],
           dest: "<%= project.dist.release %>/index.css"
         }]
-      }
-    },
-
-    // html_snapshots provided by grunt-html-snapshots.
-    // This task will create the html snapshots for indexing.
-    html_snapshots: {
-      options: {
-        selector: {
-          "/": "#content .post-container",
-          "__default": "#content .grid-row"
-        },
-        source: "robots.txt"
-      },
-      debug: {
-        options: {
-          port: "<%= project.port.debug %>",
-          outputDir: "<%= project.dist.debug %>/snapshots"
-        }
-      },
-      release: {
-        options: {
-          port: "<%= project.port.release %>",
-          outputDir: "<%= project.dist.release %>/snapshots"
-        }
       }
     },
 
@@ -828,9 +810,7 @@ module.exports = function(grunt) {
     "rev:debug",
     "useminOptions:debug",
     "usemin",
-    "atfUpdate:debug",
-    "express:debug",
-    "html_snapshots:debug"
+    "atfUpdate:debug"
   );
   grunt.registerTask("debug", debugTasks);
 
@@ -850,8 +830,6 @@ module.exports = function(grunt) {
     "useminOptions:release",
     "usemin",
     "atfUpdate:release",
-    "express:release",
-    "html_snapshots:release",
     "clean:release-post"
   );
   grunt.registerTask("release", releaseTasks);
