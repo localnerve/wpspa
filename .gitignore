@@ -6,6 +6,7 @@
 /node_modules/grunt-contrib-imagemin
 /node_modules/grunt-html-snapshots
 /node_modules/html-snapshots
+/node_modules/phantomjs
 app/styles
 libpeerconnection.log
 wpspa.sublime-workspace
