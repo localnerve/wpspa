@@ -3,13 +3,15 @@
 
 User-agent: *
 
-Allow: /
-
-Disallow: /vendor/
 Disallow: /fonts/
 Disallow: /images/
+Disallow: /node_modules/
+Disallow: /scripts/
+Disallow: /server/
 
-Sitemap: http://wpspa.localnerve.com/sitemap.xml
+ALLOWURLS
+
+Sitemap: SITEMAPURL
 
 User-agent: ia_archiver
 Disallow: /
