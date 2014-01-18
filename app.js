@@ -13,6 +13,7 @@ var proxy = require("./server/middleware/proxy");
 var notfound = require("./server/middleware/notfound");
 var cacheControl = require("./server/middleware/cachecontrol");
 var snapshots = require("./server/middleware/snapshots");
+var routes = require("./server/routes");
 
 var config = require("./server/config").create(process.env.NODE_ENV);
 
@@ -42,8 +43,13 @@ app.use(express.logger(config.loggerFormat));
 app.use(express.compress());
 app.use(proxy(config.proxy.hostname, config.proxy.port, config.proxy.pattern));
 app.use(snapshots.htmlSnapshot);
+
 app.use(rewrite(rewriteRules));
 // requests continue after rewrites except redirects, gones, forbiddens, and proxies
+
+// Special resource GETs
+app.get("/sitemap.xml", routes.sitemap);
+app.get("/robots.txt", routes.robots);
 
 app.use(path.join('/', config.scriptsDir),
   express.static(path.resolve(path.join(config.staticBase, config.scriptsDir)), { maxAge: config.staticAge })
@@ -58,6 +64,7 @@ app.use(express.static(path.resolve(config.staticBase)));
 app.use(notfound.four04);
 
 // development only
+// TODO: replace with express-error-handler for all envs
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }

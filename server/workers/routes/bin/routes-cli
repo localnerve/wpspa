@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+var routes = require("../lib");
+routes("/", 6000);

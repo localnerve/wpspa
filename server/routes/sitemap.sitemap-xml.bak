@@ -1,0 +1,41 @@
+/**
+ * sitemap route
+ *
+ * Handle sitemap requests
+ */
+var smx = require("sitemap-xml");
+var urlm = require("url");
+var redis = require("../helpers/redis");
+var configLib = require("../config");
+
+var config = configLib.create(process.env.NODE_ENV || "development");
+
+// Serve the dynamic sitemap
+function sitemap(req, res, next) {
+  var stream = smx();
+  stream.pipe(res);
+  var redisClient = redis.client();
+  redisClient.get(config.routesKey, function(err, appRoutes) {
+    if (err) {
+      next(err);
+    } else {
+      appRoutes.split(",").forEach(function(appRoute) {
+        stream.write({
+          loc: urlm.format({
+                protocol: "http",
+                hostname: config.app.hostname,
+                port: config.app.port || 80,
+                pathname: appRoute
+              }),
+          lastmod: "2013-04-21",
+          changefreq: "2",
+          priority: "1"
+        });
+      });
+    }
+    stream.end();
+    redisClient.quit();    
+  });
+}
+
+module.exports = sitemap;

@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# The routes worker process
+# 
+# Set the PATH and run the node script
+#
+cd "$(dirname "$0")"
+pathToPhantomJS="`pwd`/../../../../node_modules/phantomjs/lib/phantom/bin"
+env PATH=$PATH:$pathToPhantomJS "`pwd`/routes-cli"
+cd -
