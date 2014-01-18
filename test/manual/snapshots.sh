@@ -16,16 +16,22 @@ pushd $relativeAppRoot
 
 if [ -x $worker ]; then
 
-  # start the test processes, app server at port 9000
-  grunt devTest &
+  # refresh the debug build
+  grunt debug
+
+  # start the test processes
+  grunt express:devDebug &
   testProcs=$!
+  echo process $testProcs started
   sleep 6
 
   # run the job
-  env NODE_ENV=test $worker
+  env NODE_ENV=debug $worker
 
   # kill the test processes
-  pkill -TERM -P $testProcs
+  # pkill -TERM -P $testProcs
+  # express:devDebug is just one process - no pgroup will be found
+  kill -TERM $testProcs
 else
   echo "ERROR: $worker not found in appRoot `pwd`"
 fi
