@@ -13,7 +13,6 @@
     "grunt": "~0.4.1",
     "grunt-targethtml": "~0.2.3",
     "grunt-bower-requirejs": "~0.6.0",
-    "grunt-html-snapshots": "~0.1.5",
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-compass": "~0.2.0",
@@ -53,6 +52,9 @@
     "express": "~3.3.5",
     "async": "~0.2.9",
     "html-snapshots": "~0.2.1",
-    "redis": "~0.10.0"
+    "redis": "~0.10.0",
+    "phantomjs": "~1.9.2-6",
+    "node-phantom": "~0.2.5",
+    "sitemap": "~0.7.1"
   }
 }
