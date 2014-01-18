@@ -2,14 +2,19 @@
 
 /**
  * The html snapshots worker process.
+
  * This takes the html snapshots and updates the snapshots hash in redis.
- *   process.env.NODE_ENV must be defined
+ *
+ * process.env.NODE_ENV must be defined
+ * Depends on the routes worker process being run successfully beforehand.
  */
 var path = require("path");
 var fs = require("fs");
+var urlm = require("url");
+var htmlSnapshots = require('html-snapshots');
+
 var configLib = require("../../../config");
 var redis = require("../../../helpers/redis");
-var snapshots = require("../lib");
 
 // Get the configuration
 var config = configLib.create(process.env.NODE_ENV);
@@ -17,49 +22,85 @@ var config = configLib.create(process.env.NODE_ENV);
 // Get the normalized path to the app root
 var appRoot = path.join(__dirname, "../../../../");
 
+// Get an appropriate, connected redis client
+var redisClient = redis.client();
+
 // Actions to perform on error
-function errorAction(message) {
+function errorAction(message, noQuit) {
   console.error(message);
+  if (!noQuit) {
+    redisClient.quit();
+  }
   // TODO: add SENDGRID or other email notification here
 }
 
-// Take snapshots driven from robots.txt and put into redis
-var result = snapshots.robots(appRoot,
-  function(nonError, completedSnapshots) {
-    if (typeof nonError === "undefined" && result) {
-
-      if (completedSnapshots.length > 0) {
-        console.log("succesfully created snapshots");
-
-        // Make the reducer to form the key
-        // Removes the appRoot and snapshotsDir from the path so the key
-        //   is just the request url.
-        var reducer = path.join(appRoot, config.snapshotsDir);
-
-        // Make the snapshots hash.
-        // The key is the app-relative path: "/snapshots/index.html"
-        // The value is the html snapshot contents
-        var hash = {};
-        for (var i = 0; i < completedSnapshots.length; i++) {
-          hash[completedSnapshots[i].replace(reducer, "")] =
-            fs.readFileSync(completedSnapshots[i], { encoding: "utf8" });
+redisClient.get(config.routesKey, function(err, appRoutes) {
+  if (appRoutes && appRoutes.length > 0) {
+    // Convert the app routes into app urls
+    var appUrls = appRoutes.split(",").map(function(appRoute) {
+      return urlm.format({
+        protocol: "http",
+        hostname: config.app.hostname,
+        port: config.app.port || 80,
+        pathname: appRoute
+      });
+    });
+    // Take html snapshots for the app routes
+    var result = htmlSnapshots.run({
+      input: "array",
+      source: appUrls,
+      outputDir: path.join(appRoot, config.snapshotsDir),
+      outputDirClean: true,
+      timeout: 20000,
+      selector: function(url) {
+        var sel = "#content .page-content";
+        var urlObj = urlm.parse(url);
+        if (/respond$/.test(urlObj.pathname)) {
+          sel = "#respond";
+        } else if (/comment$/.test(urlObj.pathname)) {
+          sel = "#comment";
         }
-
-        // Update the htmlSnapshotsHash in Redis
-        var redisClient = redis.client();
-        redisClient.hmset(config.htmlSnapshotsHash, hash, function(err, res) {
-          if (err) {
-            errorAction("Redis hash update of "+config.htmlSnapshotsHash+" failed");
-          } else {
-            console.log("Redis hash update of "+config.htmlSnapshotsHash+" succeeded");
-          }
-          redisClient.quit();
-        });
-      } else {
-        errorAction("Html snapshots took no snapshots");
+        return sel;
       }
-    } else {
-      errorAction("Html Snapshots failed");
-    }
+    }, function(nonError, completedSnapshots) {
+        // TODO: fix #37 and uncomment
+        //if (typeof nonError === "undefined" && result) {
+
+          if (completedSnapshots.length > 0) {
+            console.log("succesfully created snapshots");
+
+            // Make the reducer to form the key
+            // Removes the appRoot and snapshotsDir from the path so the key
+            //   is just the request url.
+            var reducer = path.join(appRoot, config.snapshotsDir);
+
+            // Make the snapshots hash.
+            // The key is the app-relative path: "/snapshots/index.html"
+            // The value is the html snapshot contents
+            var hash = {};
+            for (var i = 0; i < completedSnapshots.length; i++) {
+              hash[completedSnapshots[i].replace(reducer, "")] =
+                fs.readFileSync(completedSnapshots[i], { encoding: "utf8" });
+            }
+
+            // Update the htmlSnapshotsHash in Redis
+            redisClient.hmset(config.htmlSnapshotsHash, hash, function(err, res) {
+              if (err) {
+                errorAction("Redis hash update of "+config.htmlSnapshotsHash+" failed", true);
+              } else {
+                console.log("Redis hash update of "+config.htmlSnapshotsHash+" succeeded");
+              }
+              redisClient.quit();
+            });
+          } else {
+            errorAction("Html snapshots took no snapshots");
+          }
+        //} else {
+        //  errorAction("Html Snapshots failed");
+        //}
+      }
+    );
+  } else {
+    errorAction("Redis read of "+config.routesKey+ " failed");
   }
-);
+});
