@@ -20,6 +20,15 @@ describe("routes", function() {
     expect(convertedRoute).to.equal(route);
   });
 
+  it("should convert a multi-path absolute href to route", function() {
+    var route = "simple-route/a-subpage";
+    var href = "http://jsonapi.local/"+route;
+
+    var convertedRoute = routes.hrefToRoute(href);
+
+    expect(convertedRoute).to.equal(route);
+  });
+
   it("should convert a simple relative href to route", function() {
     var href = "/simple-route/extra";
     var route = href.substring(1);

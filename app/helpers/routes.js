@@ -41,11 +41,13 @@ define([
     return href;
   }
 
-  // super simple href to route mapping
-  // handle relative and absolute urls
+  // href to route mapping
+  // Extract the url path in third catpure.
+  // Handle relative and absolute urls
+  // Ref: http://my.safaribooksonline.com/book/programming/regular-expressions/9780596802837/7dot-urls-paths-and-internet-addresses/id3029853#X2ludGVybmFsX0h0bWxWaWV3P3htbGlkPTk3ODA1OTY4MDI4MzclMkZpZDMwMjEzODcmcXVlcnk9
   function hrefToRoute(href) {
-    var re = /^https?:\/\/.+(\/)([^\\?]+)\/?$/;
-    var route = href.replace(re, "$2");
+    var re = /^([a-z][a-z0-9+\-.]*:(\/\/[^\/?#]+)?)?([a-z0-9\-._~%!$&'()*+,;=:@\/]*)/i;
+    var route = href.replace(re, "$3");
     if (route.charAt(route.length - 1) === '/')
       route = route.substr(0, route.length - 1);
     if (route.charAt(0) === '/')
