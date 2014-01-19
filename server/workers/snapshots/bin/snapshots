@@ -58,7 +58,7 @@ redisClient.get(config.routesKey, function(err, appRoutes) {
         if (/respond$/.test(urlObj.pathname)) {
           sel = "#respond";
         } else if (/comment$/.test(urlObj.pathname)) {
-          sel = "#comment";
+          sel = "#comments";
         }
         return sel;
       }
