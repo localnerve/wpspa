@@ -15,7 +15,6 @@ define([
 
   var CommentsView = Marionette.CompositeView.extend({
     template: "components/content/views/content/single/comments/view",
-    id: "comments",
     className: "comments-area",
     itemViewContainer: ".comment-list",
     itemView: commentItem,
