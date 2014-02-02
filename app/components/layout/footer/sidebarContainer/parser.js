@@ -121,7 +121,7 @@ define([
     };
   }
 
-  // parse a response containing wpspa nav_menu_item posts
+  // parse a response containing wordpress widgets
 
   function parse(data) {
     contract(data, "widgets");
