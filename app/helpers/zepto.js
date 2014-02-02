@@ -3,7 +3,9 @@
  *  https://gist.github.com/pamelafox/1379704
  *  This is supposed to be in zepto, but I don't see where
  */
-define(function() {
+define([
+  "jquery"
+], function($) {
 
   // scrollLeft, scrollTop
   ["Left", "Top"].forEach(function(name, i) {
