@@ -52,16 +52,7 @@ redisClient.get(config.routesKey, function(err, appRoutes) {
       outputDir: path.join(appRoot, config.snapshotsDir),
       outputDirClean: true,
       timeout: 20000,
-      selector: function(url) {
-        var sel = "#content .page-content";
-        var urlObj = urlm.parse(url);
-        if (/respond$/.test(urlObj.pathname)) {
-          sel = "#respond";
-        } else if (/comment$/.test(urlObj.pathname)) {
-          sel = "#comments";
-        }
-        return sel;
-      }
+      selector: "#content .page-content"
     }, function(nonError, completedSnapshots) {
         // TODO: fix #37 and uncomment
         //if (typeof nonError === "undefined" && result) {
