@@ -4,7 +4,7 @@ define([
   "components/layout/footer/sidebarContainer/parser",
   "module"
 ], function(Backbone, sync, parser, module) {
-  $w = window;
+  var $w = window;
 
   // definition of the footer sidebar collection
   var SidebarCollection = Backbone.Collection.extend({
