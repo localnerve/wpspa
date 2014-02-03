@@ -1,7 +1,8 @@
 define([
+  "helpers/routes",
   "app",
   "components/layout/header/navigation/view"
-], function(app, navigationView) {
+], function(routes, app, navigationView) {
 
   // Create a partial definition for container.header module
   var thisModule = app.module("container.header", function(header) {
@@ -21,14 +22,25 @@ define([
 
       // When an item is added to navigation, add it to the app router
       header.listenTo(header.navigation.collection, "add", function(model) {
-        app.vent.trigger("app:router:addRoute", {
+        var object_props = model.get("object_props");
+        var param = {
           name: model.get("name"),
           route: model.get("route"),
           options: {
             object_type: model.get("object_type"),
-            object_id: model.get("object_id")
+            object_id: model.get("object_id"),
+            object_props: object_props
           }
-        });
+        };
+
+        // If the target object is_single, add comment routes
+        var altParams = object_props.is_single ?
+          routes.buildCommentRoutes(
+            app.pushState, param.route, param.name, param.options
+          ).routeParams : [];
+
+        // Add the new routes
+        app.vent.trigger("app:router:addRoute", [param].concat(altParams));
       });
       
       // Start the navigation download

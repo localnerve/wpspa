@@ -50,39 +50,17 @@ define([
 
   function parseComments(post) {
 
-    // Add derived properties to the comments object
-    post.comments.commentUrl = routes.buildRoutePath(app.pushState, post.url, "comment");
-    post.comments.respondUrl = routes.buildRoutePath(app.pushState, post.url, "respond");
+    var result = routes.buildCommentRoutes(app.pushState, post.url, post.slug, {
+      object_type: post.type,
+      object_id: post.id
+    });
 
-    // Add a route to handle comments for this post.
-    // Since the content will be served by type/id, send in a parameter
-    // to tell the presentation that it will need to prepare for comments.
-    app.vent.trigger("app:router:addRoute", {
-      name: post.slug+"-comment",
-      route: routes.hrefToRoute(post.comments.commentUrl),
-      params: {
-        action: "comment"
-      },
-      options: {
-        object_type: post.type,
-        object_id: post.id
-      }
-    });
-    
-    // Add a route to handle responses for this post.
-    // Since the content will be served by type/id, send in a parameter
-    // to tell the presentation that it will need to prepare for responses.
-    app.vent.trigger("app:router:addRoute", {
-      name: post.slug+"-respond",
-      route: routes.hrefToRoute(post.comments.respondUrl),
-      params: {
-        action: "respond"
-      },
-      options: {
-        object_type: post.type,
-        object_id: post.id
-      }
-    });
+    // Add derived properties to the comments object
+    post.comments.commentUrl = result.sources.comment;
+    post.comments.respondUrl = result.sources.respond;
+
+    // Add a routes to handle comments for this post.
+    app.vent.trigger("app:router:addRoute", result.routeParams);
   }
 
   // parse a single post
@@ -109,21 +87,16 @@ define([
 
   // parse response data from json api
   function parse(data) {
+    var input = data.posts || [data.post];
 
-    if (data.posts) {
-
-      // make the models and give them back to the collection
-      return _.map(data.posts, function(post) {
-        return process(post);
-      });
-
-    } else if (data.post) {
-
-      return process(data.post);
-
-    } else {
+    if (!input.length || input.length <= 0) {
       throw new Error("Unexpected post data format");
     }
+
+    // make the models and give them back to the collection
+    return _.map(data.posts, function(post) {
+      return process(post);
+    });
   }
 
   return parse;

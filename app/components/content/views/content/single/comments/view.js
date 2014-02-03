@@ -7,11 +7,12 @@ define([
   "backbone.marionette",
   "helpers/contract",
   "helpers/ui",
+  "helpers/routes",
   "resources/strings",
   "module",
   "components/content/views/content/single/comments/item",
   "components/content/entities/specializations/respond"
-], function(_, Marionette, contract, ui, strings, module, commentItem, ResponseModel) {
+], function(_, Marionette, contract, ui, routes, strings, module, commentItem, ResponseModel) {
 
   var CommentsView = Marionette.CompositeView.extend({
     template: "components/content/views/content/single/comments/view",
@@ -53,9 +54,9 @@ define([
       _.defer(function(self) { ui.scrollTop(self.ui.respond.offset()); }, this);
     },
     processParams: function(params) {
-      if (params.action === "comment") {
+      if (params.action === routes.commentAction.comment) {
         _.defer(function(self) { ui.scrollTop(self.ui.comments.offset()); }, this);
-      } else if (params.action === "respond") {
+      } else if (params.action === routes.commentAction.respond) {
         this.scrollToRespond();
       }
     },

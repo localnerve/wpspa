@@ -1,4 +1,4 @@
-/*
+/**
  * routes.js
  *
  * Helper methods to assist with routes.
@@ -7,15 +7,63 @@ define([
   "lodash"
 ], function(_) {
 
+  // The names of comment actions
+  var commentActions = {
+    comment: "comment",
+    respond: "respond"
+  };
+
+  /**
+   * Build comment route parameters
+   *
+   * Formats standard comment route parameters for creating comment/respond
+   * routes. Use this to create comment and respond routes. The created routes 
+   * will pass the same given options when invoked.
+   * The given route can be in route or href format, if it is already a route
+   * it will pass-thru, if it is an href it will be converted to a route.
+   *
+   * Returns sources and routeParams. Sources are used to create the acutal routes.
+   * If you supply an href for the route, then these will also be in href format.
+   */
+  function buildCommentRoutes(pushState, route, slug, options) {
+    var result = {
+      sources: {
+        comment: buildRoutePath(pushState, route, commentActions.comment),
+        respond: buildRoutePath(pushState, route, commentActions.respond)
+      },
+      routeParams: []
+    };
+
+    result.routeParams.push({
+      name: slug+"-"+commentActions.comment,
+      route: hrefToRoute(result.sources.comment),
+      params: {
+        action: commentActions.comment
+      },
+      options: options
+    });
+    
+    result.routeParams.push({
+      name: slug+"-"+commentActions.respond,
+      route: hrefToRoute(result.sources.respond),
+      params: {
+        action: commentActions.respond
+      },
+      options: options
+    });
+
+    return result;
+  }
+
   /**
    * Build a route path
    *
    * Arguments: 
    *  1: pushstate boolean
-   *  2: the path to start building a url on to
+   *  2: a url or route to start building on to
    *  others: URI components to add on the start path
    *
-   * Returns the built url result
+   * Returns the built route result
    */
   function buildRoutePath(pushState, start) {
     var sep = pushState ? "/" : "-";
@@ -58,7 +106,9 @@ define([
   return {
     buildRoutePath: buildRoutePath,
     routeToHref: routeToHref,
-    hrefToRoute: hrefToRoute
+    hrefToRoute: hrefToRoute,
+    buildCommentRoutes: buildCommentRoutes,
+    commentActions: commentActions
   };
 
 });

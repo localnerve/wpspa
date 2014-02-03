@@ -23,22 +23,25 @@ define([
       // Add route events handler, adds a dynamic route
       // NOTE: instead of calling this.addRoute, using a function allows test stubs.
       //  This appears to be because handlers are bound at definition, disallowing stubs later (during test).
-      app.vent.on("app:router:addRoute", function(options) {
-        app.router.addRoute(options);
+      app.vent.on("app:router:addRoute", function(items) {
+        app.router.addRoute(items);
       });
     },
 
     // The addRoute handler
-    // Dynamically add a route AND a handler
-    addRoute: function(options) {
-      contract(options, "route", "name");
-      if (!this.appRoutes[options.route]) {
-        
-        app.controller.createHandler(options);
+    // Dynamically add a routes AND handlers
+    addRoute: function(items) {
+      var self = this;
+      if (!_.isArray(items)) items = [items];
 
-        this.appRoutes[options.route] = options.name;
-        this.appRoute(options.route, options.name);
-      }
+      _.each(items, function(item) {
+        contract(item, "route", "name");
+        if (!self.appRoutes[item.route]) {
+          app.controller.createHandler(item);
+          self.appRoutes[item.route] = item.name;
+          self.appRoute(item.route, item.name);
+        }
+      });
     }
   });
 
