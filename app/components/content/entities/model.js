@@ -5,7 +5,7 @@ define([
   "components/content/entities/parser",
   "module"
 ], function(Backbone, urls, sync, parser, module) {
-  $w = window;
+  var $w = window;
 
   // definition of a post model
   var PostModel = Backbone.Model.extend({
