@@ -35,7 +35,7 @@ define([
 
         // If the target object is_single, add comment routes
         var altParams = object_props.is_single ?
-          routes.buildCommentRoutes(
+          routes.comments.buildRouteParams(
             app.pushState, param.route, param.name, param.options
           ).routeParams : [];
 

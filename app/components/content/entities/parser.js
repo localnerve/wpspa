@@ -50,7 +50,7 @@ define([
 
   function parseComments(post) {
 
-    var result = routes.buildCommentRoutes(app.pushState, post.url, post.slug, {
+    var result = routes.comments.buildRouteParams(app.pushState, post.url, post.slug, {
       object_type: post.type,
       object_id: post.id
     });

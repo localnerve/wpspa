@@ -54,9 +54,9 @@ define([
       _.defer(function(self) { ui.scrollTop(self.ui.respond.offset()); }, this);
     },
     processParams: function(params) {
-      if (params.action === routes.commentActions.comment) {
+      if (params.action === routes.comments.actions.comment) {
         _.defer(function(self) { ui.scrollTop(self.ui.comments.offset()); }, this);
-      } else if (params.action === routes.commentActions.respond) {
+      } else if (params.action === routes.comments.actions.respond) {
         this.scrollToRespond();
       }
     },

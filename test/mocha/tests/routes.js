@@ -70,4 +70,63 @@ describe("routes", function() {
     expect(path).to.equal(root.substr(0, root.length-1)+"-one-two");
   });
 
+  describe("comments", function() {
+
+    it("should expose comment and respond actions", function() {
+     expect(routes.comments.actions.comment).to.be.a("string");
+     expect(routes.comments.actions.respond).to.be.a("string");
+    });
+
+    describe("buildRouteParams", function() {
+      
+      it("should return expected sources and routes", function() {
+        var href = "http://jsonapi.local/some/path";
+        var slug = "yep";
+        var options = {
+          one: 1,
+          two: 2
+        };
+        
+        var result = routes.comments.buildRouteParams(true, href, slug, options);
+
+        expect(result.sources).to.be.an("object");
+        expect(_.keys(result.sources).length).to.equal(2);
+        expect(result.sources.comment).to.be.a("string");
+        expect(result.sources.respond).to.be.a("string");
+        expect(result.routeParams).to.be.an("array");
+        expect(result.routeParams.length).to.equal(2);
+      });
+
+      it("should preserve options in new route params", function() {
+        var href = "http://jsonapi.local/some/path";
+        var slug = "yep";
+        var options = {
+          one: 1,
+          two: 2
+        };
+        
+        var result = routes.comments.buildRouteParams(true, href, slug, options);
+
+        expect(result.routeParams[0].options).to.be.an("object");
+        expect(result.routeParams[1].options).to.be.an("object");
+        expect(result.routeParams[0].options).to.deep.equal(result.routeParams[1].options);
+        expect(result.routeParams[0].options).to.deep.equal(options);
+      });
+
+      it("should preserve href in sources", function() {
+        var href = "http://jsonapi.local/some/path";
+        var slug = "yep";
+        var options = {
+          one: 1,
+          two: 2
+        };
+        
+        var result = routes.comments.buildRouteParams(true, href, slug, options);
+
+        expect(result.sources.comment).to.contain(href);
+        expect(result.sources.respond).to.contain(href);
+      });
+      
+    });
+  });
 });
