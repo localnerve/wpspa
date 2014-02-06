@@ -72,6 +72,12 @@ Object.defineProperties(Config.prototype, {
     enumerable: true
   },
 
+  // the key for atf content
+  atfKey: {
+    value: "atf-content",
+    enumerable: true
+  },
+  
   // endpoint for navigation (requires JSON API + WPSPA plugin)
   navigationPath: {
     value: "/api/wpspa/menu",

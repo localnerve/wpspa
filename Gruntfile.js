@@ -46,37 +46,40 @@ module.exports = function(grunt) {
 
   // load the server configurations
   var serverDir = "server";
-  var config = require("./"+serverDir+"/config");
-  var configAll = config.create("all");
-  var configTest = config.create("test");
-  var configDebug = config.create("debug");
-  var configRelease = config.create("release");
-  var configDev = config.create("development");
+  var configLib = require("./"+serverDir+"/config");
+  var config = {
+    all: configLib.create("all"),
+    test: configLib.create("test"),
+    debug: configLib.create("debug"),
+    release: configLib.create("release"),
+    dev: configLib.create("development")
+  };
 
   // project configuration
   var projectConfig = {
     dist: {
-      debug: configDebug.staticBase,
-      release: configRelease.staticBase
+      debug: config.debug.staticBase,
+      release: config.release.staticBase
     },
     app: "app",
     report: "report",
-    images: configAll.imagesDir,
-    fonts: configAll.fontsDir,
-    scripts: configAll.scriptsDir,
+    images: config.all.imagesDir,
+    fonts: config.all.fontsDir,
+    scripts: config.all.scriptsDir,
+    atfKey: config.all.atfKey,
     server: serverDir,
     serverMain: "app.js",
     test: "test/mocha",
     vendor: "vendor",
     mock: {
-      host: configTest.proxy.hostname,
-      port: configTest.proxy.port
+      host: config.test.proxy.hostname,
+      port: config.test.proxy.port
     },
     port: {
-      test: configTest.app.port,
-      dev: configDev.app.port,
-      debug: configDebug.app.port,
-      release: configRelease.app.port
+      test: config.test.app.port,
+      dev: config.dev.app.port,
+      debug: config.debug.app.port,
+      release: config.release.app.port
     },
     pkg: grunt.file.readJSON("package.json")
   };
@@ -91,36 +94,40 @@ module.exports = function(grunt) {
     atfUpdate: {
       dev: {
         options: {
-          environment: "development"
-        },
-        src: ["index.html"]
+          environment: "development",
+          update: "<%= project.atfKey %>"
+        }
       },
       test: {
         options: {
+          update: "file",
           environment: "test"
         },
         src: ["<%= project.test %>/index.html"]
       },
       debug: {
         options: {
-          environment: "debug"
-        },
-        src: ["<%= project.dist.debug %>/index.html"]
+          environment: "debug",
+          update: "<%= project.atfKey %>"
+        }
       },
       release: {
         options: {
-          environment: "release"
-        },
-        src: ["<%= project.dist.release %>/index.html"]
+          environment: "release",
+          update: "<%= project.atfKey %>"
+        }
       }
     },
 
     // atfRemove custom internal task
     // Removes the bootstrapped atf content from the html source
     atfRemove: {
-      all: {
+      test: {
+        options: {
+          environment: "test",
+          update: "file"
+        },
         src: [
-          "index.html",
           "<%= project.test %>/index.html"
         ]
       }
@@ -668,41 +675,70 @@ module.exports = function(grunt) {
     grunt.config.set("usemin", this.data.usemin);
   });
 
-  // custom internal task to update files with atf content
+  // custom internal task to update files or redis with atf content
   grunt.registerMultiTask("atfUpdate", "update atf content in targets", function() {
     var atf = require("./server/workers/atf/lib");
-    var count = 0,
-        files = this.filesSrc,
-        options = this.options(),
+    var options = this.options(),
         done = this.async();
-    files.forEach(function(file) {
-      atf.update(file, function(target) {
-        grunt.log.writeln("updated "+target+" with atf content");
-        count++;
-        if (count === files.length) {
-          grunt.log.ok(files.length + " files updated");
-          done();
+    if (options.update === "file") {
+      var count = 0,
+          files = this.filesSrc;
+      files.forEach(function(file) {
+        atf.run(atf.file.update(file, function(err, target) {
+          if (err) {
+            grunt.fail.fatal(err);
+          }
+          grunt.log.writeln("updated "+target+" with atf content");
+          count++;
+          if (count === files.length) {
+            grunt.log.ok(files.length + " files updated");
+            done();
+          }
+        }), options.environment);
+      });
+    } else {
+      atf.run(atf.redis.update(options.update, function(err, key) {
+        if (err) {
+          grunt.fail.fatal(err);
+        } else {
+          grunt.log.ok("updated atf content in redis '"+key+"'");
         }
-      }, options.environment);
-    });
+        done();
+      }), options.environment);
+    }
   });
 
   // custom internal task to remove atf content from files
   grunt.registerMultiTask("atfRemove", "remove atf content from target files", function() {
     var atf = require("./server/workers/atf/lib");
-    var count = 0,
-        files = this.filesSrc,
+    var options = this.options(),
         done = this.async();
-    files.forEach(function(file) {
-      atf.remove(file, function(target) {
-        grunt.log.writeln("removed atf content from "+target);
-        count++;
-        if (count === files.length) {
-          grunt.log.ok(files.length + " files updated");
-          done();
-        }
+    if (options.update === "file") {
+      var count = 0,
+          files = this.filesSrc;
+      files.forEach(function(file) {
+        atf.file.remove(file, function(err, target) {
+          if (err) {
+            grunt.fail.fatal(err);
+          }
+          grunt.log.writeln("removed atf content from "+target);
+          count++;
+          if (count === files.length) {
+            grunt.log.ok(files.length + " files updated");
+            done();
+          }
+        });
       });
-    });
+    } else {
+      atf.redis.remove(options.update, function(err, key) {
+        if (err) {
+          grunt.fail.fatal(err);
+        } else {
+          grunt.log.ok("removed atf content from Redis '"+key+"'");
+        }
+        done();
+      });
+    }
   });
 
   grunt.registerTask("default", "workflow menu", function() {
@@ -722,7 +758,7 @@ module.exports = function(grunt) {
   });
 
   // the standalone test task
-  grunt.registerTask("test", ["compass:test", "connect:test", "atfUpdate:test", "express:test", "mocha", "atfRemove"]);
+  grunt.registerTask("test", ["compass:test", "connect:test", "atfUpdate:test", "express:test", "mocha", "atfRemove:test"]);
 
   // the standalone lint task
   grunt.registerTask("lint", ["jshint"]);

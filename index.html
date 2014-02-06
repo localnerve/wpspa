@@ -26,7 +26,7 @@
   <link rel="canonical" href="http://wpspa.localnerve.com/" />
 
   <!--(if target release)>
-  <script id="wpspa-data-atf"></script>
+  <script id="wpspa-data-atf"><%= atfContent %></script>
   <meta name="wpspa-data-src" data-src="/scripts/require.js" />
   <script id="wpspa-data-load" type="text/javascript">
     (function() {
@@ -40,7 +40,7 @@
   <!(endif)-->
 
   <!--(if target debug)>
-  <script id="wpspa-data-atf"></script>
+  <script id="wpspa-data-atf"><%= atfContent %></script>
   <meta name="wpspa-data-src" data-src="/scripts/require.js" />
   <script id="wpspa-data-load" type="text/javascript">
     (function() {
@@ -112,7 +112,7 @@
   </div>
 
   <!--(if target development)><!-->
-  <script id="wpspa-data-atf"></script>
+  <script id="wpspa-data-atf"><%= atfContent %></script>
   <script data-main="/app/config" src="/vendor/bower/requirejs/require.js"></script>
   <!--<!(endif)-->
 

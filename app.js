@@ -7,6 +7,7 @@ var express = require("express");
 var http = require("http");
 var path = require("path");
 var rewrite = require("connect-modrewrite");
+var cons = require("consolidate");
 
 var rewriteHelper = require("./server/helpers/rewrites");
 var proxy = require("./server/middleware/proxy");
@@ -32,6 +33,11 @@ var rewriteRules = [
   '!(\\.(css$|js$|png$|ico$|txt$|xml$|html$|ttf$|eot$|svg$|woff$)) /index.html [NC L]'
 ];
 
+// setup server-side templating
+app.engine('.html', cons.underscore);
+app.set('views', __dirname);
+app.set('view engine', 'html');
+
 // set the port
 app.set('port', config.app.port || process.env.PORT);
 
@@ -48,6 +54,7 @@ app.use(rewrite(rewriteRules));
 // requests continue after rewrites except redirects, gones, forbiddens, and proxies
 
 // Special resource GETs
+app.get("/index.html", routes.main);
 app.get("/sitemap.xml", routes.sitemap);
 app.get("/robots.txt", routes.robots);
 

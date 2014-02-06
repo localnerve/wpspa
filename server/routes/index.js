@@ -3,5 +3,6 @@
  */
 module.exports = {
   sitemap: require("./sitemap"),
-  robots: require("./robots")
+  robots: require("./robots"),
+  main: require("./main")
 };

@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 
-var path = require("path");
-var atf = require("../lib");
+// Update ATF content in Redis
+// process.env.NODE_ENV must be defined
 
-// target the main index.html, process.env.NODE_ENV must be defined
-atf.update(
-  path.normalize(__dirname + "../../../../../index.html"),
-  function(target) {
-    console.log("succesfully updated "+ target);
+var atf = require("../lib");
+var configLib = require("../../../config");
+var config = configLib.create(process.env.NODE_ENV);
+
+atf.run(atf.redis.update(config.atfKey, function(err, key) {
+  if (err) {
+    console.error("Failed to update '"+key+"' in Redis with ATF content"+err ? ": "+err : "");
+  } else {
+    console.log("succesfully updated '"+key+"' in Redis with ATF content");
   }
-);
+}));
