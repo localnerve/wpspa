@@ -9,7 +9,8 @@ var environments = {
   test: require("./test"),
   debug: require("./debug"),
   release: require("./release"),
-  all: require("./all")
+  all: require("./all"),
+  demo: require("./demo")
 };
 
 function create(env) {
