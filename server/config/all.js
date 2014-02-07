@@ -86,7 +86,8 @@ Object.defineProperties(Config.prototype, {
 
   // endpoint for site_info (requires JSON API + WPSPA plugin)
   siteInfoPath: {
-    value: "/api/wpspa/site_info"
+    value: "/api/wpspa/site_info",
+    enumerable: true
   },
 
   // endpoint for footer content (requires JSON API)
