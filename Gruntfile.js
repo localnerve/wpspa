@@ -105,6 +105,13 @@ module.exports = function(grunt) {
         },
         src: ["<%= project.test %>/index.html"]
       },
+      demo: {
+        options: {
+          update: "file",
+          environment: "test"
+        },
+        src: ["<%= project.dist.release %>/index.html"]
+      },
       debug: {
         options: {
           environment: "debug",
@@ -122,11 +129,10 @@ module.exports = function(grunt) {
     // atfRemove custom internal task
     // Removes the bootstrapped atf content from the html source
     atfRemove: {
+      options: {
+        update: "file"
+      },
       test: {
-        options: {
-          environment: "test",
-          update: "file"
-        },
         src: [
           "<%= project.test %>/index.html"
         ]
@@ -289,10 +295,11 @@ module.exports = function(grunt) {
           background: false
         }
       },
-      // this server is for demo use without a backend
+      // this server is for demo use without a live backend
       demo: {
         options: {
-          node_env: "development",
+          script: "<%= project.dist.release %>/<%= project.serverMain %>",
+          node_env: "demo",
           background: false
         }
       },
@@ -809,22 +816,22 @@ module.exports = function(grunt) {
     ], this.async());
   });
 
-  // the test development task, run watch, mock api, and the development webserver in parallel
-  // use this for interactive test suite development
+  // the demo development task, run watch, mock api, and the development webserver in parallel
   grunt.registerTask("demoTasks", "parallel demo tasks", function() {
     async.parallel([
       function() {
-        runTask(grunt, "connect:demo");
-      },
-      function() {
-        runTask(grunt, "atfUpdate:dev");
+        runTask(grunt, "connect:demo", function(chunk) {
+          if (/Started connect/ig.test(chunk)) {
+            runTask(grunt, "atfUpdate:demo");
+          }
+        });
       },
       function() {
         runTask(grunt, "express:demo");
       }
     ], this.async());
   });
-  grunt.registerTask("demo", ["ccss", "demoTasks"]);
+  grunt.registerTask("demo", ["release", "demoTasks"]);
 
   // build tasks: debug, release
 
