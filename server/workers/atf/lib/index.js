@@ -25,25 +25,27 @@ var redis = require("./redis");
 var request = require("../../../helpers/request");
 var configLib = require("../../../config");
 
-/**
- * Get the remote ATF content and callback to update a target
- * callback is the callback to perform the update, signature:
- *   callback(err, results)
- */
-function run(callback, environment) {
-  var config = configLib.create(environment || process.env.NODE_ENV);
-
-  // This defines what is in the atf content
-  // start the atf content requests in parallel
-  async.parallel({
+// The application definition of atf content
+// This defines what constitutes all bootstrapped, above the fold content for the app
+function atfContent(config) {
+  return {
     navigation: request(config.proxy.hostname, config.proxy.port, config.navigationPath),
     siteInfo: request(config.proxy.hostname, config.proxy.port, config.siteInfoPath),
     footer: request(config.proxy.hostname, config.proxy.port, config.footerPath),
     recent: request(config.proxy.hostname, config.proxy.port, config.recentPath)
-  },
-  // When the requests all complete, call the callback
-  callback
-  );
+  };
+}
+
+/**
+ * Get the remote ATF content and callback to update a target.
+ * callback is the callback to perform the update, signature:
+ *   callback(err, results)
+ * The object returned by config.atfContent defines what constitutes 
+ * the literal atf content for the app.
+ */
+function run(callback, environment) {
+  var config = configLib.create(environment || process.env.NODE_ENV);
+  async.parallel(atfContent(config), callback);
 }
 
 module.exports = {
