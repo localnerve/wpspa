@@ -511,7 +511,7 @@ module.exports = function(grunt) {
     plato: {
       client: {
         options: {
-          exclude: /config\.js|server\/middleware\/inject\.js/
+          exclude: /config\.js/
         },
         files: [{
           dest: "<%= project.report %>",
