@@ -4,7 +4,7 @@
 
 > An example single page application that takes Wordpress optimization to a whole new level.
 
-The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over a 3G network, the first load is much faster than any optimized Wordpress site. This design features data-driven, asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
+The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over any network, page loads are much faster than any fully optimized traditional Wordpress site. This design features data-driven, background asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
 
 > latest [performance results](http://www.webpagetest.org/result/131212_KF_TGB/) over a 300ms RTT 3G network.
 
@@ -17,6 +17,8 @@ By adding an SPA front-end to an existing Wordpress site, you achieve major perf
 The only changes required on your Wordpress site are that you install the [jsonapi](http://wordpress.org/plugins/json-api/) plugin and the [WPSPA plugin](https://github.com/localnerve/wpspa-plugin). The WPSPA plugin extends the jsonapi plugin and various post types to assist SPAs.
 
 ## Featured Technologies
+This is a NodeJS/ExpressJS powered application... In the spirit of a MEAN stack, but NERM stack instead ;-{}
+
 + Client-side
   * MarionetteJS
   * Foundation 4
@@ -26,10 +28,15 @@ The only changes required on your Wordpress site are that you install the [jsona
 + Server-side
   * ExpressJS
   * Redis
-  * Scheduled Workers
+  * NodeJS
 
 ## Demo
-To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be executed by cloning this project, executing "grunt demo", and navigating to localhost:9001. The demo task runs the front-end server and mocks the back-end api locally. For now, the demo only runs the development website, so it does not demonstrate the performance aspect.
+To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be executed by:
+1. Cloning this project
+2. Running "npm install" in the project directory
+3. Executing "grunt demo" (to build a release and start the servers)
+4. Navigate to localhost:9000 to examine the results. 
+The demo task runs the front-end server and mocks the back-end api, so it is all self-contained locally. For now, the only working search is the term "page two", all others will demo the connectivity error page.
 
 ## Development Notes
 
@@ -48,28 +55,16 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 ### More Notes
 #### Multi-Device Wordpress (Performance)
 + Demonstrates WP structures that play well with an SPA architecture
-  * WPSPA Wordpress plugin extends menu admin interface for SPA route mapping
-+ Targeting one second response for Mobile user (ATF 1st response).
-
-#### Performance prior to Zepto
-+ Here is the old 3G [performance](http://www.webpagetest.org/result/131021_6S_45Z/) prior to converting to Zepto (~20% network performance improvement)
-+ Note there was a 64K size difference in the app bundle, which equates to a parse-time savings of ~64ms at 1k=1ms.
-
-#### Demonstrated Learning
-+ Demonstrate optimized build procedure for development and SEO
-  * Portable environments make testing, integration, and development easier.
-
-+ Model a scalable, extensible application architecture
-  * Separate layout (structure) from content
-  * SRP, Modular 
-  * Composite Application Archtiecture
-+ Separate, portable backend and frontend 
-  * Total javascript front end implementation (one language)
+  * [WPSPA Wordpress plugin](http://github.com/localnerve/wpspa-plugin) extends json-api and normal Wordpress features to offer advanced SPA features and content prioritization.
++ On mobile networks, most responses are less than 1 second, however first response is ~2 seconds.
 
 #### External Dependencies
 ##### Responsive CSS
 + Ruby
 + Compass & Sass gems
+
+##### Development Runtime Dependencies
++ Redis-server
 
 ##### Build and Package Management Dependencies
 + Git
@@ -78,11 +73,12 @@ Development workflow is controlled by Grunt. See the Gruntfile for full task lis
 + Grunt-cli
 + Bower
 
-##### Workers
-+ Redis
-
 #### Unmanaged Vendor packages
 + Modernizr, still manually building it with their website. Waiting on grunt-modernizr/Moderizr 3
+
+#### Performance prior to Zepto
++ Here is the old 3G [performance](http://www.webpagetest.org/result/131021_6S_45Z/) prior to converting to Zepto (~20% network performance improvement)
++ Note there was a 64K size difference in the app bundle, which equates to a parse-time savings of ~64ms at 1k=1ms.
 
 #### Dynamically loaded modules
 ##### Dynamic and Conditionally loaded modules
