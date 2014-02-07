@@ -31,11 +31,11 @@ This is a NodeJS/ExpressJS powered application... In the spirit of a MEAN stack,
   * NodeJS
 
 ## Demo
-To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be executed by:
+To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be run with these steps:
 
-1. Cloning this project
-2. Running "npm install" in the project directory
-3. Executing "grunt demo" (to build a release and start the servers)
+1. Clone this project
+2. Run "npm install" in the project directory
+3. Execute "grunt demo" in the project directory (to build a release and start the servers)
 4. Navigate to localhost:9000 to examine the results. 
 
 The demo task runs the front-end server and mocks the back-end api, so it is all self-contained locally. For now, the only working search is the term "page two", all others will demo the connectivity error page.
