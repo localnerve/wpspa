@@ -49,10 +49,10 @@ The demo task runs the front-end server and mocks the back-end api, so it is all
 Development workflow is controlled by Grunt. See the Gruntfile for full task list. Some of the workflow tasks:
 + grunt test - Runs the test suite in "batch" mode. This is what "npm test" runs.
 + grunt devTest - Runs the test suite in "interactive" mode. This starts the normal test suite servers and allows you to view the results in a web browser. If you use LiveReload, you can connect to the LiveReload server and use this to interactively develop and debug tests.
-+ grunt dev - The main development task. Runs the development servers, and allows you to connect LiveReload for interactive development. This also automtically lints the Javascript and compiles the Sass when the files change. Runs the servers in the development environment, which is currently configured to use jsonapi.local endpoint as the back-end. If you want to run with a mock back-end, you can use "grunt demo", but it doesn't include the js and scss watch.
++ grunt dev - The main development task. Runs the development servers, and allows you to connect LiveReload for interactive development. This also automtically lints the Javascript and compiles the Sass when the files change. Runs the servers in the development environment, which is currently configured to use jsonapi.local endpoint as the back-end. The development back-end is configured in server/config/development.js, as the Config.prototype.proxy object.
 + grunt debug - Runs the debug build task. This produces a debuggable build in dist/debug.
-+ grunt release - Runs the release build task. This produces a release build in dist/release.
-+ grunt express:devRelease - Once you run "grunt release", the release website can be viewed running this task. It starts the front-end server on localhost:9003 and uses the remote backend.
++ grunt release - Runs the release build task. This produces a release build in dist/release. This is the build that is deployed to production.
++ grunt express:devRelease - Once you run "grunt release", the release website can be viewed running this task. It starts the front-end server on localhost:9003 and uses the real remote back-end.
 
 ### More Notes
 #### Multi-Device Wordpress (Performance)
