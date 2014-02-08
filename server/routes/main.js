@@ -12,7 +12,7 @@ var config = configLib.create(process.env.NODE_ENV);
 function index(req, res) {
   var redisClient = redis.client();
   
-  redisClient.get(config.atfKey, function(err, results) {
+  redisClient.get(config.keys.atf, function(err, results) {
     if (err) {
       next(err);
     } else {

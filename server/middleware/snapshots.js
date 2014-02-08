@@ -30,7 +30,7 @@ function htmlSnapshot(req, res, next) {
   if (!result) {
     next();
   } else {
-    var hash = config.htmlSnapshotsHash;
+    var hash = config.keys.htmlSnapshots;
     var redisClient = redis.client();
 
     // normalize the key so that it always ends in '/index.html' per html-snapshots

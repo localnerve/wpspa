@@ -7,7 +7,7 @@ var atf = require("../lib");
 var configLib = require("../../../config");
 var config = configLib.create(process.env.NODE_ENV);
 
-atf.run(atf.redis.update(config.atfKey, function(err, key) {
+atf.run(atf.redis.update(config.keys.atf, function(err, key) {
   if (err) {
     console.error("Failed to update '"+key+"' in Redis with ATF content"+err ? ": "+err : "");
   } else {

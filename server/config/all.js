@@ -60,21 +60,13 @@ Object.defineProperties(Config.prototype, {
     enumerable: true
   },
 
-  // the hash for html snapshots
-  htmlSnapshotsHash: {
-    value: "html-snapshots",
-    enumerable: true
-  },
-
-  // the key for app routes
-  routesKey: {
-    value: "app-routes",
-    enumerable: true
-  },
-
-  // the key for atf content
-  atfKey: {
-    value: "atf-content",
+  // keys to data from the database
+  keys: {
+    value: {
+      htmlSnapshots: "html-snapshots",
+      routes: "app-routes",
+      atf: "atf-content"
+    },
     enumerable: true
   },
   

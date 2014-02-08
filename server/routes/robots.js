@@ -43,7 +43,7 @@ function robots(req, res, next) {
         });
       });
       var redisClient = redis.client();
-      redisClient.get(config.routesKey, function(err, appRoutes) {
+      redisClient.get(config.keys.routes, function(err, appRoutes) {
         if (err) {
           next(err);
         } else {

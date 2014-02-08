@@ -17,7 +17,7 @@ var configLib = require("../../../config");
 var redis = require("../../../helpers/redis");
 
 // Get the configuration
-var config = configLib.create(process.env.NODE_ENV);
+var config = configLib.create();
 
 // Get the normalized path to the app root
 var appRoot = path.join(__dirname, "../../../../");
@@ -34,7 +34,7 @@ function errorAction(message, noQuit) {
   // TODO: add SENDGRID or other email notification here
 }
 
-redisClient.get(config.routesKey, function(err, appRoutes) {
+redisClient.get(config.keys.routes, function(err, appRoutes) {
   if (appRoutes && appRoutes.length > 0) {
     // Convert the app routes into app urls
     var appUrls = appRoutes.split(",").map(function(appRoute) {
@@ -51,22 +51,21 @@ redisClient.get(config.routesKey, function(err, appRoutes) {
       source: appUrls,
       outputDir: path.join(appRoot, config.snapshotsDir),
       outputDirClean: true,
-      timeout: 20000,
+      timeout: 30000,
       selector: "#content .page-content"
     }, function(nonError, completedSnapshots) {
-        // TODO: fix #37 and uncomment
-        //if (typeof nonError === "undefined" && result) {
+        if (typeof nonError === "undefined" && result) {
 
           if (completedSnapshots.length > 0) {
             console.log("succesfully created snapshots");
 
-            // Make the reducer to form the key
-            // Removes the appRoot and snapshotsDir from the path so the key
+            // Make the reducer to form the name in the hash
+            // Removes the appRoot and snapshotsDir from the path so the name
             //   is just the request url.
             var reducer = path.join(appRoot, config.snapshotsDir);
 
             // Make the snapshots hash.
-            // The key is the app-relative path: "/snapshots/index.html"
+            // The name is the app-relative path: "/snapshots/index.html"
             // The value is the html snapshot contents
             var hash = {};
             for (var i = 0; i < completedSnapshots.length; i++) {
@@ -74,24 +73,24 @@ redisClient.get(config.routesKey, function(err, appRoutes) {
                 fs.readFileSync(completedSnapshots[i], { encoding: "utf8" });
             }
 
-            // Update the htmlSnapshotsHash in Redis
-            redisClient.hmset(config.htmlSnapshotsHash, hash, function(err, res) {
+            // Update Redis
+            redisClient.hmset(config.keys.htmlSnapshots, hash, function(err, res) {
               if (err) {
-                errorAction("Redis hash update of "+config.htmlSnapshotsHash+" failed", true);
+                errorAction("Redis hash update of "+config.keys.htmlSnapshots+" failed", true);
               } else {
-                console.log("Redis hash update of "+config.htmlSnapshotsHash+" succeeded");
+                console.log("Redis hash update of "+config.keys.htmlSnapshots+" succeeded");
               }
               redisClient.quit();
             });
           } else {
             errorAction("Html snapshots took no snapshots");
           }
-        //} else {
-        //  errorAction("Html Snapshots failed");
-        //}
+        } else {
+          errorAction("Html Snapshots failed");
+        }
       }
     );
   } else {
-    errorAction("Redis read of "+config.routesKey+ " failed");
+    errorAction("Redis read of "+config.keys.routes+ " failed");
   }
 });

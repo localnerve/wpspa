@@ -66,7 +66,7 @@ module.exports = function(grunt) {
     images: config.all.imagesDir,
     fonts: config.all.fontsDir,
     scripts: config.all.scriptsDir,
-    atfKey: config.all.atfKey,
+    atfKey: config.all.keys.atf,
     server: serverDir,
     serverMain: "app.js",
     test: "test/mocha",

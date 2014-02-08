@@ -8,6 +8,8 @@
  * The paths are also used by downstream worker processes (snapshots) to produce the site's html snapshots
  *   for _escaped_fragment_ requests.
  *
+ * Run this worker anytime the app menu has changed and needs to be refreshed.
+ *
  * PATH and NODE_ENV have to set in the environment before running this.
  * PATH has to include phantomjs bin
  */
@@ -18,7 +20,7 @@ var urlm = require("url");
 var redis = require("../../../helpers/redis");
 var configLib = require("../../../config");
 
-var config = configLib.create(process.env.NODE_ENV);
+var config = configLib.create();
 
 // Write the appRoutes to Redis
 function writeAppRoutes(appRoutes) {
@@ -30,11 +32,11 @@ function writeAppRoutes(appRoutes) {
   });
   if (appRoutes.length > 0) {
     var redisClient = redis.client();
-    redisClient.set(config.routesKey, appRoutes, function(err) {
+    redisClient.set(config.keys.routes, appRoutes, function(err) {
       if (err) {
-        console.error("failed to store the routes for "+config.routeskey);
+        console.error("failed to store the routes for "+config.keys.routes);
       } else {
-        console.log("successfully stored "+appRoutes.length+" routes in "+config.routesKey);
+        console.log("successfully stored "+appRoutes.length+" routes in "+config.keys.routes);
       }
       redisClient.quit();
     });
