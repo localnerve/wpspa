@@ -81,4 +81,6 @@ function routes(urlPath, timeout) {
   });
 }
 
-module.exports = routes;
+module.exports = {
+  routes: routes
+};
