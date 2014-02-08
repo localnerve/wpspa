@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+
+/**
+ * dump
+ *
+ * Outputs all values in redis for inspection to STDOUT
+ */
+var util = require("util");
+var async = require("async");
+var redis = require("../../../helpers/redis");
+
+var head = "**** %s ****";
+var tail = "************";
+
+var redisClient = redis.client();
+
+var typeActions = {
+  string: function(item, callback) {
+    redisClient.get(item.key, function(err, result) {
+      outputResult(err, item.key, item.type, function() {
+        console.log(result);
+      });
+      callback(err);
+    });
+  },
+  hash: function(item, callback) {
+    redisClient.hgetall(item.key, function(err, result) {
+      outputResult(err, item.key, item.type, function() {
+        console.log(util.inspect(result, null));
+      });
+      callback(err);
+    });
+  }
+};
+
+function outputResult(err, key, type, outputValue) {
+  if (!err) {
+    console.log(util.format(head, key));
+    outputValue();
+    console.log(tail);
+  } else {
+    console.error("Failed to get the value for "+key+" as a "+type);
+  }
+}
+
+function getType(key, callback) {
+  redisClient.type(key, function(err, type) {
+    callback(err, { key: key, type: type });
+  });
+}
+
+function getValue(item, callback) {
+  if (typeActions[item.type]) {
+    typeActions[item.type](item, callback);
+  } else {
+    console.error("Got value for unsupported type "+item.type);
+  }
+}
+
+// output all values
+redisClient.keys("*", function(err, keys) {
+  if (err) {
+    console.error("Failed to get keys '*'");
+    redisClient.quit();
+  } else {
+    async.map(keys, getType, function(err, result) {
+      if (err) {
+        console.error("Failed to get types for keys "+keys.join(","));
+        redisClient.quit();
+      } else {
+        async.eachSeries(result, getValue, function(err) {
+          redisClient.quit();
+        });
+      }
+    });
+  }
+});
