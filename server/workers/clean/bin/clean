@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+/**
+ * clean
+ *
+ * Removes all keys in configuration from redis
+ *   Requires that NODE_ENV must be defined
+ */
+var redis = require("../../../helpers/redis");
+var configLib = require("../../../config");
+
+var redisClient = redis.client();
+var configKeys = configLib.create().keys;
+
+var keys = [];
+for (var key in configKeys) {
+  keys.push(configKeys[key]);
+}
+
+// delete all keys in configuration
+redisClient.del(keys, function(err) {
+  if (err) {
+    console.error("Failed to delete keys "+keys.join(","));
+  } else {
+    console.log("Successfully removed keys "+keys.join(","));
+  }
+  redisClient.quit();
+});
