@@ -6,6 +6,6 @@ services:
 before_install:
   - sudo apt-get update
   - sudo apt-get install rubygems
-  - gem install compass
+  - gem install compass --version 0.12.2
 before_script:
   - npm install -g grunt-cli
