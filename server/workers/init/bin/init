@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#
+# init
+#
+# Perform initialization for the application
+#  NODE_ENV must be pre-defined in environment
+#
+
+# change this if you move this file
+relativeRoot=../..
+
+# worker order
+order="clean routes atf snapshots"
+
+cd "$(dirname "$0")"
+pushd $relativeRoot
+
+echo "starting init"
+for worker in $order; do
+  if [ -x $worker/bin/$worker ]; then
+    echo "running $worker/bin/$worker..."
+    $worker/bin/$worker
+    echo "$worker/bin/$worker complete."
+  else
+    echo "ERROR: $worker/bin/$worker not found in `pwd`"
+  fi
+done
+echo "init complete"
+
+popd
+cd -
