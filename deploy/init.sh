@@ -19,7 +19,7 @@ repo=/home/agrant/var/www/content/wpspa-heroku
 if [ -d "$repo" ] && [ -d "$repo/.git" ]; then
   cd "$repo"
   heroku run:detached server/workers/init/bin/init
-  heroku run server/workers/dump/bin/dump
+  # heroku run server/workers/dump/bin/dump
   cd -
 else
   echo "ERROR repo $repo not found"
