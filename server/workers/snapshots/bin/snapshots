@@ -1,96 +1,10 @@
-#!/usr/bin/env node
-
-/**
- * The html snapshots worker process.
-
- * This takes the html snapshots and updates the snapshots hash in redis.
- *
- * process.env.NODE_ENV must be defined
- * Depends on the routes worker process being run successfully beforehand.
- */
-var path = require("path");
-var fs = require("fs");
-var urlm = require("url");
-var htmlSnapshots = require('html-snapshots');
-
-var configLib = require("../../../config");
-var redis = require("../../../helpers/redis");
-
-// Get the configuration
-var config = configLib.create();
-
-// Get the normalized path to the app root
-var appRoot = path.join(__dirname, "../../../../");
-
-// Get an appropriate, connected redis client
-var redisClient = redis.client();
-
-// Actions to perform on error
-function errorAction(message, noQuit) {
-  console.error(message);
-  if (!noQuit) {
-    redisClient.quit();
-  }
-  // TODO: add SENDGRID or other email notification here
-}
-
-redisClient.get(config.keys.routes, function(err, appRoutes) {
-  if (appRoutes && appRoutes.length > 0) {
-    // Convert the app routes into app urls
-    var appUrls = appRoutes.split(",").map(function(appRoute) {
-      return urlm.format({
-        protocol: "http",
-        hostname: config.app.hostname,
-        port: config.app.port || 80,
-        pathname: appRoute
-      });
-    });
-    // Take html snapshots for the app routes
-    var result = htmlSnapshots.run({
-      input: "array",
-      source: appUrls,
-      outputDir: path.join(appRoot, config.snapshotsDir),
-      outputDirClean: true,
-      timeout: 30000,
-      selector: "#content .page-content"
-    }, function(nonError, completedSnapshots) {
-        if (typeof nonError === "undefined" && result) {
-
-          if (completedSnapshots.length > 0) {
-            console.log("succesfully created snapshots");
-
-            // Make the reducer to form the name in the hash
-            // Removes the appRoot and snapshotsDir from the path so the name
-            //   is just the request url.
-            var reducer = path.join(appRoot, config.snapshotsDir);
-
-            // Make the snapshots hash.
-            // The name is the app-relative path: "/snapshots/index.html"
-            // The value is the html snapshot contents
-            var hash = {};
-            for (var i = 0; i < completedSnapshots.length; i++) {
-              hash[completedSnapshots[i].replace(reducer, "")] =
-                fs.readFileSync(completedSnapshots[i], { encoding: "utf8" });
-            }
-
-            // Update Redis
-            redisClient.hmset(config.keys.htmlSnapshots, hash, function(err, res) {
-              if (err) {
-                errorAction("Redis hash update of "+config.keys.htmlSnapshots+" failed", true);
-              } else {
-                console.log("Redis hash update of "+config.keys.htmlSnapshots+" succeeded");
-              }
-              redisClient.quit();
-            });
-          } else {
-            errorAction("Html snapshots took no snapshots");
-          }
-        } else {
-          errorAction("Html Snapshots failed");
-        }
-      }
-    );
-  } else {
-    errorAction("Redis read of "+config.keys.routes+ " failed");
-  }
-});
+#!/bin/bash
+#
+# The snapshots worker process
+# 
+# Set the PATH and run the node script
+#
+cd "$(dirname "$0")"
+pathToPhantomJS="`pwd`/../../../../node_modules/phantomjs/lib/phantom/bin"
+env PATH=$PATH:$pathToPhantomJS "`pwd`/snapshots-cli"
+cd -
