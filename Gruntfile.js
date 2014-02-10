@@ -129,13 +129,18 @@ module.exports = function(grunt) {
     // atfRemove custom internal task
     // Removes the bootstrapped atf content from the html source
     atfRemove: {
-      options: {
-        update: "file"
-      },
       test: {
+        options: {
+          update: "file"
+        },
         src: [
           "<%= project.test %>/index.html"
         ]
+      },
+      redis: {
+        options: {
+          update: "<%= project.atfKey %>"
+        }
       }
     },
 
