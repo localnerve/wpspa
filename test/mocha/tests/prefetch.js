@@ -57,16 +57,17 @@ describe("prefetch", function() {
       backboneSync(method, model, options);
     });
 
-    // trigger the prefetch    
-    ea.trigger("content:prefetch", [{
+    // trigger the prefetch
+    var options = {
       object_type: object_type,
       object_id: 1
-    }]);
+    };
+    ea.trigger("content:prefetch", options);
 
     assert(modelurl_stub.calledOnce, "model.url should have been called once");
     assert(sync_stub.calledOnce, "Backbone.sync should have been called once");
 
-    pf.promises[object_type]
+    pf.promises.get(options)
     .then(
       success_fn,
       function(items) {
@@ -87,12 +88,13 @@ describe("prefetch", function() {
     var fail_fn = sandbox.spy();
 
     var pf = prefetch._create(ea);
-    ea.trigger("content:prefetch", [{
+    var options = {
       object_type: object_type,
       object_id: 1
-    }]);
+    };
+    ea.trigger("content:prefetch", options);
 
-    pf.promises[object_type].then(
+    pf.promises.get(options).then(
       function(collection) {
         expect(collection).to.exist;
         expect(fail_fn.callCount).to.equal(0);
