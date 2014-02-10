@@ -1,8 +1,7 @@
 /*
  * connect
  *
- * Connect a new post to the application so it can be shown as content.
- * Adds a post that has already been fetched to the main content dispatch.
+ * Connect data to the application so it can be shown as content.
  */
 define([
   "lodash",
@@ -15,7 +14,7 @@ define([
   function Connect(eventAggregator, promises) {
     var self = this;
 
-    this.promises = promises;
+    this._promises = promises;
 
     // Handle content:connect
     eventAggregator.on("content:connect", function(post) {
@@ -28,7 +27,7 @@ define([
   //
   _.extend(Connect.prototype, {
 
-    // Connect a post to the app content dispatch, if it needs it
+    // Connect a post to the main content dispatch, if it needs it
     // Posts sent into connect have already been fetched, so they just need to be connected.
     _connect: function(post) {
       contract(post, "type", "id", "slug", "route");
@@ -43,7 +42,7 @@ define([
       if (entity.options.createdEmpty) {
         var dfd = $.Deferred();
         dfd.resolve(entity);
-        this.promises[post.type] = dfd.promise();
+        this._promises[post.type] = dfd.promise();
       }
 
       // Add the post to the new or existing entity, ignores duplicates.
