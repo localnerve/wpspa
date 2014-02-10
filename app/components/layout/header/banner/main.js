@@ -27,6 +27,8 @@ define([
         success: function() {
           // banner successfully loaded, tell the container
           app.vent.trigger("container:complete");
+          // signal that the banner can be shown
+          header.banner.trigger("banner:show");
         },
         error: function(collection, response, options) {
           // banner failed to load, tell the app

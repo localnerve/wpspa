@@ -3,12 +3,13 @@
  * Defines the header layout and composition
  */
 define([
+  "lodash",
   "backbone.marionette",
   "app",
   "module",
   "components/layout/header/navigation/main",
   "components/layout/header/banner/main"
-], function(Marionette, app, module) {
+], function(_, Marionette, app, module) {
 
   // Create a partial definition for container.header module
   var thisModule = app.module("container.header", function(header) {
@@ -27,7 +28,7 @@ define([
       // renders all child views of this layout
       onRender: function() {
         this.navigation.show(header.navigation);
-        this.banner.show(header.banner);
+        header.banner.trigger("banner:show");
       }
 
     });
@@ -35,6 +36,10 @@ define([
     header.addInitializer(function(options) {
       this.layout = new HeaderLayout(options);
       this.timeout = module.config().timeout;
+
+      this.listenTo(this.banner, "banner:show", _.after(module.config().bannerShowEvents, function() {
+        this.layout.banner.show(this.banner);
+      }));
     });
 
     header.addFinalizer(function() {

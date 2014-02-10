@@ -26,7 +26,8 @@ require.config({
       timeout: 15000
     },
     "components/layout/header/main": {
-      timeout: 30000
+      timeout: 30000,
+      bannerShowEvents: 2
     },
     "components/layout/header/navigation/entities": {
       endpoint: "/api/wpspa/menu"
