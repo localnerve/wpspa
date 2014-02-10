@@ -6,8 +6,9 @@ define([
   "helpers/contract",
   "helpers/routes",
   "helpers/content",
+  "helpers/types",
   "resources/strings"
-], function(_, $, app, contract, routesLib, contentLib, strings) {
+], function(_, $, app, contract, routesLib, contentLib, types, strings) {
 
   // update the category content
   function updateCategories(content) {
@@ -24,46 +25,14 @@ define([
       // for now, just change a comment link to a supported link
       return contentLib.alterContent(content, "a[href]", function(el) {
         if (el && el.href)
-          el.href = el.href.replace(/#comment(?:[^\"']+)/i, "comment");
+          el.href = el.href.replace(/#comment(?:[^\"']+)/i, routesLib.comments.actions.comment);
       });
     } else {
       return content;
     }
   }
 
-  function prepareArchiveRoute(type, routes, id, path) {
-    var slug = id.replace("/", "-");
-    routes.push({
-      name: slug,
-      route: routesLib.hrefToRoute(path),
-      params: {
-        header: {
-          message: function(model) {
-            return strings.content.multi.header.monthlyArchives +
-              model.get("title").replace(/(\d+)\/(\d+)/, function(m, m1, m2) {
-                return strings.content.months[parseInt(m2, 10)] + " " +m1;
-              });
-          }
-        }
-      },
-      options: {
-        object_type: type+":"+slug,
-        object_id: id
-      }
-    });
-  }
-
-  function addArchiveRoutes(type, routes) {
-    // prefetch the items
-    app.vent.trigger("content:prefetch", _.map(routes, function(route) {
-      return route.options;
-    }));
-    // add the routes
-    _.each(routes, function(route) {
-      app.vent.trigger("app:router:addRoute", route);
-    });
-  }
-
+  // update search content
   function updateSearch(content) {
     // remove the method and action from the search form
     return contentLib.alterContent(content, "form.search-form", function(el) {
@@ -78,6 +47,53 @@ define([
     });
   }
 
+  function prepareArchiveRoute(type, routes, id, path) {
+    var routeParam = {
+      name: name,
+      route: routesLib.hrefToRoute(path),
+      params: {
+        header: {
+          message: routesLib.archives.archiveHeader[type]
+        }
+      }
+    };
+
+    if (_.isFunction(routesLib.archives.archiveOptions[type])) {
+      routeParam.options = routesLib.archives.archiveOptions[type](id, routeParam.route);
+    }
+
+    routes.push(routeParam);
+  }
+
+  // filter the content for the various widget supported types
+  var widgetFilter = {
+    search: function(content) {
+      return updateSearch(content);
+    },
+    categories: function(content) {
+      var archiveRoutes = [];
+      content = contentLib.alterLinks(
+        app.root, updateCategories(content), _.partial(prepareArchiveRoute, "category", archiveRoutes)
+      );
+      routesLib.addRoutes(app.vent, archiveRoutes);
+      return content;
+    },
+    "recent comments": function(content) {
+      return contentLib.alterLinks(app.root, updateComments(content));
+    },
+    "recent posts": function(content) {
+      return contentLib.alterLinks(app.root, content);
+    },
+    archives: function(content) {
+      var archiveRoutes = [];
+      content = contentLib.alterLinks(
+        app.root, content, _.partial(prepareArchiveRoute, "date", archiveRoutes)
+      );
+      routesLib.addRoutes(app.vent, archiveRoutes, true);
+      return content;
+    }
+  };
+
   // parse a single widget to a model
   function parseWidget(widget) {
     contract(widget, "id", "widget", "params.before_widget", "params.after_widget", "params.widget_name");
@@ -88,31 +104,9 @@ define([
     content = content.substr(0, last);
 
     // process specific widget types
-    switch(widget.params.widget_name.toLowerCase()) {
-      case "search":
-        content = updateSearch(content);
-        break;
-
-      case "categories":
-        content = contentLib.alterLinks(app.root, updateCategories(content));
-        break;
-
-      case "recent comments":
-        content = contentLib.alterLinks(app.root, updateComments(content));
-        break;
-
-      case "recent posts":
-        content = contentLib.alterLinks(app.root, content);
-        break;
-
-      case "archives":
-        var archiveRoutes = [];
-        content = contentLib.alterLinks(app.root, content, _.partial(prepareArchiveRoute, "date", archiveRoutes));
-        addArchiveRoutes("date", archiveRoutes);
-        break;
-
-      default:
-        break;
+    var widgetType = widget.params.widget_name.toLowerCase();
+    if (_.isFunction(widgetFilter[widgetType])) {
+      content = widgetFilter[widgetType](content);
     }
 
     return {

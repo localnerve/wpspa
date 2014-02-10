@@ -21,8 +21,10 @@ define([
       var items = this.get("items");
       if (items && items.length > 0) {
         var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
+        var id = items[0].object_id;
+        var idType = parseInt(id, 10) ? "id" : "slug";
         // for the model, we just do one category at a time
-        return urlRoot + "?id=" + items[0].object_id + "&custom_fields=_wpspa_meta_description,_wpspa_page_title";
+        return urlRoot + "?"+idType+"="+id+"&custom_fields=_wpspa_meta_description,_wpspa_page_title";
       } else {
         return module.config().endpoint;
       }

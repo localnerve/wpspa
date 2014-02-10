@@ -10,15 +10,23 @@ define([
   "lodash",
   "jquery",
   "app",
+  "components/layout/content/promises",
+  "components/layout/content/connect",
   "module"
-], function(_, $, app, module) {
+], function(_, $, app, promises, connect, module) {
 
   // Construct a prefetch object on the given event aggregator
   function Prefetch(eventAggregator, timeout) {
     var self = this;
 
     // The collection of promises, keyed by object_type
-    this.promises = {};
+    this._promises = {};
+
+    // The public interface to promises
+    this.promises = promises.create(eventAggregator, this._promises);
+
+    // Create the promise connector to connect existing data with promises
+    this._connect = connect.create(eventAggregator, this._promises);
 
     // The request timeout for this Prefetch instance
     this.timeout = timeout || module.config().timeout;
@@ -41,7 +49,7 @@ define([
 
       // Prefetch unique entity types
       _.each(items, function(item) {
-        var promise = self.promises[item.object_type];
+        var promise = self._promises[item.object_type];
 
         // If not already fetched or has previously failed
         if (!promise || promise.state() === "rejected") {
@@ -69,7 +77,7 @@ define([
           });
 
           // Keep this promise, blow away a failed promise
-          self.promises[item.object_type] = dfd.promise();
+          self._promises[item.object_type] = dfd.promise();
 
           // Fetch the object_type
           entity.fetch({

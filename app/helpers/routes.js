@@ -4,8 +4,42 @@
  * Helper methods to assist with routes.
  */
 define([
-  "lodash"
-], function(_) {
+  "lodash",
+  "helpers/types",
+  "resources/strings"
+], function(_, types, strings) {
+
+  // Archive route helpers
+  var archives = {
+
+    archiveHeader: {
+      date: function(model) {
+        return strings.content.multi.header.monthlyArchives +
+          model.get("title").replace(/(\d+)\/(\d+)/, function(m, m1, m2) {
+              return strings.content.months[parseInt(m2, 10)] + " " +m1;
+          });
+      },
+      category: function(model) {
+          return strings.content.multi.header.categoryArchives + model.get("title");
+      }
+    },
+    archiveOptions: {
+      date: function(id) {
+        var name = id.replace("/", "-");
+        return {
+          object_type: types.objectTypes.date(name),
+          object_id: id
+        };
+      },
+      category: function(id) {
+        var name = id.replace("category/", "");
+        return {
+          object_type: types.objectTypes.category(name),
+          object_id: name
+        };
+      }
+    }
+  };
 
   // Comment route helpers
   var comments = {
@@ -55,6 +89,22 @@ define([
   };
 
   /**
+   * Add dynamic routes and optionally prefetch data
+   *
+   * To prefetch data, the route params must have route options defined.
+   */
+  function addRoutes(eventAggregator, routes, prefetch) {
+    if (prefetch) {
+      // start the data download
+      eventAggregator.trigger("content:prefetch", _.map(routes, function(route) {
+        return route.options;
+      }));
+    }
+    // add the routes
+    eventAggregator.trigger("app:router:addRoute", routes);
+  }
+
+  /**
    * Build a route path
    *
    * Arguments: 
@@ -95,7 +145,9 @@ define([
     buildRoutePath: buildRoutePath,
     routeToHref: routeToHref,
     hrefToRoute: hrefToRoute,
-    comments: comments
+    addRoutes: addRoutes,
+    comments: comments,
+    archives: archives
   };
 
 });

@@ -5,9 +5,10 @@ define([
   "lodash",
   "helpers/contract",
   "helpers/routes",
+  "helpers/types",
   "resources/strings",
   "app"
-], function(_, contract, routes, strings, app) {
+], function(_, contract, routes, types, strings, app) {
 
   // Parse the categories of a post
   function parseCategories(post) {
@@ -16,35 +17,30 @@ define([
     _.each(post.categories, function(category) {
 
       // make the object type specific to this category
-      var object_type = "category:"+category.slug;
+      var object_type = types.objectTypes.category(category.slug);
       
+      // make the route options
+      var options = {
+        object_type: object_type,
+        object_id: category.id
+      };
+
       // Add derived properties to the category object
       category.route = routes.buildRoutePath(app.pushState, "category", category.slug);
       category.url = routes.routeToHref(category.route);
 
-      // The category in a post doesn't contain the post contents.
-      // Also, since the category might contain posts that we haven't downloaded, get them.
-      app.vent.trigger("content:prefetch", [{
-        object_type: object_type,
-        object_id: category.id
-      }]);
-
-      // Setup to route this category
-      app.vent.trigger("app:router:addRoute", {
+      // A category in a post doesn't contain the post contents.
+      // Furthermore, the category might contain posts that we haven't downloaded, get them.
+      routes.addRoutes(app.vent, [{
         name: category.slug,
         route: category.route,
         params: {
           header: {
-            message: function(model) {
-              return strings.content.multi.header.categoryArchives + model.get("title");
-            }
+            message: routes.archives.archiveHeader.category
           }
         },
-        options: {
-          object_type: object_type,
-          object_id: category.id
-        }
-      });
+        options: options
+      }], true);
     });
   }
 
@@ -60,7 +56,7 @@ define([
     post.comments.respondUrl = result.sources.respond;
 
     // Add a routes to handle comments for this post.
-    app.vent.trigger("app:router:addRoute", result.routeParams);
+    routes.addRoutes(app.vent, result.routeParams, false);
   }
 
   // parse a single post

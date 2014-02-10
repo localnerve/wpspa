@@ -9,7 +9,17 @@ define(function() {
     return object_type.split(":")[0];
   }
 
+  var objectTypes = {
+    category: function(slug) {
+      return "category:"+slug;
+    },
+    date: function(slug) {
+      return "date:"+slug;
+    }
+  };
+
   return {
-    baseObjectType: baseObjectType
+    baseObjectType: baseObjectType,
+    objectTypes: objectTypes
   };
 });

@@ -17,10 +17,9 @@ define([
   "helpers/ui",
   "components/layout/content/vendor-interface",
   "components/layout/content/prefetch",
-  "components/layout/content/connect",
   "components/layout/content/page",
   "module"
-], function(Marionette, app, contract, ui, vendor, prefetch, connect, page, module) {
+], function(Marionette, app, contract, ui, vendor, prefetch, page, module) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -30,9 +29,6 @@ define([
       
       // Create prefetch promises on the app.vent
       this._promises = prefetch.promises(app.vent);
-
-      // Create the connector on the app.vent and promises
-      this._connect = connect.create(app.vent, this._promises);
 
       // Create the page updater on this event source
       this._page = page.create(this);
@@ -72,7 +68,7 @@ define([
       // Request the appropriate error view
       var error = app.request("content:error", options);
       
-      this._promises[subopts.object_type].then(
+      this._promises.get(subopts).then(
         // success
         function(collection) {
           var model = collection.get({
