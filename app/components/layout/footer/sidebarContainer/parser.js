@@ -49,7 +49,7 @@ define([
 
   function prepareArchiveRoute(type, routes, id, path) {
     var routeParam = {
-      name: name,
+      name: id,
       route: routesLib.hrefToRoute(path),
       params: {
         header: {
