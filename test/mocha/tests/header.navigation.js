@@ -24,12 +24,13 @@ describe("Navigation", function() {
     expect(navigationView.collection.length).to.be.at.least(1);
   });
 
-  it("should NOT fire addRoute event when item is added to the collection after initialization", function() {
+  it("should fire addRoute event when item is added to the collection after initialization", function() {
     var name = "dummy1",
       route = "someroute",
       object_type = "post",
       object_id = "1",
       nav_item = "999999999",
+      is_single = false,
       addRoute_stub;
 
     // stub the appRouter.addRoute so that we don't have to clean up.
@@ -43,6 +44,9 @@ describe("Navigation", function() {
       nav_item: nav_item,
       object_type: object_type,
       object_id: object_id,
+      object_props: {
+        is_single: is_single
+      },
       parent: "0"
     });
 
@@ -50,7 +54,7 @@ describe("Navigation", function() {
 
     navigationView.collection.add(models);
 
-    assert(!addRoute_stub.called, "addRoute should not have been called");
+    assert(addRoute_stub.called, "addRoute should have been called");
 
     // cleanup the collection
     var foundModels = navigationView.collection.where({
