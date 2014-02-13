@@ -62,14 +62,21 @@ define([
           var entityFactory = _.find(typedItems, function(i) { return !!i.create; });
 
           // Create or retrieve the entity
-          var entity = app.request("content:entity", {
+          var entityResult = app.request("content:entity", {
             object_type: item.object_type,
             items: typedItems,
             create: entityFactory ? entityFactory.create : undefined
           });
 
+          // Support appending to the entity
+          var remove = true;
+          if (!entityResult.createdNew && _.isFunction(entityResult.entity.addItems)) {
+            remove = false;
+            entityResult.entity.addItems(typedItems);
+          }
+
           // Listen to the request event and notify the promise holder
-          entity.once("request", function() {
+          entityResult.entity.once("request", function() {
             if (dfd.state() === "pending") {
               // Progress notification
               dfd.notify();
@@ -80,7 +87,10 @@ define([
           self._promises[item.object_type] = dfd.promise();
 
           // Fetch the object_type
-          entity.fetch({
+          entityResult.entity.fetch({
+            // if the entity is being appended, don't remove what is there
+            remove: remove,
+
             // Request timeout
             timeout: self.timeout,
 

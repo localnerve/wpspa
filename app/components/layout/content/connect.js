@@ -36,7 +36,7 @@ define([
       var entity = app.request("content:entity", {
         object_type: post.type,
         emptyOnNew: true
-      });
+      }).entity;
 
       // If new, give main content dispatch a reference to the resolved promise
       if (entity.options.createdEmpty) {

@@ -23,6 +23,14 @@ define([
       return this.attributes[attr];
     },
 
+    // findWhere on the inner collection
+    findWhere: function(attr) {
+      if (_.isObject(attr)) {
+        return this;
+      }
+      return this.collection.findWhere(attr);
+    },
+
     createCollection: function(models) {
       // we can do this because this is not part of a real collection
       this.collection = new Backbone.Collection(models);

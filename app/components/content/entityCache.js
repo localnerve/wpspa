@@ -40,12 +40,18 @@ define([
     // get the cached entity
     var entity = cache[options.object_type];
 
+    // flag if creating new
+    var createdNew = !entity;
+
     // if there is no entity, create a new one.
     if (!entity) {
       entity = cache[options.object_type] = createEntity(options);
     }
 
-    return entity;
+    return {
+      createdNew: createdNew,
+      entity: entity
+    };
   }
 
   // remove an entity from the cache
