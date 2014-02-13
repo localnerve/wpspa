@@ -6,6 +6,7 @@
  */
 define([
   "lodash",
+  "jquery",
   "backbone",
   "backbone.marionette",
   "loaders/jst",
@@ -13,7 +14,7 @@ define([
   "helpers/contract",
   "server/helpers/rewrites",
   "module"
-], function(_, Backbone, Marionette, loader, anchor, contract, rewrites, module) {
+], function(_, $, Backbone, Marionette, loader, anchor, contract, rewrites, module) {
   // Denote global references
   var $w = window;
 
@@ -69,7 +70,8 @@ define([
   // After app initialization
   app.on("initialize:after", function(options) {
     // Trigger the initial application render chain
-    app.main.show(app.container.layout);
+    // ... But don't act until domReady
+    $(function() { app.main.show(app.container.layout); });
   });
 
   return app;
