@@ -67,8 +67,6 @@ define([
             options: options
           });
         }
-      }).done(function() {
-        header.stopListening();
       });
     });
 
