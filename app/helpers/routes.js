@@ -53,7 +53,8 @@ define([
      * Build comment route parameters
      *
      * Formats standard comment route parameters for creating comment/respond
-     * routes. comment/respond routes will both use the same route options.
+     * routes around a normal route. 
+     *   comment/respond routes will both use the same route options.
      *
      * The given route can be in route or href format, if it is already a route
      * it will pass-thru, if it is an href it will be converted to a route.
@@ -67,26 +68,39 @@ define([
         respond: buildRoutePath(pushState, route, comments.actions.respond)
       };
 
-      function makeRouteParam(href, action) {
-        return {
-          name: slug+"-"+action,
-          route: hrefToRoute(href),
-          params: {
-            action: action
-          },
-          options: options
-        };
-      }
-
       return {
         sources: sources,
         routeParams: [
-          makeRouteParam(sources.comment, comments.actions.comment),
-          makeRouteParam(sources.respond, comments.actions.respond)
+          makeRouteParam(slug+"-"+comments.actions.comment, sources.comment, options, {
+            action: comments.actions.comment
+          }),
+          makeRouteParam(slug+"-"+comments.actions.respond, sources.respond, options, {
+            action: comments.actions.respond
+          })
         ]
       };
     }
   };
+
+  /**
+   */
+  function makeRouteOptions(object_type, object_id) {
+    return {
+      object_type: object_type,
+      object_id: object_id
+    };
+  }
+
+  /**
+   */
+  function makeRouteParam(name, href, options, params) {
+    return {
+      name: name,
+      route: hrefToRoute(href),
+      params: params,
+      options: options
+    };
+  }
 
   /**
    * Add dynamic routes and optionally prefetch data
@@ -146,6 +160,8 @@ define([
     routeToHref: routeToHref,
     hrefToRoute: hrefToRoute,
     addRoutes: addRoutes,
+    makeRouteParam: makeRouteParam,
+    makeRouteOptions: makeRouteOptions,
     comments: comments,
     archives: archives
   };

@@ -47,22 +47,55 @@ define([
     });
   }
 
-  function prepareArchiveRoute(type, routes, id, path) {
-    var routeParam = {
-      name: id,
-      route: routesLib.hrefToRoute(path),
-      params: {
-        header: {
-          message: routesLib.archives.archiveHeader[type]
-        }
+  // create route params for archive types
+  function prepareArchiveRoute(type, routeParams, id, path) {
+    var routeParam = routesLib.makeRouteParam(id, path, null, {
+      header: {
+        message: routesLib.archives.archiveHeader[type]
       }
-    };
+    });
 
     if (_.isFunction(routesLib.archives.archiveOptions[type])) {
       routeParam.options = routesLib.archives.archiveOptions[type](id, routeParam.route);
     }
 
-    routes.push(routeParam);
+    routeParams.push(routeParam);
+  }
+
+  // create route params for comments
+  function prepareCommentRoute(type, routeParams, id, path) {
+    var routeParam = routesLib.makeRouteParam(id, path,
+      routesLib.makeRouteOptions(type, id.replace(/\/.+$/, "")), {
+      action: routesLib.comments.actions.comment
+    });
+
+    routeParams.push(routeParam);
+  }
+
+  // create route params for posts
+  function prepareRoute(type, routeParams, id, path) {
+    var routeParam = routesLib.makeRouteParam(id, path,
+      routesLib.makeRouteOptions(type, id)
+    );
+    
+    _.each([routeParam].concat(routesLib.comments.buildRouteParams(
+      app.pushState, routeParam.route, id, routeParam.options
+    ).routeParams), function(param) {
+      routeParams.push(param);
+    });
+  }
+
+  // filter content, update links, create routes and add them
+  function processContent(content, type, routePrepare, contentFilter, fetch) {
+    var routeParams = [];
+    var filter = contentFilter || function(content) { return content; };
+
+    content = contentLib.alterLinks(
+      app.root, filter(content), _.partial(routePrepare, type, routeParams)
+    );
+
+    routesLib.addRoutes(app.vent, routeParams, fetch);
+    return content;
   }
 
   // filter the content for the various widget supported types
@@ -71,26 +104,16 @@ define([
       return updateSearch(content);
     },
     categories: function(content) {
-      var archiveRoutes = [];
-      content = contentLib.alterLinks(
-        app.root, updateCategories(content), _.partial(prepareArchiveRoute, "category", archiveRoutes)
-      );
-      routesLib.addRoutes(app.vent, archiveRoutes);
-      return content;
+      return processContent(content, "category", prepareArchiveRoute, updateCategories);
     },
     "recent comments": function(content) {
-      return contentLib.alterLinks(app.root, updateComments(content));
+      return processContent(content, "post", prepareCommentRoute, updateComments);
     },
     "recent posts": function(content) {
-      return contentLib.alterLinks(app.root, content);
+      return processContent(content, "post", prepareRoute);
     },
     archives: function(content) {
-      var archiveRoutes = [];
-      content = contentLib.alterLinks(
-        app.root, content, _.partial(prepareArchiveRoute, "date", archiveRoutes)
-      );
-      routesLib.addRoutes(app.vent, archiveRoutes, true);
-      return content;
+      return processContent(content, "date", prepareArchiveRoute, null, true);
     }
   };
 
