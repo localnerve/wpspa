@@ -6,11 +6,13 @@
 
 The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over any network, page loads are much faster than any fully optimized traditional Wordpress site. This design features data-driven, background asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
 
-> latest [performance results](http://www.webpagetest.org/result/131212_KF_TGB/) over a 300ms RTT 3G network.
+> [performance results](http://www.webpagetest.org/result/140213_42_WSZ/) over a 150ms RTT 3G network.
 
-> latest [pagespeed results](http://github.com/localnerve/wpspa/blob/master/docs/images/pagespeed.jpg)
+> [performance results](http://www.webpagetest.org/result/131212_KF_TGB/) over a 300ms RTT 3G network.
 
-> latest [yslow results](http://github.com/localnerve/wpspa/blob/master/docs/images/yslow.jpg)
+> [pagespeed results](http://github.com/localnerve/wpspa/blob/master/docs/images/pagespeed.jpg)
+
+> [yslow results](http://github.com/localnerve/wpspa/blob/master/docs/images/yslow.jpg)
 
 By adding an SPA front-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
