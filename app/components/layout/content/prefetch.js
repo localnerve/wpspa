@@ -51,8 +51,16 @@ define([
       _.each(items, function(item) {
         var promise = self._promises[item.object_type];
 
-        // If not already fetched or has previously failed
-        if (!promise || promise.state() === "rejected") {
+        // If object_type not already fetched or has previously failed
+        // If the object type and id are not found
+        var needsFetch = !promise || promise.state() === "rejected" ||
+          !app.request("content:entity:find", {
+            object_type: item.object_type,
+            object_id: item.object_id
+          });
+
+        // If needs total or partial fetch
+        if (needsFetch) {
           var dfd = $.Deferred();
 
           // Get a unqiue set by object_type, items might not be homogenous
@@ -70,9 +78,9 @@ define([
 
           // Support appending to the entity
           var remove = true;
-          if (!entityResult.createdNew && _.isFunction(entityResult.entity.addItems)) {
+          if (!entityResult.createdNew && _.isFunction(entityResult.entity.mergeItems)) {
             remove = false;
-            entityResult.entity.addItems(typedItems);
+            entityResult.entity.mergeItems(typedItems);
           }
 
           // Listen to the request event and notify the promise holder

@@ -27,7 +27,7 @@ define([
     },
 
     // remove fetch items as they become models
-    maintainItems: function(model) {
+    _maintainItems: function(model) {
       this.options.items = _.reject(this.options.items, function(item) {
         return item.object_id == model[types.objectIdType(item.object_id)];
       });
@@ -36,11 +36,9 @@ define([
       }
     },
 
-    // add fetch items after initialize
-    addItems: function(items) {
-      _.each(items, function(item) {
-        this.options.items.push(item);
-      }, this);
+    // merge in additional fetch items after initialize
+    mergeItems: function(items) {
+      this.options.items = _.union(this.options.items, items);
     },
 
     url: function() {
@@ -53,7 +51,7 @@ define([
         var posts = params.collection[method](_.pluck(fetchItems, "object_id"));
 
         // maintain the fetchItems as they are added
-        this.on("add", this.maintainItems, this);
+        this.on("add", this._maintainItems, this);
 
         return urls.normalizeUrlRoot(this.urlRoot) +
                "?post_type=any" +
