@@ -41,6 +41,7 @@ define([
       // If new, give main content dispatch a reference to the resolved promise
       if (entity.options.createdEmpty) {
         var dfd = $.Deferred();
+        entity.options.createdEmpty = undefined;
         dfd.resolve(entity);
         this._promises[post.type] = dfd.promise();
       }
