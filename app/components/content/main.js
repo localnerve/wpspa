@@ -24,7 +24,7 @@ define([
       return viewFactory.getViewFactory(options, "error");
     });
 
-    // handle content:entity requests
+    // handle content:entity requests. Creates or gets an entity.
     app.reqres.setHandler("content:entity", function(options) {
       return entityCache.getEntity(options);
     });
@@ -33,4 +33,10 @@ define([
     app.reqres.setHandler("content:entity:remove", function(options) {
       return entityCache.removeEntity(options);
     });
+
+    // handle content:entity:find requests. Returns the found entity or null.
+    app.reqres.setHandler("content:entity:find", function(options) {
+      return entityCache.findEntity(options);
+    });
+
   });

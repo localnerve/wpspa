@@ -6,8 +6,9 @@
 define([
   "lodash",
   "helpers/contract",
+  "helpers/params",
   "components/content/entities/main"
-], function(_, contract, entities) {
+], function(_, contract, params, entities) {
 
   // The entity cache. Entities are keyed by object_type.
   var cache = {};
@@ -69,8 +70,26 @@ define([
     return entity;
   }
 
+  // find an entity by type and id
+  function findEntity(options) {
+    contract(options, "object_type", "object_id");
+    
+    var found = null;
+
+    // get the cached entity
+    var entity = cache[options.object_type];
+
+    // if there is an entity, find the id
+    if (entity) {
+      found = entity.findWhere(params.typedId(options.object_id));
+    }
+
+    return found;
+  }
+
   return {
     getEntity: getEntity,
-    removeEntity: removeEntity
+    removeEntity: removeEntity,
+    findEntity: findEntity
   };
 });
