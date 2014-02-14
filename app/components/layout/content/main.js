@@ -16,11 +16,12 @@ define([
   "helpers/contract",
   "helpers/ui",
   "helpers/types",
+  "helpers/params",
   "components/layout/content/vendor-interface",
   "components/layout/content/prefetch",
   "components/layout/content/page",
   "module"
-], function(Marionette, app, contract, ui, types, vendor, prefetch, page, module) {
+], function(Marionette, app, contract, ui, types, params, vendor, prefetch, page, module) {
 
   // definition of the content region
   var ContentRegion = Marionette.Region.extend({
@@ -72,11 +73,9 @@ define([
       this._promises.get(subopts).then(
         // success
         function(collection) {
-          var selector = {};
-          selector[types.objectIdType(subopts.object_id)] =
-            parseInt(subopts.object_id, 10) || subopts.object_id;
-          
-          var model = collection.findWhere(selector);
+          var model = collection.findWhere(
+            params.typedId(subopts.object_id)
+          );
 
           self.trigger("content:start:success", {
             model: model

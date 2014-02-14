@@ -3,6 +3,8 @@
  *
  * non-environment specific configuration
  */
+var common = require("./common");
+
 function Config() {}
 
 // base properties that are configurable and writeable
@@ -90,7 +92,7 @@ Object.defineProperties(Config.prototype, {
 
   // endpoint for home content (requires JSON API)
   recentPath: {
-    value: "/api/get_recent_posts/?custom_fields=_wpspa_meta_description,_wpspa_page_title",
+    value: "/api/get_recent_posts/?"+common.customFieldsParam,
     enumerable: true
   }
 });

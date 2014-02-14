@@ -7,21 +7,28 @@
 define([
   "helpers/backbone/sync",
   "helpers/contract",
+  "helpers/urls",
+  "helpers/params",
   "module",
   "components/content/entities/parser",
   "components/content/entities/specializations/onetomany"
-], function(sync, contract, module, parser, OneToMany) {
+], function(sync, contract, urls, params, module, parser, OneToMany) {
   var $w = window;
 
   // Definition of a recent posts collection
   var RecentPostsCollection = OneToMany.extend({
+
+    urlRoot: module.config().urlRoot,
 
     initialize: function() {
       // Make sure this was created as expected
       contract(this.get("items"), "0.object_id", "0.object_type");
     },
 
-    url: module.config().endpoint,
+    url: function() {
+      return urls.normalizeUrlRoot(this.urlRoot) + "?" +
+        params.meta.custom_fields;
+    },
 
     sync: sync($w.wpspa ? $w.wpspa.recent : null),
 

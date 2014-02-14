@@ -10,25 +10,10 @@ define([
   "backbone",
   "helpers/urls",
   "helpers/types",
+  "helpers/params",
   "components/content/entities/parser",
   "module"
-], function(_, Backbone, urls, types, parser, module) {
-
-  // Methods for creating params for fetching WP posts
-  var fetchParam = {
-    id: function(ids) {
-      var index = 0;
-      // create the post__in WP_Query filter for these items, URI encoded
-      var params = _.map(ids, function(value) {
-        return "post__in%5B"+(index++)+"%5D="+value;
-      });
-      return params.join("&");
-    },
-    slug: function(names) {
-      if (names.length > 1) throw new Error("WP Query does not support multiple slugs");
-      return "name="+names[0];
-    }
-  };
+], function(_, Backbone, urls, types, params, parser, module) {
 
   // Definition of a post collection
   var PostCollection = Backbone.Collection.extend({
@@ -64,17 +49,16 @@ define([
       // if fetch items are specified, get the specific items
       //   object_ids all have to be homogenous (same types)
       if (fetchItems && fetchItems.length > 0) {
-        //var postType = types.baseObjectType(this.options.object_type);
         var method = types.objectIdType(fetchItems[0].object_id);
-        var params = fetchParam[method](_.pluck(fetchItems, "object_id"));
+        var posts = params.collection[method](_.pluck(fetchItems, "object_id"));
 
         // maintain the fetchItems as they are added
         this.on("add", this.maintainItems, this);
 
         return urls.normalizeUrlRoot(this.urlRoot) +
-               "?post_type=any"+//postType +
-               "&"+params +
-               "&custom_fields=_wpspa_meta_description,_wpspa_page_title";
+               "?post_type=any" +
+               "&"+posts +
+               "&"+params.meta.custom_fields;
       } else {
         return module.config().endpoint;
       }

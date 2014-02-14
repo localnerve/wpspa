@@ -1,10 +1,11 @@
 define([
   "backbone",
   "helpers/urls",
+  "helpers/params",
   "helpers/backbone/sync",
   "components/content/entities/parser",
   "module"
-], function(Backbone, urls, sync, parser, module) {
+], function(Backbone, urls, params, sync, parser, module) {
   var $w = window;
 
   // definition of a post model
@@ -20,8 +21,9 @@ define([
 
     // make a jsonapi url
     url: function() {
-      var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
-      return urlRoot + "?id=" + this.id + "&custom_fields=_wpspa_meta_description,_wpspa_page_title";
+      return urls.normalizeUrlRoot(this.urlRoot) + "?" +
+        params.typedId(this.id, true) +
+        "&"+params.meta.custom_fields;
     },
 
     // delegate response parsing to the given parser

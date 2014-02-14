@@ -3,12 +3,14 @@
  * A collection of posts by category
  */
 define([
+  "jquery",
   "helpers/contract",
   "helpers/urls",
+  "helpers/params",
   "module",
   "components/content/entities/parser",
   "components/content/entities/specializations/onetomany"
-], function(contract, urls, module, parser, OneToMany) {
+], function($, contract, urls, params, module, parser, OneToMany) {
   
   // Definition of a category model
   var CategoryModel = OneToMany.extend({
@@ -20,11 +22,10 @@ define([
     url: function() {
       var items = this.get("items");
       if (items && items.length > 0) {
-        var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
-        var id = items[0].object_id;
-        var idType = parseInt(id, 10) ? "id" : "slug";
         // for the model, we just do one category at a time
-        return urlRoot + "?"+idType+"="+id+"&custom_fields=_wpspa_meta_description,_wpspa_page_title";
+        return urls.normalizeUrlRoot(this.urlRoot) + "?" +
+          $.param(params.typedId(items[0].object_id, true)) +
+          "&"+params.meta.custom_fields;
       } else {
         return module.config().endpoint;
       }

@@ -16,8 +16,8 @@ define([
     urlRoot: module.config().urlRoot,
 
     url: function() {
-      var urlRoot = urls.normalizeUrlRoot(this.urlRoot);
-      return urlRoot + "?" + $.param(this.attributes);
+      return urls.normalizeUrlRoot(this.urlRoot) + "?" +
+        $.param(this.attributes);
     }
   });
 
