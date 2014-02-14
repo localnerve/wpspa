@@ -84,10 +84,11 @@ define([
 
   /**
    */
-  function makeRouteOptions(object_type, object_id) {
+  function makeRouteOptions(object_type, object_id, create) {
     return {
       object_type: object_type,
-      object_id: object_id
+      object_id: object_id,
+      create: create
     };
   }
 
@@ -108,6 +109,13 @@ define([
    * To prefetch data, the route params must have route options defined.
    */
   function addRoutes(eventAggregator, routes, prefetch) {
+    routes = _.isArray(routes) ? routes : [routes];
+
+    // discard wordpress routes
+    routes = _.reject(routes, function(routeParam) {
+      return (/wp-[\w\-]+$/).test(routeParam.route);
+    });
+
     if (prefetch) {
       // start the data download
       eventAggregator.trigger("content:prefetch", _.map(routes, function(route) {
