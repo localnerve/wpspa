@@ -89,9 +89,9 @@ define([
 
   // parse response data from json api
   function parse(data) {
-    var input = data.posts || (data.post ? [data.post] : []);
+    var input = data.posts || (data.post ? [data.post] : -1);
 
-    if (!input.length) {
+    if (input === -1) {
       throw new Error("Unexpected post data format");
     }
 
