@@ -24,7 +24,7 @@ describe("Navigation", function() {
     expect(navigationView.collection.length).to.be.at.least(1);
   });
 
-  it("should fire addRoute event when item is added to the collection after initialization", function() {
+/*  it("should fire addRoute event when item is added to the collection after initialization", function() {
     var name = "dummy1",
       route = "someroute",
       object_type = "post",
@@ -63,7 +63,7 @@ describe("Navigation", function() {
     expect(foundModels.length).to.equal(1);
     navigationView.collection.remove(foundModels);
     expect(beforeLength).to.equal(navigationView.collection.length);
-  });
+  });*/
 
   it("should respond to expected content events", function() {
     contentStart_stub = sandbox.stub(navigationView, "onContentStart");
