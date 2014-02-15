@@ -22,25 +22,20 @@ define([
 
       // When an item is added to navigation, add it to the app router
       header.listenTo(header.navigation.collection, "add", function(model) {
-        var object_props = model.get("object_props");
-        var param = {
-          name: model.get("name"),
-          route: model.get("route"),
-          options: {
-            object_type: model.get("object_type"),
-            object_id: model.get("object_id"),
-            object_props: object_props
-          }
-        };
+        var param = routes.makeRouteParam(
+          model.get("name"), model.get("route"),
+          routes.makeRouteOptions(model.get("object_type"), model.get("object_id"))
+        );
 
         // If the target object is_single, add comment routes
+        var object_props = model.get("object_props");
         var altParams = object_props.is_single ?
           routes.comments.buildRouteParams(
             app.pushState, param.route, param.name, param.options
           ).routeParams : [];
 
         // Add the new routes
-        app.vent.trigger("app:router:addRoute", [param].concat(altParams));
+        routes.addRoutes(app.vent, [param].concat(altParams));
       });
       
       // Start the navigation download
@@ -50,10 +45,7 @@ define([
         success: function(collection) {
           // send out a pretch content event
           app.vent.trigger("content:prefetch", collection.map(function(model) {
-            return {
-              object_type: model.get("object_type"),
-              object_id: model.get("object_id")
-            };
+            return routes.makeRouteOptions(model.get("object_type"), model.get("object_id"));
           }));
 
           // navigation successfully loaded, tell the container

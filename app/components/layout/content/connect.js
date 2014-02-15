@@ -7,8 +7,9 @@ define([
   "lodash",
   "jquery",
   "helpers/contract",
+  "helpers/routes",
   "app"
-], function(_, $, contract, app) {
+], function(_, $, contract, routes, app) {
 
   // Construct a Connect object on the given eventAggregator and promises
   function Connect(eventAggregator, promises) {
@@ -50,14 +51,11 @@ define([
       entity.add(post);
 
       // add the route, ignores duplicates
-      app.vent.trigger("app:router:addRoute", {
-        name: post.slug,
-        route: post.route,
-        options: {
-          object_type: post.type,
-          object_id: post.id
-        }
-      });
+      routes.addRoutes(
+        app.vent, routes.makeRouteParam(
+          post.slug, post.route, routes.makeRouteOptions(post.type, post.id)
+        )
+      );
     }
   });
 
