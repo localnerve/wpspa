@@ -83,16 +83,21 @@ define([
   };
 
   /**
+   * Makes route options
+   * If an extra object is supplied, it extends the route options
    */
-  function makeRouteOptions(object_type, object_id, create) {
-    return {
+  function makeRouteOptions(object_type, object_id, extra) {
+    var options = {
       object_type: object_type,
-      object_id: object_id,
-      create: create
+      object_id: object_id
     };
+    _.extend(options, extra);
+    return options;
   }
 
   /**
+   * Makes route parameters
+   * href is parsed to route, but if already a route, then passes thru
    */
   function makeRouteParam(name, href, options, params) {
     return {
