@@ -6,9 +6,9 @@ define([
   "helpers/contract",
   "helpers/routes",
   "helpers/types",
-  "resources/strings",
+  "helpers/content",
   "app"
-], function(_, contract, routes, types, strings, app) {
+], function(_, contract, routes, types, content, app) {
 
   // Parse the categories of a post
   function parseCategories(post) {
@@ -31,7 +31,7 @@ define([
 
       // A category in a post doesn't contain the post contents.
       // Furthermore, the category might contain posts that we haven't downloaded, get them.
-      routes.addRoutes(app.vent, [{
+      routes.addRoutes(app.vent, {
         name: category.slug,
         route: category.route,
         params: {
@@ -40,12 +40,12 @@ define([
           }
         },
         options: options
-      }], true);
+      }, true);
     });
   }
 
+  // parse the comments of a post
   function parseComments(post) {
-
     var result = routes.comments.buildRouteParams(app.pushState, post.url, post.slug, {
       object_type: post.type,
       object_id: post.id
@@ -59,15 +59,21 @@ define([
     routes.addRoutes(app.vent, result.routeParams, false);
   }
 
+  // parse the content of a post
+  function parseContent(post) {
+    post.content = content.alterLinks(app.root, post.content);
+  }
+
   // parse a single post
   function parsePost(post) {
     contract(post, "date", "url");
-    
+
     // Add derived properties to the post object
     post.route = routes.hrefToRoute(post.url);
     post.url = routes.routeToHref(post.route);
     post.datetime = post.date.replace(" ", "T")+"+00.00";
 
+    parseContent(post);
     parseCategories(post);
     parseComments(post);
 
@@ -89,9 +95,14 @@ define([
       throw new Error("Unexpected post data format");
     }
 
-    // make the models and give them back to the collection
-    return _.map(data.posts, function(post) {
+    // process all the posts
+    var processed = _.map(data.posts, function(post) {
       return process(post);
+    });
+
+    // return only non-child posts to this collection
+    return _.reject(processed, function(post) {
+      return post.custom_fields._wpspa_child_link;
     });
   }
 
