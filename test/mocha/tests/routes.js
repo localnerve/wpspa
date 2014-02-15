@@ -38,6 +38,15 @@ describe("routes", function() {
     expect(convertedRoute).to.equal(route);
   });
 
+  it("should convert a home href to route properly", function() {
+    var href = "/";
+    var route = href.substring(1);
+
+    var convertedRoute = routes.hrefToRoute(href);
+
+    expect(convertedRoute).to.equal(route);
+  });
+
   it("should convert a route to an href", function() {
     var route = "simple-route/extra";
 

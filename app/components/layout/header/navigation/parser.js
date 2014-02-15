@@ -1,8 +1,9 @@
 // parser for wpspa wordpress plugin nav_menu_item Wordpress type posts
 define([
   "lodash",
-  "helpers/contract"
-], function(_, contract) {
+  "helpers/contract",
+  "helpers/routes"
+], function(_, contract, routes) {
 
   // parse a single wpspa nav_menu_item post to a model
   function parsePost(post) {
@@ -17,14 +18,7 @@ define([
     );
     return {
       name: post.custom_fields._menu_item_wpspa_menu_text[0],
-      route: (function() {
-        var route = post.custom_fields._menu_item_wpspa_route[0];
-
-        if (route.charAt(0) === '/')
-          route = route.substring(1);
-
-        return route;
-      }()),
+      route: routes.hrefToRoute(post.custom_fields._menu_item_wpspa_route[0]),
       id: post.id,
       nav_item: post.id,
       parent: post.custom_fields._menu_item_menu_item_parent[0],
