@@ -31,17 +31,16 @@ define([
     // The addRoute handler
     // Dynamically add a routes AND handlers
     addRoute: function(items) {
-      var self = this;
       if (!_.isArray(items)) items = [items];
 
       _.each(items, function(item) {
         contract(item, "route", "name");
-        if (!self.appRoutes[item.route]) {
+        if (!this.appRoutes[item.route]) {
           app.controller.createHandler(item);
-          self.appRoutes[item.route] = item.name;
-          self.appRoute(item.route, item.name);
+          this.appRoutes[item.route] = item.name;
+          this.appRoute(item.route, item.name);
         }
-      });
+      }, this);
     }
   });
 
