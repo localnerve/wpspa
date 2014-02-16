@@ -44,7 +44,7 @@
   @include block-grid(1);
 }
 
-.entry-meta a {
+.entry-meta a, .entry-content a, .comment-content a {
   color: #bc360a;
 }
 
