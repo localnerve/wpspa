@@ -61,7 +61,9 @@ define([
 
   // parse the content of a post
   function parseContent(post) {
-    post.content = content.alterLinks(app.root, post.content);
+    post.content = content.alterLinks(app.root, post.content, function(id, path) {
+      return routes.isWordpressRoute(path);
+    });
   }
 
   // parse a single post

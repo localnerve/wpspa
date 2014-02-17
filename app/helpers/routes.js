@@ -56,9 +56,6 @@ define([
      * routes around a normal route. 
      *   comment/respond routes will both use the same route options.
      *
-     * The given route can be in route or href format, if it is already a route
-     * it will pass-thru, if it is an href it will be converted to a route.
-     *
      * Returns sources and routeParams. Sources are used to create the acutal routes.
      * If you supply an href for the route, then sources will also be in href format.
      */
@@ -118,7 +115,7 @@ define([
 
     // discard wordpress routes
     routes = _.reject(routes, function(routeParam) {
-      return (/wp-[\w\-]+$/).test(routeParam.route);
+      return isWordpressRoute(routeParam.route);
     });
 
     if (prefetch) {
@@ -129,6 +126,12 @@ define([
     }
     // add the routes
     eventAggregator.trigger("app:router:addRoute", routes);
+  }
+
+  /**
+   */
+  function isWordpressRoute(route) {
+    return (/wp-[\w\-]+$/).test(route);
   }
 
   /**
@@ -175,6 +178,7 @@ define([
     addRoutes: addRoutes,
     makeRouteParam: makeRouteParam,
     makeRouteOptions: makeRouteOptions,
+    isWordpressRoute: isWordpressRoute,
     comments: comments,
     archives: archives
   };

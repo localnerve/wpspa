@@ -23,19 +23,25 @@ define([
     return content;
   }
 
-  // Finds all hrefs in content and replaces the protocol and host with appRoot and removes any trailing /
+  // Finds all hrefs in content and replaces the protocol and host with appRoot 
+  //  and removes any trailing /
   //   If a callback is supplied, it is called given the arguments:
-  //     1) All of the URI matched after "http://host/"
+  //     1) All of the URI matched after "http://host/", no trailing /
   //     2) appRoot prepended to argument 1
-  //   Callback cannot modify the link result
-  //   Returns the modified link result
+  //     3) The host portion of the URI
+  //     If the callback returns true the link is not altered
+  //   The callback cannot directly modify the link result
+  // Returns all content containing the modified link results
   function alterLinks(appRoot, content, callback) {
-    return content.replace(/(href=(?:\"|'))(https?:\/\/[^\/]+\/)([^\"']+)/ig,
-      function(match, m1, m2, last) {
-        if (last.charAt(last.length-1) === '/')
+    return content.replace(/(href=(?:\"|'))(https?:\/\/([^\/?#]+))(?:[\/?#])?([^\"']+)/ig,
+      function(match, m1, m2, host, last) {
+        if (last.charAt(last.length-1) === '/') {
           last = last.substr(0, last.length-1);
+        }
         var result = m1+appRoot+last;
-        if (callback) callback(last, appRoot+last);
+        if (callback && callback(last, appRoot+last, host)) {
+          result = match;
+        }
         return result;
       });
   }
