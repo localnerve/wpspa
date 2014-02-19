@@ -75,7 +75,7 @@ require.config({
       pushState: true
     },
     "helpers/content": {
-      backendHostname: "jsonapi.local"
+      backendHostname: "localhost"
     },
     "helpers/params": {
       customFieldsParam: "custom_fields=_wpspa_meta_description%2C_wpspa_page_title%2C_wpspa_prefetch"
