@@ -72,6 +72,12 @@ Object.defineProperties(Config.prototype, {
     enumerable: true
   },
   
+  // common configuration
+  common: {
+    value: common,
+    enumerable: true
+  },
+
   // endpoint for navigation (requires JSON API + WPSPA plugin)
   navigationPath: {
     value: "/api/wpspa/menu",
