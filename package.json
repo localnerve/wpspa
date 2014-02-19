@@ -36,7 +36,8 @@
     "grunt-express-server": "~0.4.3",
     "http-proxy": "~0.10.3",
     "connect-modrewrite": "~0.5.4",
-    "async": "~0.2.9"
+    "async": "~0.2.9",
+    "grunt-requirejs-transformconfig": "0.0.2"
   },
   "scripts": {
     "test": "grunt test",

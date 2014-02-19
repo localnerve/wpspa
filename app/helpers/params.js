@@ -6,12 +6,12 @@
 define([
   "lodash",
   "helpers/types",
-  "server/config/common"
-], function(_, types, common) {
+  "module"
+], function(_, types, module) {
   
   // Standard meta parameters for a request
   var meta = {
-    custom_fields: common.customFieldsParam
+    custom_fields: module.config().customFieldsParam
   };
 
   // Methods for creating params for fetching WP posts for a collection

@@ -29,8 +29,41 @@ function nodeDeps(pkg) {
   return result;
 }
 
-// async helper
+// helper function to extend requirejs config with 
+//   environment specific configuration. Also, any common config
+//   is mixed in here as well.
+// NOTE: function closed on _, configLib
+function mixinEnvConfig(env, requirejsConfig) {
+  var envConfig = configLib.create(env);
+  var moduleConfig = {
+    "helpers/content": {
+      backendHostname: envConfig.proxy.hostname
+    },
+    "helpers/params": {
+      customFieldsParam: envConfig.common.customFieldsParam
+    },
+    "components/layout/header/navigation/entities": {
+      endpoint: envConfig.navigationPath
+    },
+    "components/layout/header/banner/entities": {
+      endpoint: envConfig.siteInfoPath
+    },
+    "components/layout/footer/sidebarContainer/entities": {
+      endpoint: envConfig.footerPath
+    },
+    "components/content/entities/specializations/recent": {
+      endpoint: envConfig.recentPath
+    }
+  };
+  _.extend(requirejsConfig.config, moduleConfig);
+  return requirejsConfig;
+}
+
+// async helper, grunt.util.async deprecated
 var async = require("async");
+
+// underscore support, grunt.util._ deprecated
+var _ = require("underscore");
 
 // middleware to mock /api for test
 var mockApi = require("./test/fixtures/mockApi");
@@ -38,22 +71,22 @@ var mockApi = require("./test/fixtures/mockApi");
 // path helper
 var path = require("path");
 
+// load the environment specific configurations
+var serverDir = "server";
+var configLib = require("./"+serverDir+"/config");
+var config = {
+  all: configLib.create("all"),
+  test: configLib.create("test"),
+  debug: configLib.create("debug"),
+  release: configLib.create("release"),
+  dev: configLib.create("development")
+};
+
 // Grunt callback
 module.exports = function(grunt) {
 
   // load all grunt tasks
   require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
-
-  // load the server configurations
-  var serverDir = "server";
-  var configLib = require("./"+serverDir+"/config");
-  var config = {
-    all: configLib.create("all"),
-    test: configLib.create("test"),
-    debug: configLib.create("debug"),
-    release: configLib.create("release"),
-    dev: configLib.create("development")
-  };
 
   // project configuration
   var projectConfig = {
@@ -229,9 +262,9 @@ module.exports = function(grunt) {
       },
       dist: {
         src: [
-          // use require if you have dynamically loaded stuff
+          // use require if you have dynamically loaded stuff or multi-configs
           //"<%= project.vendor %>/bower/requirejs/require.js",
-          // use almond if you don't
+          // use almond if you don't (much less expensive)
           "<%= project.vendor %>/bower/almond/almond.js",
           "<%= project.dist.debug %>/<%= project.scripts %>/templates.js",
           "<%= project.dist.debug %>/<%= project.scripts %>/require.js"
@@ -576,6 +609,69 @@ module.exports = function(grunt) {
       }
     },
 
+    // requirejs config transform task provided by grunt-requirejs-transformconfig.
+    // Transform the requirejs config with common and env specific config.
+    // By maintaining one requirejs config at build time, we can avoid the cost of multiple calls
+    // to a runtime config update, which equates to 6x size increase in that role because
+    // then we can't use almond. These are not runtime updates, so the cost is unwarranted.
+    "requirejs-transformconfig": {
+      test: {
+        options: {
+          transform: (function(env) {
+            return function(config) {
+              return mixinEnvConfig(env, config);
+            };
+          }("test"))
+        },
+        src: "<%= project.app %>/config.js",
+        dest: "<%= project.app %>/config.js"
+      },
+      demo: {
+        options: {
+          transform: (function(env) {
+            return function(config) {
+              return mixinEnvConfig(env, config);
+            };
+          }("demo"))
+        },
+        src: "<%= project.app %>/config.js",
+        dest: "<%= project.app %>/config.js"
+      },
+      dev: {
+        options: {
+          transform: (function(env) {
+            return function(config) {
+              return mixinEnvConfig(env, config);
+            };
+          }("development"))
+        },
+        src: "<%= project.app %>/config.js",
+        dest: "<%= project.app %>/config.js"
+      },
+      debug: {
+        options: {
+          transform: (function(env) {
+            return function(config) {
+              return mixinEnvConfig(env, config);
+            };
+          }("debug"))
+        },
+        src: "<%= project.app %>/config.js",
+        dest: "<%= project.app %>/config.js"
+      },
+      release: {
+        options: {
+          transform: (function(env) {
+            return function(config) {
+              return mixinEnvConfig(env, config);
+            };
+          }("release"))
+        },
+        src: "<%= project.app %>/config.js",
+        dest: "<%= project.app %>/config.js"
+      }
+    },
+
     // revision task provided by grunt-rev
     // makes hash revisions for select files
     rev: {
@@ -799,7 +895,7 @@ module.exports = function(grunt) {
       }
     ], this.async());
   });
-  grunt.registerTask("dev", ["ccss", "devTasks"]);
+  grunt.registerTask("dev", ["ccss", "requirejs-transformconfig:dev", "devTasks"]);
 
   // the test development task, run watch, mock api, and the development webserver in parallel
   // use this for interactive test suite development
@@ -811,6 +907,7 @@ module.exports = function(grunt) {
       function() {
         runTask(grunt, "connect:devTest", function(chunk) {
           if (/Started connect/ig.test(chunk)) {
+            runTask(grunt, "requirejs-transformconfig:test");
             runTask(grunt, "atfUpdate:test");
           }
         });
@@ -836,12 +933,12 @@ module.exports = function(grunt) {
       }
     ], this.async());
   });
-  grunt.registerTask("demo", ["release", "demoTasks"]);
+  grunt.registerTask("demo", ["release", "requirejs-transformconfig:demo", "demoTasks"]);
 
   // build tasks: debug, release
 
   // tasks common to any build
-  var commonTasks = ["bower", "jshint", "jst", "requirejs", "concat"];
+  var commonTasks = ["bower", "jshint", "jst"];
 
   // The debug task will remove all contents inside the dist/ folder, lint
   // all your code, precompile all the underscore templates into
@@ -850,6 +947,8 @@ module.exports = function(grunt) {
   // almond.js and dist/debug/templates.js into the require.js file.
   var debugTasks = ["clean:debug"].concat(commonTasks);
   debugTasks.push(
+    "requirejs-transformconfig:debug",
+    "requirejs", "concat",
     "compass:debug",
     "targethtml:debug",
     "copy:debug",
@@ -866,6 +965,8 @@ module.exports = function(grunt) {
   // dist/debug/require.js file and CSS files.
   var releaseTasks = ["clean:release"].concat(commonTasks);
   releaseTasks.push(
+    "requirejs-transformconfig:release",
+    "requirejs", "concat",
     "compass:release",
     "uglify:release",
     "cssmin:release",

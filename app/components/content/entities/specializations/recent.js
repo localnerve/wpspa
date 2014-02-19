@@ -18,17 +18,12 @@ define([
   // Definition of a recent posts collection
   var RecentPostsCollection = OneToMany.extend({
 
-    urlRoot: module.config().urlRoot,
-
     initialize: function() {
       // Make sure this was created as expected
       contract(this.get("items"), "0.object_id", "0.object_type");
     },
 
-    url: function() {
-      return urls.normalizeUrlRoot(this.urlRoot) + "?" +
-        params.meta.custom_fields;
-    },
+    url: module.config().endpoint,
 
     sync: sync($w.wpspa ? $w.wpspa.recent : null),
 

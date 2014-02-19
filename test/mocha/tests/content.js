@@ -13,7 +13,8 @@ describe("content", function() {
   });
 
   var protocol = "http://";
-  var host = "somehost";
+  var host = "localhost"; // must match backend hostname
+  var otherhost = "somehost";
   var port = 8080;
   var path = "somepath", path2 = "somepath2";
   var containerStart = "<div>";
@@ -27,6 +28,8 @@ describe("content", function() {
   var htmlTrailDQ = containerStart+anchorStart+"\""+protocol+host+":"+port+"/"+path+"\">"+anchorMiddle+anchorEnd+containerEnd;
   var htmlTwoAnchor = containerStart+anchorStart+"'"+protocol+host+":"+port+"/"+path+"'>"+anchorMiddle+anchorEnd+
                         anchorStart+"'"+protocol+host+":"+port+"/"+path2+"'>"+anchorMiddle+anchorEnd+containerEnd;
+  var htmlTwoAnchorMixedHost = containerStart+anchorStart+"'"+protocol+host+":"+port+"/"+path+"'>"+anchorMiddle+anchorEnd+
+                        anchorStart+"'"+protocol+otherhost+":"+port+"/"+path2+"'>"+anchorMiddle+anchorEnd+containerEnd;
 
   describe("alterLinks", function() {
 
@@ -62,6 +65,27 @@ describe("content", function() {
     it("should replace http protocol, host, and port with appRoot - simple trail dq case", function() {
       var result = simpleHtmlCase(htmlTrailDQ);
       expect(result.indexOf("/"+path+"/")).to.equal(-1);
+    });
+
+    it("should operate properly on more than one anchor", function() {
+      var spy = sinon.spy();
+      var result = content.alterLinks(app.root, htmlTwoAnchor, spy);
+      expect(spy.calledTwice).to.be.true;
+    });
+
+    it("should operate properly on more than one anchor, mixed hosts", function() {
+      var spy = sinon.spy();
+      var result = content.alterLinks(app.root, htmlTwoAnchorMixedHost, spy);
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it("callback should be able to stop link alteration", function() {
+      var spy = sinon.spy(function(id, path) {
+        return true;
+      });
+      var result = content.alterLinks(app.root, htmlTwoAnchor, spy);
+      expect(result).to.equal(htmlTwoAnchor);
+      expect(spy.calledTwice).to.be.true;
     });
 
     it("should not callback if no match", function() {

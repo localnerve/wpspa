@@ -52,7 +52,7 @@ require.config({
       endpoint: "/api/get_posts/?post_type=any"
     },
     "components/content/entities/specializations/recent": {
-      urlRoot: "/api/get_recent_posts"
+      endpoint: "/api/get_recent_posts/?custom_fields=_wpspa_meta_description%2C_wpspa_page_title%2C_wpspa_prefetch"
     },
     "components/content/entities/specializations/category": {
       urlRoot: "/api/get_category_posts/",
@@ -73,6 +73,12 @@ require.config({
     app: {
       root: "/",
       pushState: true
+    },
+    "helpers/content": {
+      backendHostname: "jsonapi.local"
+    },
+    "helpers/params": {
+      customFieldsParam: "custom_fields=_wpspa_meta_description%2C_wpspa_page_title%2C_wpspa_prefetch"
     }
   },
   map: {
