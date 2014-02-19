@@ -866,7 +866,7 @@ module.exports = function(grunt) {
   });
 
   // the standalone test task
-  grunt.registerTask("test", ["compass:test", "connect:test", "atfUpdate:test", "express:test", "mocha", "atfRemove:test"]);
+  grunt.registerTask("test", ["compass:test", "connect:test", "atfUpdate:test", "requirejs-transformconfig:test", "express:test", "mocha", "atfRemove:test"]);
 
   // the standalone lint task
   grunt.registerTask("lint", ["jshint"]);
