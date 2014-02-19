@@ -9,7 +9,7 @@ var configLib = require("../config");
 
 var config = configLib.create(process.env.NODE_ENV);
 
-function index(req, res) {
+function index(req, res, next) {
   var redisClient = redis.client();
   
   redisClient.get(config.keys.atf, function(err, results) {
