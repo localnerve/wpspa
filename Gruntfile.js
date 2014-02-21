@@ -91,7 +91,59 @@ module.exports = function(grunt) {
     ], this.async());
   });
 
-  // demo - run mock api, and the development webserver in parallel
+  // tasks common to any build
+  var commonTasks = ["bower", "jshint", "jst", "requirejs", "concat"];
+
+  // Debug build
+  // Builds an app useful for debugging/testing an app build
+  // Similar to release but:
+  //   Sass source map support
+  //   Does not include uglify, cssmin, imagemin
+  //   Uses the debug config
+  // Fully encapsulated result runnable from dist/debug
+  var debugTasks = ["clean:debug", "requirejs-transformconfig:debug"].concat(commonTasks);
+  debugTasks.push(
+    "compass:debug",
+    "targethtml:debug",
+    "copy:debug",
+    "inline:debug",
+    "clean:debugAfterInline",
+    "rev:debug",
+    "useminOptions:debug", "usemin",
+    "atfUpdate:debug",
+    "requirejs-transformconfig:test"
+  );
+  grunt.registerTask("debug", debugTasks);
+
+  // Release build
+  // Builds the release app for production
+  // Fully encapsulated result runnable from dist/release
+  var releaseTasks = ["clean:release", "requirejs-transformconfig:release"].concat(commonTasks);
+  releaseTasks.push(
+    "compass:release",
+    "uglify:release",
+    "cssmin:release",
+    "imagemin:release",
+    "targethtml:release",
+    "copy:release",
+    "inline:release",
+    "clean:releaseAfterInline",
+    "rev:release",
+    "useminOptions:release", "usemin",
+    "atfUpdate:release",
+    "requirejs-transformconfig:test",
+    "clean:release-post"
+  );
+  grunt.registerTask("release", releaseTasks);
+
+  // Demo build and servers
+  // Creates a standalone demo based on the release with no external dependencies
+  // Builds the demo app based on the release build, 
+  //   runs local mock api for the backend, and the demo webserver for the frontend
+  var demoTasks = helpers.mapTasks(releaseTasks, {
+    "requirejs-transformconfig:release": "requirejs-transformconfig:demo",
+    "atfUpdate:release": null
+  }).concat(["demoTasks"]);
   grunt.registerTask("demoTasks", "parallel demo tasks", function() {
     async.parallel([
       function() {
@@ -106,54 +158,6 @@ module.exports = function(grunt) {
       }
     ], this.async());
   });
-  grunt.registerTask("demo", ["release", "requirejs-transformconfig:demo", "demoTasks"]);
-
-  // build tasks: debug, release
-
-  // tasks common to any build
-  var commonTasks = ["bower", "jshint", "jst"];
-
-  // The debug task will remove all contents inside the dist/ folder, lint
-  // all your code, precompile all the underscore templates into
-  // dist/debug/templates.js, compile all the application code into
-  // dist/debug/require.js, and then concatenate the require/define shim
-  // almond.js and dist/debug/templates.js into the require.js file.
-  var debugTasks = ["clean:debug"].concat(commonTasks);
-  debugTasks.push(
-    "requirejs-transformconfig:debug",
-    "requirejs", "concat",
-    "compass:debug",
-    "targethtml:debug",
-    "copy:debug",
-    "inline:debug",
-    "clean:debugAfterInline",
-    "rev:debug",
-    "useminOptions:debug",
-    "usemin",
-    "atfUpdate:debug"
-  );
-  grunt.registerTask("debug", debugTasks);
-
-  // The release task will run the debug tasks and then minify the
-  // dist/debug/require.js file and CSS files.
-  var releaseTasks = ["clean:release"].concat(commonTasks);
-  releaseTasks.push(
-    "requirejs-transformconfig:release",
-    "requirejs", "concat",
-    "compass:release",
-    "uglify:release",
-    "cssmin:release",
-    "imagemin:release",
-    "targethtml:release",
-    "copy:release",
-    "inline:release",
-    "clean:releaseAfterInline",
-    "rev:release",
-    "useminOptions:release",
-    "usemin",
-    "atfUpdate:release",
-    "clean:release-post"
-  );
-  grunt.registerTask("release", releaseTasks);
+  grunt.registerTask("demo", demoTasks);
 
 };
