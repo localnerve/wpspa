@@ -67,8 +67,29 @@ function mixinEnvConfig(env, requirejsConfig) {
   return requirejsConfig;
 }
 
+// Map tasks from taskList, substituting tasks found in subst along the way.
+// subst is an object like { existingTask: substituteTask }
+//  where existingTasks in taskList are substituted for substituteTask
+// If substituteTask is falsy, it is removed from the resulting list.
+function mapTasks(taskList, subst) {
+  // Make array of the existing tasks to substitute for in taskList
+  var tasksToSubst = _.keys(subst);
+
+  // Return taskList tasks with their substitutions
+  return _.compact(
+    _.map(taskList, function(task) {
+      if (_.contains(tasksToSubst, task)) {
+        return subst[task];
+      } else {
+        return task;
+      }
+    })
+  );
+}
+
 module.exports = {
   runTask: runTask,
   nodeDeps: nodeDeps,
-  mixinEnvConfig: mixinEnvConfig
+  mixinEnvConfig: mixinEnvConfig,
+  mapTasks: mapTasks
 };
