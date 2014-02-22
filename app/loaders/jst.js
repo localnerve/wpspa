@@ -8,27 +8,23 @@
  * Built code expects the templates to be precompiled and cached
  */
 define([
-    "jquery",
-    "lodash",
-    "module"
-  ], function($, _, module) {
+  "loaders/jst-dev",
+  "module"
+], function(devLoader, module) {
 
     // Cache the templates, if this is development, mark it
     var JST = window.JST = window.JST || {
       development: true
     };
     
-    // Process a template prefix
-    function processTemplatePrefix(prefix) {
-      prefix = prefix.charAt(prefix.length - 1) !== '/' ? prefix + "/" : prefix;
-      prefix = prefix.charAt(0) === '/' ? prefix.substring(1) : prefix;
-      return prefix;
+    // conform a template prefix
+    function conformPrefix(prefix) {
+      return prefix.replace(/^\/|\/$/g, "") + "/";
     }
 
-    // Process a template suffix
-    function processTemplateSuffix(suffix) {
-      suffix = suffix.charAt(0) !== '.' ? "." + suffix : suffix;
-      return suffix;
+    // conform a template suffix
+    function conformSuffix(suffix) {
+      return "." + suffix.replace(/^\./, "");
     }
 
     // Template retrieval failure handler
@@ -40,42 +36,27 @@ define([
       throw new Error(err);
     }
     
+    // Handle a cache miss
+    function cacheMiss(template, data, root) {
+      // If it is not development, always fail
+      return (!JST.development && failure(template)) ||
+        devLoader.load(template, data, root, failure, JST);
+    }
+
     // Run the factory startup code against the configuration
-    var prefix = processTemplatePrefix(module.config().prefix);
-    var suffix = processTemplateSuffix(module.config().suffix);
+    var prefix = conformPrefix(module.config().prefix);
+    var suffix = conformSuffix(module.config().suffix);
 
     // Process a template for rendering.
     // Expect JST to be precompiled and cached except in development.
     function processTemplate(template, data, root) {
       template = prefix + template + suffix;
+
       // if not cached
       if (!JST[template]) {
-        // If not development
-        if (!JST.development) {
-          // this was a real build, so you should've built your templates - shameful.
-          failure(template);
-        } else {
-          // development-only code
-          if (_.isString(root) && template.substring(0, root.length - 1) != root) {
-            template = root + template;
-          }
-          // For development, its ok to block, you won't notice it - much.
-          $.ajax({
-            url: template,
-            async: false
-          })
-            .done(function(data, textStatus, jqXHR) {
-              if (textStatus === "success")
-              // compile and cache
-                JST[template] = _.template(data);
-              else
-                failure(template, jqXHR);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-              failure(template, jqXHR, errorThrown.message);
-            });
-        }
+        template = cacheMiss(template, data, root);
       }
+
       return JST[template](data);
     }
 
