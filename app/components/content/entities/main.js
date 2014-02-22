@@ -15,21 +15,29 @@ function(contract, types, PostModel, PostCollection, specializations) {
     });
   }
 
+  // Create a default post collection
+  function createDefaultCollection(type, options) {
+    return new PostCollection(null,
+      type === "empty" ? { createdEmpty: true } : options
+    );
+  }
+
+  // If there is a specialized prototype, create it
+  function createSpecialization(type, options) {
+    var result;
+    if (specializations[type]) {
+      result = new specializations[type](options);
+    }
+    return result;
+  }
+
   // Create a specialized or vanilla post collection
   function createCollection(options) {
     contract(options, "object_type");
 
     var type = types.baseObjectType(options.object_type);
 
-    // if we have a specialized prototype, create it
-    if (specializations[type]) {
-      return new specializations[type](options);
-    } else {
-      // otherwise, this is a generic PostCollection
-      return new PostCollection(null,
-        type === "empty" ? { createdEmpty: true } : options
-      );
-    }
+    return createSpecialization(type, options) || createDefaultCollection(type, options);
   }
 
   return {
