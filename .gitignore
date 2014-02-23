@@ -8,6 +8,7 @@
 /node_modules/html-snapshots
 /node_modules/phantomjs
 app/styles
+test/fixtures/api-automated.json
 libpeerconnection.log
 wpspa.sublime-workspace
 wpspa.sublime-project

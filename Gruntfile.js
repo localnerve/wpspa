@@ -1,3 +1,6 @@
+// path helper to make this portable for other support repos
+var path = require("path");
+
 // async helper, grunt.util.async deprecated
 var async = require("async");
 
@@ -17,25 +20,26 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON("package.json")
   });
 
-  grunt.loadTasks("build/grunt/tasks");
+  grunt.loadTasks(path.join(__dirname, "build/grunt/tasks"));
 
   // menu
   grunt.registerTask("default", "workflow menu", function() {
     grunt.log.writeln("Workflow menu:");
     grunt.log.writeln("\tgrunt test - Run the test suites");
     grunt.log.writeln("\tgrunt lint - Run the linter");
-    grunt.log.writeln("\tgrunt ccss - Run compass");
+    grunt.log.writeln("\tgrunt ccss - Run Compass");
     grunt.log.writeln("\tgrunt watch - Run the watch process");
+    grunt.log.writeln("\tgrunt plato - Run the static analysis report");
     grunt.log.writeln("\tgrunt commit - Prepare to commit a changeset: lint, test, analyze");
     grunt.log.writeln("\tgrunt format - Run the js formatter");
+    grunt.log.writeln("\tgrunt mockapi:<dev|debug|release> - Update the mockapi by environment");
     grunt.log.writeln("\tgrunt dev - Run the development watch and webserver");
     grunt.log.writeln("\tgrunt devTest - Run the development watch and webserver for the test suite");
-    grunt.log.writeln("\tgrunt demo - Run the demo development webserver against the mockapi");
-    grunt.log.writeln("\tgrunt plato - Run the static analysis report");
     grunt.log.writeln("\tgrunt debug - Build the debug version of the app");
     grunt.log.writeln("\tgrunt express:devDebug - Run the debug build server on port "+config.projectConfig.port.debug);
     grunt.log.writeln("\tgrunt release - Build the release version of the app");
     grunt.log.writeln("\tgrunt express:devRelease - Run the release build server on port "+config.projectConfig.port.release);
+    grunt.log.writeln("\tgrunt demo - Run the demo development webserver against the mockapi");
   });
 
   // the standalone test task
