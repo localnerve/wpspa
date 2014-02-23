@@ -29,15 +29,18 @@
     "grunt-contrib-watch": "~0.4.4",
     "grunt-jsbeautifier": "~0.1.9",
     "grunt-mocha": "~0.3.4",
-    "grunt-plato": "~0.2.1",
+    "grunt-plato": "~0.2.1",    
     "rjs-build-analysis": "~0.0.3",
-    "matchdep": "~0.1.2",
     "grunt-inline": "~0.1.9",
     "grunt-express-server": "~0.4.3",
+    "grunt-requirejs-transformconfig": "0.0.2",
     "http-proxy": "~0.10.3",
     "connect-modrewrite": "~0.5.4",
     "async": "~0.2.9",
-    "grunt-requirejs-transformconfig": "0.0.2"
+    "redis": "~0.10.0",
+    "underscore": "~1.5.2",
+    "phantomjs": "~1.9.2-6",
+    "node-phantom": "~0.2.5"
   },
   "scripts": {
     "test": "grunt test",
