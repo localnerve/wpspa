@@ -4,6 +4,7 @@
  * non-environment specific configuration
  */
 var common = require("./common");
+var workers = require("./workers");
 
 function Config() {}
 
@@ -69,6 +70,12 @@ Object.defineProperties(Config.prototype, {
       routes: "app-routes",
       atf: "atf-content"
     },
+    enumerable: true
+  },
+
+  // worker process configuration
+  workers: {
+    value: workers,
     enumerable: true
   },
   

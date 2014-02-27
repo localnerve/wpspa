@@ -10,7 +10,8 @@
  */
 var path = require("path");
 var fs = require("fs");
-var urlm = require("url");
+var urlLib = require("url");
+var _ = require("underscore");
 var htmlSnapshots = require('html-snapshots');
 
 var configLib = require("../../../config");
@@ -65,7 +66,7 @@ function processSnapshots(completedSnapshots) {
 function takeSnapshots(appRoutes) {
   // Convert the app routes into full urls
   var appUrls = appRoutes.split(",").map(function(appRoute) {
-    return urlm.format({
+    return urlLib.format({
       protocol: "http",
       hostname: config.app.hostname,
       port: config.app.port || 80,
@@ -74,15 +75,10 @@ function takeSnapshots(appRoutes) {
   });
 
   // Take the html snapshots
-  var result = htmlSnapshots.run({
-    input: "array",
+  var result = htmlSnapshots.run(_.extend(config.workers.htmlSnapshots, {
     source: appUrls,
-    outputDir: path.join(appRoot, config.snapshotsDir),
-    outputDirClean: true,
-    timeout: 30000,
-    selector: "#content .page-content",
-    phantomjs: "phantomjs"
-  }, function(nonError, completedSnapshots) {
+    outputDir: path.join(appRoot, config.snapshotsDir)
+  }), function(nonError, completedSnapshots) {
     if (typeof nonError === "undefined" && result) {
       console.log("Html Snapshots took "+completedSnapshots.length+" snapshots");
       processSnapshots(completedSnapshots);
@@ -94,6 +90,7 @@ function takeSnapshots(appRoutes) {
 
 function snapshots() {
   // Get the routes from the route worker process output
+  //  and use them to drive html-snapshots
   redisClient.get(config.keys.routes, function(err, appRoutes) {
     if (!err && appRoutes && appRoutes.length > 0) {
       takeSnapshots(appRoutes);
