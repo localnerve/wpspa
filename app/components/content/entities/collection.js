@@ -38,6 +38,11 @@ define([
 
     // merge in additional fetch items after initialize
     mergeItems: function(items) {
+      // remove any new fetch items that are already fetched
+      items = _.reject(items, function(item) {
+        return this.get(item.object_id);
+      }, this);
+      // create a union of previous fetch items and the new fetch items
       this.options.items = _.union(this.options.items, items);
     },
 
