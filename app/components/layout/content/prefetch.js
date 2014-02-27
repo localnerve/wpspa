@@ -54,10 +54,13 @@ define([
         // If object_type not already fetched or has previously failed
         // If the object type and id are not found
         var needsFetch = !promise || promise.state() === "rejected" ||
-          !app.request("content:entity:find", {
-            object_type: item.object_type,
-            object_id: item.object_id
-          });
+          (
+            promise.state() === "resolved" &&
+            !app.request("content:entity:find", {
+              object_type: item.object_type,
+              object_id: item.object_id
+            })
+          );
 
         // If needs total or partial fetch
         if (needsFetch) {
