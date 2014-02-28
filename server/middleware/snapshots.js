@@ -35,11 +35,7 @@ function htmlSnapshot(req, res, next) {
 
     // normalize the key so that it always ends in '/index.html' per html-snapshots
     var key = result[1].replace(/(?:\/)?([^\/]*)$/, function(match, last) {
-      var result = match;
-      if (last !== "index.html") {
-        result = path.join(match, "/index.html");
-      }
-      return result;
+      return last === "index.html" ? match : path.join(match, "/index.html");
     });
     
     // get the data from redis

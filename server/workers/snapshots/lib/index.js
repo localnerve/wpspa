@@ -41,7 +41,7 @@ function processSnapshots(completedSnapshots) {
   // Make a reducer to form the hash property names
   // Removes the appRoot and snapshotsDir from the path so the name
   //   to lookup is just the request url.
-  var reducer = path.join(appRoot, config.snapshotsDir);
+  var reducer = path.join(appRoot, config.workers.htmlSnapshots.snapshotsDir);
 
   // Make the snapshots hash
   // The name is the app-relative path: "/snapshots/index.html"
@@ -75,9 +75,9 @@ function takeSnapshots(appRoutes) {
   });
 
   // Take the html snapshots
-  var result = htmlSnapshots.run(_.extend(config.workers.htmlSnapshots, {
+  var result = htmlSnapshots.run(_.extend(config.workers.htmlSnapshots.options, {
     source: appUrls,
-    outputDir: path.join(appRoot, config.snapshotsDir)
+    outputDir: path.join(appRoot, config.workers.htmlSnapshots.snapshotsDir)
   }), function(nonError, completedSnapshots) {
     if (typeof nonError === "undefined" && result) {
       console.log("Html Snapshots took "+completedSnapshots.length+" snapshots");
