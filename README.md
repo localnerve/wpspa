@@ -24,7 +24,18 @@ By adding an SPA front-end to an existing Wordpress site, you achieve major perf
 
 The only changes required on your Wordpress site are that you install the [jsonapi](http://wordpress.org/plugins/json-api/) plugin and the [WPSPA plugin](https://github.com/localnerve/wpspa-plugin). The [WPSPA plugin](https://github.com/localnerve/wpspa-plugin) simply extends the jsonapi plugin and various post types to further assist SPA request efficiency. The [WPSPA plugin](https://github.com/localnerve/wpspa-plugin) behavior is also extendable.
 
-## Featured Technologies
+## Demo
+To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be run with these steps:
+
+1. Clone this project
+2. Run "npm install" in the project directory
+3. Execute "grunt demo" in the project directory (to build a release and start the servers)
+4. Navigate to localhost:9000 to examine the results. 
+
+The demo task runs the front-end server and mocks the back-end api, so it is all self-contained locally. For now, the only working search is the term "page two", all others will demo the connectivity error page.
+
+## Tech/Developer Stuff
+### Featured Technologies
 This is a NodeJS/ExpressJS powered application... In the spirit of a MEAN stack, but NERM stack instead ;-{}
 
 + Client-side
@@ -38,17 +49,7 @@ This is a NodeJS/ExpressJS powered application... In the spirit of a MEAN stack,
   * Redis
   * NodeJS
 
-## Demo
-To run the demo, you first must have Compass (to compile the scss) and Node installed (to run the front-end and back-end servers). The demo can be run with these steps:
-
-1. Clone this project
-2. Run "npm install" in the project directory
-3. Execute "grunt demo" in the project directory (to build a release and start the servers)
-4. Navigate to localhost:9000 to examine the results. 
-
-The demo task runs the front-end server and mocks the back-end api, so it is all self-contained locally. For now, the only working search is the term "page two", all others will demo the connectivity error page.
-
-## Development Notes
+### Development Notes
 
 [static analysis report](http://htmlpreview.github.io/?https://github.com/localnerve/wpspa-report/blob/master/report/index.html "Plato Report")
 
@@ -63,33 +64,34 @@ Development workflow is controlled by Grunt. See the Gruntfile or type `grunt` f
 * `grunt release` - Runs the release build task. This produces a release build in dist/release. This is the build that is deployed to production.
 * `grunt express:devRelease` - Once you run "grunt release", the release website can be viewed running this task. It starts the front-end server on localhost:9003 and uses the real remote back-end.
 
-### More Notes
-#### Multi-Device Wordpress (Performance)
+#### More Notes
+##### Multi-Device Wordpress (Performance)
 * Demonstrates WP structures that play well with an SPA architecture
   + [WPSPA Wordpress plugin](http://github.com/localnerve/wpspa-plugin) extends json-api and normal Wordpress features to offer advanced SPA features and content prioritization.
 * On mobile networks, most responses are less than 1 second, however first response is ~2 seconds.
 
-#### External Dependencies
-##### Responsive CSS
+##### External Dependencies
+###### Responsive CSS
 * Ruby
 * Compass & Sass gems
 
-##### Development Runtime Dependencies
+###### Development Runtime Dependencies
 * Redis-server - Required if you want to use bootstrapped ATF content (immediately available content)
 
-##### Build and Package Management Dependencies
+###### Build and Package Management Dependencies
 * Git
 * Node/Npm
 * Grunt-cli
 * Bower
 
-#### Unmanaged Vendor packages
+##### Unmanaged Vendor packages
 * Modernizr, still manually building it with their website. Waiting on grunt-modernizr/Moderizr 3
 
-#### Performance prior to Zepto
+##### Performance prior to Zepto
 * Here is the old 3G [performance](http://www.webpagetest.org/result/131021_6S_45Z/) prior to converting to Zepto (~20% network performance improvement)
 * Note there was a 64K size difference in the app bundle, which equates to a parse-time savings of ~64ms at 1k=1ms.
 
-#### Dynamically loaded modules
-##### Dynamic and Conditionally loaded modules
-* (none)
+##### Dynamically loaded modules
+###### Dynamic and Conditionally loaded modules
+* None. Currently configured to use [almond](https://github.com/jrburke/almond) for performance reasons.
+* RequireJS could be a good way to deliver dynamic views for presenting custom WP content. WPSPA already handles [dynamic view components](https://github.com/localnerve/wpspa/blob/master/app/components/content/viewFactory.js), but a delivery implementation has not been decided on.
