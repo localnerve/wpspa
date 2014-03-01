@@ -4,7 +4,7 @@
 
 > An example single page application that takes Wordpress optimization to a whole new level.
 
-The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over any network, page loads are much faster than any fully optimized traditional Wordpress site. This design features data-driven, background asynchronous prefetching of non-priority content, so deeper content is likely to have arrived before the user requests it.
+The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but mobile performance is dramatically increased. Over any network, page loads are much faster than any fully optimized traditional Wordpress site. This SPA design features a dynamic routes and a data-driven architecture \(using Wordpress\). It also adds delivery prioritization options to Wordpress content for UX optimization \(assigned via the [WPSPA plugin](https://github.com/localnerve/wpspa-plugin)\).
 
 > [performance results](http://www.webpagetest.org/result/140215_BN_5JK/) over a 150ms RTT 3G network.
 
@@ -16,7 +16,9 @@ The purpose of this project is to demonstrate a faster, mobile friendly Wordpres
 
 By adding an SPA front-end to an existing Wordpress site, you achieve major performance improvement while still enjoying your content in Wordpress. This example application features the WP 2013 theme.
 
-The only changes required on your Wordpress site are that you install the [jsonapi](http://wordpress.org/plugins/json-api/) plugin and the [WPSPA plugin](https://github.com/localnerve/wpspa-plugin). The WPSPA plugin extends the jsonapi plugin and various post types to assist SPAs.
+> [Visualize a Change from Wordpress to WPSPA](http://goo.gl/mHQmW5)
+
+The only changes required on your Wordpress site are that you install the [jsonapi](http://wordpress.org/plugins/json-api/) plugin and the [WPSPA plugin](https://github.com/localnerve/wpspa-plugin). The [WPSPA plugin](https://github.com/localnerve/wpspa-plugin) simply extends the jsonapi plugin and various post types to further assist SPA request efficiency. The [WPSPA plugin](https://github.com/localnerve/wpspa-plugin) behavior is also extendable.
 
 ## Featured Technologies
 This is a NodeJS/ExpressJS powered application... In the spirit of a MEAN stack, but NERM stack instead ;-{}
