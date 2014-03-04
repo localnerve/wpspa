@@ -95,3 +95,7 @@ Development workflow is controlled by Grunt. See the Gruntfile or type `grunt` f
 ###### Dynamic and Conditionally loaded modules
 * None. Currently configured to use [almond](https://github.com/jrburke/almond) for performance reasons.
 * RequireJS could be a good way to deliver dynamic views for presenting custom WP content. WPSPA already handles [dynamic view components](https://github.com/localnerve/wpspa/blob/master/app/components/content/viewFactory.js), but a delivery implementation has not been decided on.
+
+## Inspired By
+* [High Performance Browser Networking](http://goo.gl/owGSre)
+* The many incredible authors and contributors of the tools used in this project
