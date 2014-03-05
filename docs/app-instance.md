@@ -1,4 +1,4 @@
-# The Link To a Live WPSPA App Instance
+# The Link to a Live WPSPA App Instance
 
 ## Explanation
 The live app is currently running on a Heroku free-tier. This means that the app server goes to sleep when not in use. This is not typical behavior, just a service condition of the Heroku free-tier.
