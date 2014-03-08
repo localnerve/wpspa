@@ -26,6 +26,4 @@ Config.prototype.staticBase = "dist/release";
 // Define the far-future expiry of statics (in milliseconds)
 Config.prototype.staticAge = 31556926000; // one year
 
-// add more development properties/functions here
-
 module.exports = Config;
