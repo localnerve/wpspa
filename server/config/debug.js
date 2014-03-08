@@ -25,6 +25,4 @@ Config.prototype.proxy = {
 Config.prototype.staticBase = "dist/debug";
 Config.prototype.staticAge = 9002; // for debugging response headers
 
-// add more development properties/functions here
-
 module.exports = Config;
