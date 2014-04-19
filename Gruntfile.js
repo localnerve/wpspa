@@ -72,7 +72,7 @@ module.exports = function(grunt) {
       }
     ], this.async());
   });
-  grunt.registerTask("dev", ["ccss", "requirejs-transformconfig:dev", "devTasks"]);
+  grunt.registerTask("dev", ["lint", "ccss", "requirejs-transformconfig:dev", "devTasks"]);
 
   // the test development task, run watch, mock api, and the development webserver in parallel
   // use this for interactive test suite development
