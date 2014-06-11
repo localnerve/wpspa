@@ -49,8 +49,10 @@
       "customFieldsParam": "custom_fields=_wpspa_meta_description%2C_wpspa_page_title%2C_wpspa_prefetch"
     },
 
-    "navigationPath": "/api/wpspa/menu",
-    "siteInfoPath": "/api/wpspa/site_info",
-    "footerPath": "/api/widgets/get_sidebar/?sidebar_id=sidebar-1",
-    "recentPath": "/api/get_recent_posts/?<%= self.common.customFieldsParam %>"
+    "atf": {
+      "navigation": "/api/wpspa/menu",
+      "siteInfo": "/api/wpspa/site_info",
+      "footer": "/api/widgets/get_sidebar/?sidebar_id=sidebar-1",
+      "recent": "/api/get_recent_posts/?<%= self.common.customFieldsParam %>"
+    }
 }

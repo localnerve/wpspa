@@ -19,6 +19,7 @@
  *       console.log("redis update succeeded");
  *   }));
  */
+var _ = require("underscore");
 var async = require("async");
 var file = require("./file");
 var redis = require("./redis");
@@ -28,12 +29,11 @@ var configLib = require("../../../config");
 // The application definition of atf content
 // This defines what constitutes all bootstrapped, above the fold content for the app
 function atfContent(config) {
-  return {
-    navigation: request(config.proxy.hostname, config.proxy.port, config.navigationPath),
-    siteInfo: request(config.proxy.hostname, config.proxy.port, config.siteInfoPath),
-    footer: request(config.proxy.hostname, config.proxy.port, config.footerPath),
-    recent: request(config.proxy.hostname, config.proxy.port, config.recentPath)
-  };
+  return _.object(_.map(config.atf, function(value, key) {
+    return [
+      key, request(config.proxy.hostname, config.proxy.port, value)
+    ];
+  }));
 }
 
 /**

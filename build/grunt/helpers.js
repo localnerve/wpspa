@@ -51,16 +51,16 @@ function mixinEnvConfig(env, requirejsConfig) {
       customFieldsParam: envConfig.common.customFieldsParam
     },
     "components/layout/header/navigation/entities": {
-      endpoint: envConfig.navigationPath
+      endpoint: envConfig.atf.navigation
     },
     "components/layout/header/banner/entities": {
-      endpoint: envConfig.siteInfoPath
+      endpoint: envConfig.atf.siteInfo
     },
     "components/layout/footer/sidebarContainer/entities": {
-      endpoint: envConfig.footerPath
+      endpoint: envConfig.atf.footer
     },
     "components/content/entities/specializations/recent": {
-      endpoint: envConfig.recentPath
+      endpoint: envConfig.atf.recent
     }
   };
   _.extend(requirejsConfig.config, moduleConfig);
