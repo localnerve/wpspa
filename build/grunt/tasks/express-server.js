@@ -18,8 +18,10 @@ module.exports = function(grunt) {
     },
     // this server is for running the development server in the background
     development: {
+      options: {
         node_env: "development",
         background: true
+      }
     },
     // this server is for automated tests
     test: {
