@@ -29,7 +29,7 @@
     "grunt-contrib-watch": "~0.4.4",
     "grunt-jsbeautifier": "~0.1.9",
     "grunt-mocha": "~0.3.4",
-    "grunt-plato": "~0.2.1",    
+    "grunt-plato": "~0.2.1",
     "rjs-build-analysis": "~0.0.3",
     "grunt-inline": "~0.1.9",
     "grunt-express-server": "~0.4.3",
@@ -40,7 +40,8 @@
     "redis": "~0.10.0",
     "underscore": "~1.5.2",
     "phantomjs": "~1.9.7",
-    "node-phantom": "~0.2.5"
+    "node-phantom": "~0.2.5",
+    "socket.io": "^0.9.17"
   },
   "scripts": {
     "test": "grunt test",
@@ -59,6 +60,7 @@
     "redis": "~0.10.0",
     "phantomjs": "~1.9.7",
     "node-phantom": "~0.2.5",
+    "socket.io": "^0.9.17",    
     "sitemap": "~0.7.1",
     "underscore": "~1.5.2",
     "consolidate": "~0.10.0"

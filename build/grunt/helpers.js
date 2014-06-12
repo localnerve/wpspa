@@ -27,7 +27,10 @@ function nodeDeps(pkg) {
     "html-snapshots": true,
     "phantomjs": true,
     "hiredis": true,
-    "node-phantom": true
+    "node-phantom": true,
+    // socket.io is only here for a node-phantom version mistake
+    // https://github.com/alexscheelmeyer/node-phantom/issues/102
+    "socket.io": true    
   };
   for (var dep in pkg.dependencies) {
     if (!exclude[dep]) {

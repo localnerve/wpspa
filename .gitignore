@@ -7,6 +7,7 @@
 /node_modules/grunt-html-snapshots
 /node_modules/html-snapshots
 /node_modules/phantomjs
+/node_modules/socket.io
 app/styles
 test/fixtures/api-automated.json
 libpeerconnection.log
