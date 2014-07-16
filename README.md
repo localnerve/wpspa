@@ -51,7 +51,7 @@ This is a NodeJS/ExpressJS powered application... In the spirit of a MEAN stack,
 
 ### Development Notes
 
-[static analysis report](http://htmlpreview.github.io/?https://github.com/localnerve/wpspa-report/blob/master/report/index.html "Plato Report")
+[static analysis report](http://htmlpreview.github.io/?https://raw.githubusercontent.com/localnerve/wpspa-report/master/report/index.html "Plato Report")
 
 > You first have to run npm install on this project first if you want to run the test suite or builds.
 
