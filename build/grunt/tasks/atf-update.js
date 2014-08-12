@@ -23,7 +23,7 @@ module.exports = function(grunt) {
           update: "file",
           environment: "test"
         },
-        src: ["<%= project.test %>/index.html"]
+        src: ["<%= project.test %>/mocha/index.html"]
       },
       demo: {
         options: {

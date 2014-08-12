@@ -12,7 +12,7 @@ module.exports = function(grunt) {
         log: true,
         bail: false,
         urls: [
-          "http://localhost:<%= project.port.test %>/<%= project.test %>/index.html"
+          "http://localhost:<%= project.port.test %>/<%= project.test %>/mocha/index.html"
         ]
       }
     }

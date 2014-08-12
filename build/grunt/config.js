@@ -35,7 +35,7 @@ function init(projectDir) {
     atfKey: configEnv.all.keys.atf,
     server: serverDir,
     serverMain: "app.js",
-    test: "test/mocha",
+    test: "test",
     vendor: "vendor",
     mock: {
       host: configEnv.test.proxy.hostname,

@@ -33,7 +33,7 @@ module.exports = function(grunt) {
         "-W030": false,
         "-W024": false
       },
-      src: ["<%= project.test %>/**/*.js"]
+      src: ["<%= project.test %>/mocha/**/*.js"]
     }
   });
 

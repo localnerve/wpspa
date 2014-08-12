@@ -16,7 +16,7 @@ module.exports = function(grunt) {
           update: "file"
         },
         src: [
-          "<%= project.test %>/index.html"
+          "<%= project.test %>/mocha/index.html"
         ]
       },
       redis: {
