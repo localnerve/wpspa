@@ -4,6 +4,10 @@
 
 > An example single page application that takes Wordpress optimization to a whole new level.
 
+**NOTICE**  
+If you are looking for a reference project like this but supports older browsers more inclusively using standard jQuery, check out [wpspa-transitional](https://github.com/localnerve/wpspa-transitional)
+
+## Introduction
 The purpose of this project is to demonstrate a faster, mobile friendly Wordpress site. Not only is it a responsive UI, but performance is dramatically increased. Over any network, page loads are much faster than any fully optimized traditional Wordpress site. This SPA design features a dynamic routes and a data-driven architecture \(using Wordpress\). It also adds delivery prioritization options to Wordpress content for UX optimization \(assigned via the [WPSPA plugin](https://github.com/localnerve/wpspa-plugin)\).
 
 ## Results
@@ -30,7 +34,7 @@ To run the demo, you first must have Compass (to compile the scss) and Node inst
 1. Clone this project
 2. Run "npm install" in the project directory
 3. Execute "grunt demo" in the project directory (to build a release and start the servers)
-4. Navigate to localhost:9000 to examine the results. 
+4. Navigate to localhost:9000 to examine the results.
 
 The demo task runs the front-end server and mocks the back-end api, so it is all self-contained locally. For now, the only working search is the term "page two", all others will demo the connectivity error page.
 
