@@ -8,5 +8,6 @@ before_install:
   - sudo apt-get install rubygems
   - gem install sass --version 3.2.13
   - gem install compass --version 0.12.2
-before_script:
+install:
+  - npm install
   - npm install -g grunt-cli
