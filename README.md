@@ -1,5 +1,7 @@
 # [WPSPA](http://github.com/localnerve/wpspa)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/localnerve/wpspa.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://secure.travis-ci.org/localnerve/wpspa.png?branch=master)](http://travis-ci.org/localnerve/wpspa)
 
 > An example single page application that takes Wordpress optimization to a whole new level.
